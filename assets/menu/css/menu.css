@@ -1,0 +1,100 @@
+body, nav, ul, li, a  {margin: 0; padding: 0;}
+body {font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+a {text-decoration: none;}
+.containerr {
+    width: 99%;
+    /*max-width: 1360px;*/
+    margin: 3px;
+}
+.toggleMenu {
+    display:  none;
+    background: #222;
+    padding: 10px 15px;
+    color: #fff;
+}
+.selvanav {
+    list-style: none;
+     *zoom: 1;
+     background:#222;
+     font-size:14px;
+    padding-left:40%;
+}
+.selvanav:before,
+.selvanav:after {
+    content: " "; 
+    display: table; 
+}
+.selvanav:after {
+    clear: both;
+}
+.selvanav ul {
+    list-style: none;
+    width: 9em;
+}
+.selvanav a {
+    padding: 10px 15px;
+    color:#fff;
+}
+.selvanav li {
+    position: relative;
+}
+.selvanav > li {
+    float: left;
+    border-top: 1px solid #222;
+}
+.selvanav > li > .parent {
+    background-image: url("images/downArrow.png");
+    background-repeat: no-repeat;
+    background-position: right;
+}
+.selvanav > li > a {
+    display: block;
+}
+.selvanav li  ul {
+    position: absolute;
+    left: -9999px;
+}
+.selvanav > li.hover > ul {
+    left: 0;
+}
+.selvanav li li.hover ul {
+    left: 100%;
+    top: 0;
+}
+.selvanav li li a {
+    display: block;
+    background: #222;
+    position: relative;
+    z-index:100;
+    border-top: 1px solid #175e4c;
+}
+.selvanav li li li a {
+    background:#222;
+    z-index:200;
+    border-top: 1px solid #1d7a62;
+}
+
+@media screen and (max-width: 768px) {
+    .active {
+        display: block;
+    }
+    .selvanav > li {
+        float: none;
+    }
+    .selvanav > li > .parent {
+        background-position: 95% 50%;
+    }
+    .selvanav li li .parent {
+        background-image: url("images/downArrow.png");
+        background-repeat: no-repeat;
+        background-position: 95% 50%;
+    }
+    .selvanav ul {
+        display: block;
+        width: 100%;
+    }
+   .selvanav > li.hover > ul , .selvanav li li.hover ul {
+        position: static;
+    }
+
+}

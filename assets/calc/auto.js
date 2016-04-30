@@ -22,8 +22,9 @@ var j=$('.tableCitation tr').length;
 $(".typeAddmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><input class="case_citation" type="checkbox"/></td>';
-	html += '<td><select  class="form-control"  data-type="courtType" id="courtType_'+j+'" name="courtType[]"></select></td>';
+	html += '<td><select  class="form-control"  data-type="courtType" id="courtType_'+j+'" name="courtType[]"><option value="CIID12345">Approved</option><option value="CIID12346">Followed</option><option value="CIID12347">Distinguished</option><option value="CIID12348">Modified</option><optionvalue="CIID12349">Overruled</option><option value="CIID12350">Appealed from</option><option value="CIID12351">Other</option></select></td>';
 	html += '<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_'+j+'" class="form-control autocomplete_citation" autocomplete="off"></td>';
+	html += '<td><textarea  name="note[]" id="note_'+j+'" class="form-control"></textarea> </td>';
 	html += '</tr>';
 	$('.tableCitation').append(html);
 	i++;
@@ -87,16 +88,27 @@ function frmvalidation()
 	}
 	
 	if(citation==''){
-		valid = false;
-		errorstr += "Enter valid Citation Number!"+ "<BR/>";
-		$('#divcitation').addClass('has-error');
+		
+		if(casenumber == '')
+		{
+			valid = false;
+			errorstr += "Enter valid Case Number!"+ "<BR/>";
+			$('#divcasenumber').addClass('has-error');
+		}
+		else
+		{
+			valid = false;
+			errorstr += "Enter valid Citation Number!"+ "<BR/>";
+			$('#divcitation').addClass('has-error');	
+		}
+		
 	}
-	
+	/*
 	if(casenumber==''){
 		valid = false;
 		errorstr += "Enter valid Case Number!"+ "<BR/>";
 		$('#divcasenumber').addClass('has-error');
-	}
+	}*/
 	
 	if(court_name==''){
 		valid = false;

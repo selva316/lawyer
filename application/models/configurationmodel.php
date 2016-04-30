@@ -8,6 +8,29 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function fetchYear($year)
+	{
+		$query = $this->db->query("select year from law_year where (UPPER(year) LIKE '%".strtoupper($year)."%')");
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['year'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+		
+	}
+
+	public function fetchAllCitation(){
+		$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where type='public' or type='dbversion'";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
 	public function courtNameAvailable($courtName){
 				
 		$query = $this->db->query("select count(name) as cntname from law_courttype  where (UPPER(name) = '".strtoupper($courtName)."')");

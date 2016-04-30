@@ -33,7 +33,7 @@
             <a href="<?php echo site_url('user/research');?>">Research Topic</a>
         </li>
         <li  class="test">
-            <a href="<?php echo site_url('login');?>">Logout</a>
+            <a href="<?php echo site_url('login/logout');?>">Logout</a>
         </li>
     </ul>
 </nav>

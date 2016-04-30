@@ -8,6 +8,19 @@ class Notationmodel extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function fetchNotationID($hashnotationid)
+	{
+		$query = $this->db->query("select notationid from law_notation where (UPPER(notationid) LIKE '%".strtoupper($hashnotationid)."%')");
+
+		$notationid = '';
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$notationid = $row['notationid'];//i am not want item code i,eeeeeeeeeeee
+		}
+		return $notationid;
+	}
+
 	public function fetchTypeOfCitation()
 	{
 		$str = "select * from law_type_of_citation where disable='N'";
@@ -22,6 +35,23 @@ class Notationmodel extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function fetchCaseName($casename)
+	{
+		$query = $this->db->query("select casename from law_notation where (UPPER(casename) LIKE '%".strtoupper($casename)."%')");
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['casename'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+		
+	}
+
 	function createNotation($data)
 	{
 		$this->db->insert('law_notation', $data); 
@@ -33,6 +63,8 @@ class Notationmodel extends CI_Model {
 		$this->db->set('NOTATIONID', $nid);
 		$this->db->set('HASHNOTATIONID', $hashnid);
 		
+		echo "notationid: ".$nid;
+		echo "<BR/>";
 		$this->db->set('CREATED_BY', $this->session->userdata('userid'));
 		$this->db->set('CREATED_ON', time());
 
@@ -46,14 +78,14 @@ class Notationmodel extends CI_Model {
 		$statuate = $this->input->post('statuate');
 		$subsection = $this->input->post('subsection');
 		$concept = $this->input->post('concept');
-
+		echo "number_of_entries: ".$number_of_entries;
 		if($number_of_entries >= 0)
 		{
 			for ($i=0; $i <$number_of_entries ; $i++) { 
 				
 				$itemlist = array();
 
-				if(($statuate[$i] == "") && ($concept[$i] == "") && ($nid == ""))
+				if(($statuate[$i] == "") && ($concept[$i] == "") || ($nid == ""))
 					continue;
 
 				$itemlist['STATUATE'] = $statuate[$i];
@@ -70,6 +102,7 @@ class Notationmodel extends CI_Model {
 		$number_of_citation = count($this->input->post('citationNumber'));
 		$citationNumber = $this->input->post('citationNumber');
 		$typeCitation = $this->input->post('typeCitation');
+		$note = $this->input->post('note');
 
 		if($number_of_citation >= 0)
 		{
@@ -77,17 +110,41 @@ class Notationmodel extends CI_Model {
 				
 				$itemlist = array();
 
-				if(($typeCitation[$i] == "")  && ($nid == ""))
+				if(($citationNumber[$i] == "")  || ($nid == ""))
 					continue;
 
-				$itemlist['CITATION'] = $citationNumber[$i];
+				$itemlist['CITATION'] = $this->_clean($citationNumber[$i]);
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
+				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
 
 				$this->db->insert('law_citation_notation_link', $itemlist); 
 			}
 		}
+
+		$listcitation = $this->input->post('citation');
+		echo "citation: ".$listcitation;
+		if (strpos($listcitation, ',') !== false) {
+			$citation_arr = explode(",",$listcitation);
+			foreach($citation_arr as $lcitation)
+			{
+				$itemlist = array();
+				$itemlist['CITATION'] = $lcitation;
+				$itemlist['NOTATIONID'] = $nid;
+				$this->db->insert('law_citation', $itemlist);
+				print_r($itemlist); 
+			}
+		}
+		else
+		{
+			$itemlist = array();
+			$itemlist['CITATION'] = $this->input->post('citation');
+			$itemlist['NOTATIONID'] = $nid;
+			$this->db->insert('law_citation', $itemlist); 
+			print_r($itemlist);
+		}
+		
 		return true;
 	}
 
@@ -95,7 +152,7 @@ class Notationmodel extends CI_Model {
 	{
 		if(strlen($notationid)>0 && $notationid != '')
 		{
-			$this->db->where('HASHNOTATIONID', $notationid);
+			$this->db->where('NOTATIONID', $notationid);
 			$this->db->update('law_notation', $data);
 			return $notationid;
 		}
@@ -118,7 +175,7 @@ class Notationmodel extends CI_Model {
 
 			$this->db->update('law_notation');
 	
-			return $hashnid;
+			return $nid;
 		}
 		
 	}
@@ -134,6 +191,8 @@ class Notationmodel extends CI_Model {
 		
 		$this->db->set('CASENAME', $this->input->post('casename'));
 		$this->db->set('CITATION', $this->input->post('citation'));
+		$this->db->set('DUP_CITATION', $this->_clean($this->input->post('citation')));
+
 		$this->db->set('JUDGE_NAME', $this->input->post('judge_name'));
 		$this->db->set('CASENUMBER', $this->input->post('casenumber'));
 		$this->db->set('COURT_NAME', $this->input->post('court_name'));
@@ -159,7 +218,7 @@ class Notationmodel extends CI_Model {
 				
 				$itemlist = array();
 
-				if(($statuate[$i] == "") && ($concept[$i] == "") && ($nid == ""))
+				if(($statuate[$i] == "") && ($concept[$i] == "") || ($nid == ""))
 					continue;
 
 				$itemlist['STATUATE'] = $statuate[$i];
@@ -176,6 +235,7 @@ class Notationmodel extends CI_Model {
 		$number_of_citation = count($this->input->post('citationNumber'));
 		$citationNumber = $this->input->post('citationNumber');
 		$typeCitation = $this->input->post('typeCitation');
+		$note = $this->input->post('note');
 
 		if($number_of_citation >= 0)
 		{
@@ -183,16 +243,38 @@ class Notationmodel extends CI_Model {
 				
 				$itemlist = array();
 
-				if(($typeCitation[$i] == "")  && ($nid == ""))
+				if(($typeCitation[$i] == "")  || ($nid == ""))
 					continue;
 
-				$itemlist['CITATION'] = $typeCitation[$i];
+				$itemlist['CITATION'] = $this->_clean($citationNumber[$i]);
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
-				$itemlist['TYPE_OF_CITATION'] = $citationNumber[$i];
+				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
+				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
 
 				$this->db->insert('law_citation_notation_link', $itemlist); 
 			}
+		}
+		$listcitation = $this->input->post('citation');
+		echo "citation: ".$listcitation;
+		if (strpos($listcitation, ',') !== false) {
+			$citation_arr = explode(",",$listcitation);
+			foreach($citation_arr as $lcitation)
+			{
+				$itemlist = array();
+				$itemlist['CITATION'] = $lcitation;
+				$itemlist['NOTATIONID'] = $nid;
+				$this->db->insert('law_citation', $itemlist);
+				print_r($itemlist); 
+			}
+		}
+		else
+		{
+			$itemlist = array();
+			$itemlist['CITATION'] = $this->input->post('citation');
+			$itemlist['NOTATIONID'] = $nid;
+			$this->db->insert('law_citation', $itemlist); 
+			print_r($itemlist);
 		}
 		return true;
 	}
@@ -283,7 +365,7 @@ class Notationmodel extends CI_Model {
 			foreach($itemresult as $itemrow)
 			{
 				$itemdata['NOTATIONID'] = $notationid;
-				$itemdata['CITATION'] = $itemrow['CITATION'];
+				$itemdata['CITATION'] = $this->_clean($itemrow['CITATION']);
 				$itemdata['ACTUAL_CITATION'] = $itemrow['ACTUAL_CITATION'];
 				$itemdata['TYPE_OF_CITATION'] = $itemrow['TYPE_OF_CITATION'];
 				$itemdata['DESCRIPTION'] = $itemrow['DESCRIPTION'];
@@ -659,6 +741,42 @@ class Notationmodel extends CI_Model {
 			
 		}
 		
+	}
+
+	public function chkCasenameAndCitation($casename, $citation)
+	{
+		//ED23883, RD233
+		# casename CA99821
+		# citation	ED23883, RD23232
+		$citation_arr = explode(",",$citation);
+
+		$chkAvailable = 0;
+		foreach($citation_arr as $lcitation)
+		{
+			$query = $this->db->query("select notationid, hashnotationid, count(notationid) as cntname  from law_notation where (type='dbversion' OR type='public') AND (UPPER(CASENAME) = '".$casename."') AND ((UPPER(CITATION) LIKE '%".strtoupper(trim($lcitation))."%') OR (UPPER(DUP_CITATION) LIKE '%".strtoupper(trim($lcitation))."%')) group by notationid");
+			$count = 0;
+			$result = $query->result_array();
+			$details = '';
+			foreach($result as $row)
+			{
+				$count = $row['cntname'];
+				if($count > 0)
+				{
+					$uniqueid = "'".$row['hashnotationid']."'";
+					//'action' => "<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
+					$details .= '<a  style="margin-right:5px;" class="btn btn-success" href="javascript:viewCitation('.$uniqueid.')">'.$row['notationid'].' <span class="glyphicon glyphicon-eye-open"></span></a>';
+				}
+			}
+
+		}
+
+		return $details;
+		
+	}
+
+	public function _clean($string) {
+   		$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
+  	 	return preg_replace('/[^A-Za-z0-9\s\(\)\-\,]/', '', $string); // Removes special chars.
 	}
 }
 /* End of file Logindetailsmodel.php */

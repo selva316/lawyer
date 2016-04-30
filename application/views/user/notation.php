@@ -43,9 +43,14 @@
 </head>
 
 <body>
-	<form name="frminvoice" action="notation/save" method="post" onsubmit="return frmvalidation()">
+	<form name="frminvoice" action="notation/save" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
     <div class="container-fluid">
     	<?php $this->load->view('includes/defaultconfiguration');?>
+    	
+    	<div class="blockUIOverlay" style="display:none; z-index: 1000; border: medium none; width: 100%; height: 100%; top: 0px; left: 0px; background-color: #5f5c5c; opacity: 0.6; cursor: wait; position: absolute;"></div>
+      	<div class="blockUILoading" style="display:none; z-index: 1011; position: absolute; top: 45%; left: 50%; text-align: center; cursor: wait;">
+             <div class="loading-message loading-message-boxed"><img style="width: 20px;" src="<?php echo base_url();?>img/spinner-big.gif"><span>&nbsp;&nbsp;Processing...</span></div>
+      	</div>
 
 		<div class="panel panel-success">
 			<div class="panel-heading">
@@ -56,6 +61,7 @@
 			<div class="panel panel-default">
                 <div class="panel-heading">Case Information</div>
                 <div class="panel-body">
+
             		<div class="row-fluid">
 						<div class="span3">
 							<div id="divcasename" class="form-group">
@@ -68,6 +74,9 @@
 							<div id="divcitation" class="form-group">
 								<label class="control-label">Citation</label>
 								<input  class="form-control" type="text" id="citation" name="citation" value=""/>
+							</div>
+							<div class="form-group" id="divhref">
+								
 							</div>
 						</div>
 						<div class="span3">
@@ -104,7 +113,7 @@
 						<div class="span3">
 							<div id="divyear" class="form-group">
 								<label class="control-label">Year of Judgement</label>
-								<input  class="form-control form_datetime" type="text" id="year" name="year" value=""/>
+								<input  class="form-control" type="text" id="year" name="year" value=""/>
 							</div>
 						</div>
 						<div class="span3">
@@ -113,6 +122,7 @@
 								<input  class="form-control" type="text" id="bench" name="bench" value=""/>
 							</div>
 						</div>
+						<!--
 						<div class="span3">
 							<div id="divstatus" class="form-group">
 								<label  class="control-label" >Status</label>
@@ -136,12 +146,12 @@
 								?>
 								</select>
 							</div>
-						</div>
+						</div>-->
 					</div> 
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span8">
-							<textarea id="facts_of_case" class="form-control"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"></textarea>				
+							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"></textarea>				
 						</div>
 					</div>
 
@@ -195,6 +205,7 @@
 										<th></th>
 										<th>Type of Citation</th>
 										<th>Citation Number</th>
+										<th>Note</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -210,7 +221,7 @@
 										</select>
 										</td>
 										<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"></td>
-										
+										<td><textarea  name="note[]" id="note_1" class="form-control"></textarea> </td>
 									</tr>
 								</tbody>
 							</table>
@@ -240,6 +251,13 @@
 			</div>-->
 			<div class="clear-both" style="margin-top:20px;"></div>
 		  		<div class="row-fluid">
+		  			<div class="span10" style="text-align:center;">
+		  				<label  style="margin-right: 15px;">
+                         <input type="checkbox" name="chkPrivate" id="chkPrivate" value="Private"><span style="font-weight:bold;"> Save it as Private</span></label>
+                         <input type="hidden" name="status" id="status" value="public" />
+		  			</div>
+		  		</div>
+		  		<div class="row-fluid">
 					<div class="span10" style="text-align:center;">
 						<button type="submit" class="btn btn-primary" id="save"  >
 			                Save <i class="fa fa-close"></i>
@@ -257,6 +275,7 @@
     <script src="<?php echo base_url();?>assets/jquery/jquery.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/jquery-ui.min.js"></script>
 
+	<script src="<?php echo base_url();?>assets/tinymce/js/tinymce/tinymce.min.js"></script>	
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/bootstrap-datepicker.js"></script>
@@ -269,6 +288,14 @@
     <script src="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.js"></script>
 	
 	<script>
+	tinymce.init({  
+		mode : "specific_textareas",
+        editor_selector : "myTextEditor"
+	});
+	</script>
+
+	<script>
+	var interval = null;
 	$(document).ready(function() {
 		$('#example').DataTable( {
 			columnDefs: [ {
@@ -282,16 +309,41 @@
 				orderData: [ 3, 0 ]
 			}]
 		});
-		
+		/*
 		$('.form_datetime').datepicker({
 		    //format: 'YYYY-MM-DD',
-		    dateFormat: 'dd-mm-yy',
+		    changeMonth: false,
+        	changeYear: true,
 		    autoclose : true
 		});
+		*/
+		$(".form_datetime").datepicker( {
+		    format: "yyyy",
+		    startView: "year", 
+		    minView: "year"
+		});
 
-		setInterval(ajaxCreateCitation, 60000);
+		interval = setInterval(ajaxCreateCitation, 60000);
 		//$("#court_name")
 	});
+
+	$(document).on('change', '#chkPrivate', function() {
+        if(this.checked)
+        {
+            $("#status").val('private');
+        }
+        else
+        {
+            $("#status").val('public');
+        }
+    });
+
+	function split(val) {
+		return val.split(/,\s*/);
+	}
+	function extractLast(term) {
+		return split(term).pop();
+	}
 
 	$(document).on('focus','.autocomplete_txt',function(){
 		var type = $(this).data('type');
@@ -324,6 +376,51 @@
 			}		      	
 		});
 	});
+	
+	$(document).on('blur','#citation',function(){
+		if($("#casename").val() != '' && $("#citation").val() != '')
+		{
+			
+			$.ajax({
+				url : 'notation/caseame_and_citation_avilabilty',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   casename: $("#casename").val(),
+				   citation: $("#citation").val()
+				},
+				success: function( data ) {
+					if(data != ''){
+						clearInterval(interval); 
+						$("#divhref").html(data);	
+					}
+					
+				}
+			});
+		}
+	});
+	
+	$(document).on('blur','#casename',function(){
+		if($("#casename").val() != '' && $("#citation").val() != '')
+		{
+			
+			$.ajax({
+				url : 'notation/caseame_and_citation_avilabilty',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   casename: $("#casename").val(),
+				   citation: $("#citation").val()
+				},
+				success: function( data ) {
+					if(data != ''){
+						clearInterval(interval); 
+						$("#divhref").html(data);	
+					}
+				}
+			});
+		}
+	});
 
 	$(document).on('focus','.autocomplete_concept',function(){
 		var type = $(this).data('type');
@@ -354,7 +451,7 @@
 		});
 	});
 
-	
+	/*
 	$(document).on('focus','.autocomplete_citation',function(){
 		var type = $(this).data('citationNumber');
 		
@@ -382,7 +479,7 @@
 			autoFocus: true,	      	
 			minLength: 0			
 		});
-	});
+	});*/
 
 
 	$(document).on('focus','.autocomplete_process',function(){
@@ -455,6 +552,9 @@
 			var status = $("#status").val();
 			var notationid = $("#ntype").val();
 
+			$(".blockUIOverlay").show();
+    		$(".blockUILoading").show();
+
 			$.ajax({
 				url : 'notation/autoSave',
 				dataType: "text",
@@ -476,6 +576,8 @@
 					$("#ntype").val(msg);
 				}
 			});
+			$(".blockUIOverlay").hide();
+    		$(".blockUILoading").hide();
 		}
 	}
 
@@ -483,6 +585,7 @@
 		$("#court_name").val('');	
 	});
 
+	/*
 	$(document).on('change','#casename',function(){
 		if($("#casename").val() != "")
 		{
@@ -498,17 +601,109 @@
 						$("#casename").val('');
 						$("#ntype").val('');
 					}
-					/*
-					else
-					{
-						$("#ntype").val("Draft");	
-					}*/
 				}
 			});	
 		}
 	});
+	*/	
+	$(document).on('keyup.autocomplete','#casename',function(){
+		var casename = $(this).val();
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : 'notation/fetchcasename',
+					dataType: "json",
+					method: 'post',
+					data: {
+					   casename: casename
+					},
+					 success: function( data ) {
+						 response( $.map( data, function( item ) {
+							return {
+								label: item,
+								value: item,
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 2
+		});
+	});
 
-	$(document).on('change','#citation',function(){
+	$(document).on('keyup.autocomplete','#year',function(){
+		var year = $(this).val();
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : 'notation/fetchYear',
+					dataType: "json",
+					method: 'post',
+					data: {
+					   year: year
+					},
+					 success: function( data ) {
+						 response( $.map( data, function( item ) {
+							return {
+								label: item,
+								value: item,
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 2
+		});
+	});
+	$(document).on("keyup.autocomplete","#citation",function(e){
+
+	       var term =  $(this ).val();
+	       $( this ).autocomplete({
+    	   source : function( request, response ) {
+            $.ajax({
+                url: 'notation/fetchAllCitation',
+                dataType: "json",
+                data: {term: extractLast(term)},
+                success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.citation,
+                                 //email: item.email
+                                };
+                        }));
+                    }
+                });
+            },
+			focus : function() {
+				// prevent value inserted on focus
+				return true;
+			},
+			select : function(event, ui) {
+				var terms = split( this.value );
+			      // remove the current input
+			      terms.pop();
+			      // add the selected item
+			      terms.push( ui.item.value );
+			      // add placeholder to get the comma-and-space at the end
+			      terms.push( "" );
+			      this.value = terms.join( ", " );
+			     
+			      //setSubject(this.value);
+			      return false;
+
+			},
+	      minLength: 2
+
+	    });
+
+	});
+
+	/*
+	$(document).on('blur','#citation',function(){
 		if($("#citation").val() != "")
 		{
 			$.ajax({
@@ -523,22 +718,59 @@
 						$("#citation").val('');
 						$("#ntype").val('');
 					}
-					/*
-					else
-					{
-						$("#ntype").val("Draft");	
-					}*/
+					
 				}
 			});	
 		}
 	});
+	*/
+	$(document).on("keyup.autocomplete",".autocomplete_citation",function(e){
 
-	$(document).on('click','#save',function(){
-		if($("#citation").val() != "" && $("#casename").val() !="")
-		{
+	       var term =  $(this).val();
+	       $( this ).autocomplete({
+    	   source : function( request, response ) {
+            $.ajax({
+                url: 'notation/fetchAllCitation',
+                dataType: "json",
+                data: {term: extractLast(term)},
+                success: function(data) {
+                        response($.map(data, function(item) {
+                            return {
+                                label: item.citation,
+                                 //email: item.email
+                                };
+                        }));
+                    }
+                });
+            },
+			focus : function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			select : function(event, ui) {
+				var terms = split( this.value );
+			      // remove the current input
+			      terms.pop();
+			      // add the selected item
+			      terms.push( ui.item.value );
+			      // add placeholder to get the comma-and-space at the end
+			      terms.push( "" );
+			      this.value = terms.join( ", " );
+			     
+			      //setSubject(this.value);
+			      return false;
 
-		}
+			},
+	      minLength: 2
+
+	    });
 	});
+
+	function viewCitation(notationid)
+	{
+		//window.location.href =  '<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid;
+		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_blank')
+	}
 	</script>
 </body>
 

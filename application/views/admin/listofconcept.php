@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>List of Courts</title>
+    <title>List of Concepts</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -59,13 +59,13 @@
         <?php $this->load->view('includes/defaultconfiguration');?>
         <div class="panel panel-success">
         <div class="panel-heading">
-            <center><label><b>List of Courts</b></label></center></div>
+            <center><label><b>List of Concepts</b></label></center></div>
         </div>      
         <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <div style="margin-left:30px;margin-bottom:10px;">
-                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#modalValidate" > Add Court Type <i class="fa fa-close"></i> </button>
+                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#modalValidate" > Add Concept <i class="fa fa-close"></i> </button>
                         </div>
 
                     </div>
@@ -73,15 +73,15 @@
                 </div>
                 <!-- /.row -->
                 <div class="panel panel-default">
-                    <div class="panel-heading">List of Courts</div>
+                    <div class="panel-heading">List of Concept</div>
                     <div class="panel-body">
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    
-                                    <th>Court ID</th>
+                                    <th>Concept ID</th>
                                     <th>Name</th>
-                                    <th>Court Type</th>
+                                    <th>Description</th>
+                                    <th>Created By</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -98,28 +98,20 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">New Court</h4>
+                <h4 class="modal-title">New Concept</h4>
               </div>
               <div class="modal-body">
                 
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Court Name</label>
-                        <input  class="form-control" type="text" id="courtname" name="courtname" value=""/>
+                        <label class="control-label">Name</label>
+                        <input  class="form-control" type="text" id="conceptname" name="conceptname" value=""/>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Court Type</label>
-                        
-                        <select class="form-control" disabled="true" type="text" id="courtType" name="courtType" >
-                            <option value="">Choose a Court Type</option>
-                            <?php
-                                foreach ($result as $r) {
-                                    echo "<option value='".$r['SHORTNAME']."'>". $r['NAME'] ."</option>";
-                                }
-                            ?>
-                        </select>
+                        <label class="control-label">Description</label>
+                        <input  class="form-control" type="text" disabled="true" id="description" name="description" value=""/>
                     </div>
                 </div>
 
@@ -140,28 +132,21 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Court List</h4>
+                <h4 class="modal-title">Edit Concept</h4>
               </div>
               <div class="modal-body">
                 
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Court Name</label>
-                        <input  class="form-control" type="text" id="editCourtname" name="editCourtname" value=""/>
-                        <input  class="form-control" type="hidden" id="editCNID" name="editCNID" value=""/>
+                        <label class="control-label">Name</label>
+                        <input  class="form-control" type="text" id="editConceptname" name="editConceptname" value=""/>
+                        <input  class="form-control" type="hidden" id="editCID" name="editCID" value=""/>
                     </div>
                 </div>
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Court Type</label>
-                        <select class="form-control" disabled="true" type="text" id="editCourtType" name="editCourtType" >
-                            <option value="">Choose a Court Type</option>
-                            <?php
-                                foreach ($result as $r) {
-                                    echo "<option value='".$r['SHORTNAME']."'>". $r['NAME'] ."</option>";
-                                }
-                            ?>
-                        </select>
+                        <label class="control-label">Description</label>
+                        <input  class="form-control" type="text" id="editdescription" name="editdescription" value=""/>
                     </div>
                 </div>
 
@@ -204,30 +189,31 @@
         
         fnTableCalling();
         
-        $( "#courtname" ).blur(function() {
+        $( "#conceptname" ).blur(function() {
             $.ajax({
                 type: 'post',
                 dataType: "json",
-                url: 'listofcourt/checkCourtNameAvailable',
-                data: {'courtname':$("#courtname").val()},
+                url: 'listofconcept/checkConceptNameAvailable',
+                data: {'conceptname':$("#conceptname").val()},
                 success:function(data){
                     //alert(data);
                     if(data=="true"){
-                        $("#courtType").prop('disabled',false);
+                        $("#description").prop('disabled',false);
                         //$("#proceedButton").css("display","block");
-                        $("#courtname").css("border","1px solid #ccc");
-                        $("#courtname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                        $("#conceptname").css("border","1px solid #ccc");
+                        $("#conceptname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
                     }
                     else{
-                        $("#courtname").css("border","1px solid #c7254e");
-                        $("#courtname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                        $("#description").prop('disabled',true);
+                        $("#conceptname").css("border","1px solid #c7254e");
+                        $("#conceptname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
                     }
                 }
             });
         });
 
 
-        $( "#courtType" ).change(function() {
+        $( "#description" ).change(function() {
             if($(this).val() != "")
                 $(".modalButton").css("display","block");
             else
@@ -236,11 +222,26 @@
     });
 
     $('#proceedButton').click(function () {
+
+        var errorMessage = '';
+        if ( $("#conceptname").val() == ""  || $("#conceptname").val() == null) {
+            errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+        }
+        if ( $("#description").val() == ""  || $("#description").val() == null) {
+            errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
+        }
+        
+
+        if ( errorMessage != "" ) {
+            alert(errorMessage);
+            return;
+        }
+
         $.ajax({
             type: 'post',
             dataType: "json",
-            url: 'listofcourt/insertCourtList',
-            data: {'courtname':$("#courtname").val(),'courtType':$("#courtType").val()},
+            url: 'listofconcept/insertConcept',
+            data: {'conceptname':$("#conceptname").val(),'description':$("#description").val()},
             success:function(data){
                 //window.location.href="homepage";                
                 fnTableCalling();
@@ -252,8 +253,8 @@
         $.ajax({
             type: 'post',
             dataType: "json",
-            url: 'listofcourt/updateCourtList',
-            data: {'courtname':$("#editCourtname").val(),'courtType':$("#editCourtType").val(),'editCNID':$("#editCNID").val()},
+            url: 'listofconcept/updateConcept',
+            data: {'editConceptname':$("#editConceptname").val(),'description':$("#editdescription").val(),'editCID':$("#editCID").val()},
             success:function(data){
                 //window.location.href="homepage";                
                 fnTableCalling();
@@ -270,8 +271,8 @@
         $.ajax({
             type: 'post',
             dataType: "json",
-            url: 'listofcourt/findCourtListDetails',
-            data: {'courtId':$(this).val()},
+            url: 'listofconcept/findConcept',
+            data: {'conceptid':$(this).val()},
             success:function(jdata){
                 var strData = String(jdata.data);
                 var str = strData.split(",");
@@ -279,22 +280,22 @@
                     $("#editButton").css("display","block");
 
                 }
-                $("#editCNID").val(str[0]);
-                $("#editCourtname").val(str[1]);
-                $("#editCourtType").val(str[2])
+                $("#editCID").val(str[0]);
+                $("#editConceptname").val(str[1]);
+                $("#editdescription").val(str[2])
             }
         });
 
     });
 
     
-    $(document).on('click','.disableCourtType',function(){
+    $(document).on('click','.disableConcept',function(){
 
         $.ajax({
             type: 'post',
             dataType: "json",
-            url: 'listofcourt/disableCourtList',
-            data: {'courtId':$(this).val()},
+            url: 'listofconcept/disableConcept',
+            data: {'cid':$(this).val()},
             success:function(jdata){
                 fnTableCalling();
             }
@@ -306,16 +307,17 @@
     {
         $('#courtTypeList').dataTable().fnDestroy();
         table = $('#courtTypeList').DataTable({
-            "ajax": "listofcourt/fetchListCourt",
+            "ajax": "listofconcept/fetchListOfConcept",
             "columnDefs": [
                         { 
                             "visible": false
                         }
                     ],
             "columns": [
-               { "data": "cnid" },  
+               { "data": "cid" },  
                { "data": "name" },  
-               { "data": "court_type" },  
+               { "data": "description" },
+               { "data": "createdby" },  
                { "data": "disable" }
             ]
         });

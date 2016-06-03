@@ -65,7 +65,7 @@ class Homepage extends CI_Controller {
 	public function fetchNotation()
 	{
 		$this->load->model('notationmodel');
-		$result = $this->notationmodel->fetchAllNotation();
+		$result = $this->notationmodel->fetchUserNotation();
 		
 		if($result)
 		{

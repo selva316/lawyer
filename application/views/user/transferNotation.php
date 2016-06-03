@@ -52,7 +52,7 @@
 </head>
 
 <body>
-	<form name="frminvoice" action="editnotation/update" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
+	<form name="frminvoice" action="transfernotation/changeowner" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
     <div class="container-fluid">
     	<?php $this->load->view('includes/defaultconfiguration');?>
     	
@@ -75,8 +75,10 @@
 						<div class="span3">
 							<div id="divcasename" class="form-group">
 								<label class="control-label">Case Name</label>
-								<input  class="form-control" type="text" id="casename" name="casename" value="<?php echo $casename; ?>"/>
+								<input  class="form-control" type="text" id="casename" name="casename" value="<?php echo $casename; 
+								?>"/>
 								<input type="hidden" name="ntype" id="ntype" value="<?php echo $notationid; ?>"/>
+								<input type="hidden" name="hashid" id="hashid" value="<?php echo $hashnotationid; ?>"/>
 							</div>
 						</div>
 						<div class="span3">
@@ -121,31 +123,7 @@
 								<input  class="form-control" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
 							</div>
 						</div>
-						<!--
-						<div class="span3">
-							<div id="divstatus" class="form-group">
-								<label  class="control-label" >Status</label>
-								<select  class="form-control"  id="status" name="status">
-									<option value="">Select</option>
-									<?php 
-									foreach ($status as $row) {
-										$role = $this->session->userdata('role');
-
-										if(('dbversion' == $row['NAME']))
-										{
-											if($role == 'Admin')
-												echo "<option value='".$row['NAME']."'>". $row['DESCRIPTION'] ."</option>";
-											else
-												continue;
-										}
-										else
-											echo "<option value='".$row['NAME']."'>". $row['DESCRIPTION'] ."</option>";
-
-									}
-								?>
-								</select>
-							</div>
-						</div>-->
+						
 					</div> 
 
 					<div class="row-fluid" style="margin-top:20px;">
@@ -301,20 +279,44 @@
 			</div>-->
 			<div class="clear-both" style="margin-top:20px;"></div>
 		  		<div class="row-fluid">
-		  			<div class="span10" style="text-align:center;">
-		  				<label  style="margin-right: 15px;">
-                         <input type="checkbox" name="chkPrivate" id="chkPrivate" value="Private"><span style="font-weight:bold;"> Save it as Private</span></label>
-                         <input type="hidden" name="status" id="status" value="public" />
+		  			<div class="span12" style="text-align:center;">
+		  				<?php if($type != 'private' && $type != 'draft'){ ?>
+
+	            <div class="row-fluid" style="margin-bottom:10px;">
+	            	<div class="span3" style="text-align:center;"></div>
+			<?php if($type != 'draft'){ ?>
+					<div class="span3" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="saveAsDraft">
+			                Save as Draft <i class="fa fa-check-square"></i>
+			            </button>
+					</div>
+					<?php }?>
+					
+					<?php if($this->session->userdata('role') == "Admin" && $type != 'dbversion') { ?>
+					<div class="span3" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="dbVersion">
+			                Database Version <i class="fa fa-book"></i>
+			            </button>
+					</div>
+					<?php } ?>
+					<div class="span3" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="discard" >
+			                Discard <i class="fa fa-close"></i>
+			            </button>
+					</div>
+					<!--<div class="span4" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="tag" data-toggle="modal" data-target="#modalValidate" >
+			                Tag a Notation<i class="fa fa-check-square"></i>
+			            </button>
+					</div>-->
+				</div>
+            <?php
+            }
+			?> 
+                        
 		  			</div>
 		  		</div>
-		  		<div class="row-fluid">
-					<div class="span10" style="text-align:center;">
-						<button type="submit" class="btn btn-primary" id="save"  >
-			                Update <i class="fa fa-close"></i>
-			            </button>
-			            
-					</div>
-				</div>
+		  		
 			</div>
 			<!-- /#page-wrapper -->
 		</div>
@@ -487,6 +489,41 @@
 				orderData: [ 3, 0 ]
 			}]
 		});
+
+		$("#saveAsPrivate").click(function(){
+				$.ajax({
+					url : 'transfernotation/saveAsDraft',
+					dataType: "text",
+					method: 'post',
+					data: {
+					   hashid: $("#hashid").val()
+					},
+					success : function(data) {
+						if(data == "Admin")
+							window.location.href="http://localhost/lawyer/admin/homepage";
+						else
+							window.location.href="http://localhost/lawyer/user/homepage";
+					}
+				});
+			});
+
+			$("#dbVersion").click(function(){
+				$.ajax({
+					url : 'transfernotation/dbVersion',
+					dataType: "text",
+					method: 'post',
+					data: {
+					   hashid: $("#hashid").val()
+					},
+					success : function(data) {
+						if(data == "Admin")
+							window.location.href="http://localhost/lawyer/admin/homepage";
+						else
+							window.location.href="http://localhost/lawyer/user/homepage";
+					}
+				});
+			});
+
 		/*
 		$('.form_datetime').datepicker({
 		    //format: 'YYYY-MM-DD',
@@ -1038,6 +1075,10 @@
 			  	$("#conceptModal").modal('hide');
 			}
 		});
+	});
+
+	$(document).on('click','#discard', function(e){
+		window.open('<?php echo base_url('admin/homepage');?>');
 	});
 	</script>
 </body>

@@ -183,6 +183,7 @@ class Notationmodel extends CI_Model {
 	function updateNotation($data)
 	{
 		$nid = $this->input->post('ntype');
+
 		$this->auditNotationStatuate($nid);
 		$this->auditNotationCitation($nid);
 		$this->auditNotation($nid);
@@ -415,6 +416,22 @@ class Notationmodel extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('law_notation');
 		$this->db->where('type !=', 'draft');
+
+		$itemdata = array();
+		$itemquery = $this->db->get();
+		if($itemquery->num_rows() > 0)
+		{
+			return $itemquery->result_array();
+		}
+	}
+
+	function fetchUserNotation()
+	{
+		$userid = $this->session->userdata('userid');
+		$this->db->select('*');
+		$this->db->from('law_notation');
+		$this->db->where('type !=', 'draft');
+		$this->db->where('created_by =', $userid);
 		
 		$itemdata = array();
 		$itemquery = $this->db->get();
@@ -619,8 +636,134 @@ class Notationmodel extends CI_Model {
 					}
 				}
 				
+				$this->db->where('HASHNOTATIONID', $hashid);
+				$this->db->set('ACTION', 'Y');
+				$this->db->update('law_notation');
+								
 				return true;
 			}
+			
+		}	
+	}
+
+	public function saveAsPrivate()
+	{
+		$hashid = $this->input->post('hashid');
+		//echo "Notation Id: ".$nid;
+		$this->db->select('*');
+		$this->db->from('law_notation');
+		$this->db->where('HASHNOTATIONID', $hashid);		
+		
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			//print_r($result);
+			$data = array();
+			foreach($result as $row)
+			{
+				$notationid = $row['NOTATIONID'];
+				//$data['notationid'] = $row['NOTATIONID'];
+				//$data['hashnotationid'] = $row['HASHNOTATIONID'];
+				$data['casename'] = $row['CASENAME'];
+				$data['citation'] = $row['CITATION'];
+				$data['judge_name'] = $row['JUDGE_NAME'];
+				$data['court_name'] = $row['COURT_NAME'];
+				$data['year'] = $row['YEAR'];
+				$data['bench'] = $row['BENCH'];
+				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				
+				$data['created_by'] = $row['CREATED_BY'];
+				$data['created_on'] = $row['CREATED_ON'];
+				$data['type'] = 'private';
+				
+				
+				$this->db->insert('law_notation', $data); 
+				$autoid = $this->db->insert_id();
+				
+				$this->db->where('id', $autoid);
+				$nid = 'NT'.$autoid;
+				$hashnid = md5($nid.time());
+				$this->db->set('NOTATIONID', $nid);
+				$this->db->set('HASHNOTATIONID', $hashnid);
+				
+				$this->db->set('CREATED_BY', $this->session->userdata('userid'));
+				$this->db->set('CREATED_ON', time());
+
+				$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+				$this->db->set('UPDATED_ON', time());
+
+				$this->db->update('law_notation');
+
+				/*
+				$casedata = array();
+				print "select * from ips_case where ordertrackingid='".$row['ordertrackingid']."'";
+				$casequery = $this->db->query("select * from ips_case where ordertrackingid='".$row['ordertrackingid']."'");
+				*/
+				$this->db->select('*');
+				$this->db->from('law_notation_statuate');
+				$this->db->where('notationid', $notationid);
+				$statuateData = array();
+				$statuatequery = $this->db->get();
+				
+				if($statuatequery->num_rows() > 0)
+				{
+					$statuateresult = $statuatequery->result_array();
+					foreach($statuateresult as $statuaterow)
+					{
+
+						$itemlist = array();
+
+						if(($statuaterow['STATUATE'] == "") && ($statuaterow['CONCEPT'] == "") && ($nid == ""))
+							continue;
+
+						$itemlist['STATUATE'] = $statuaterow['STATUATE'];
+						$itemlist['SUB_SECTION'] = $statuaterow['SUB_SECTION'];
+						$itemlist['CONCEPT'] = $statuaterow['CONCEPT'];
+						$itemlist['NOTATIONID'] = $nid;
+
+						$this->db->insert('law_notation_statuate', $itemlist); 
+					}
+				}
+				$data['statuatedetails'] = $statuateData;
+							
+				
+				$this->db->select('*');
+				$this->db->from('law_citation_notation_link');
+				$this->db->where('notationid', $notationid);
+				$notationdata = array();
+				$notationquery = $this->db->get();
+				
+				if($notationquery->num_rows() > 0)
+				{
+					$notationresult = $notationquery->result_array();
+					foreach($notationresult as $notationrow)
+					{
+
+						$itemlist = array();
+
+						if(($notationrow['CITATION'] == "")  && ($nid == ""))
+							continue;
+
+						$itemlist['CITATION'] = $notationrow['CITATION'];
+						$itemlist['ACTUAL_CITATION'] = $notationrow['ACTUAL_CITATION'];
+						$itemlist['TYPE_OF_CITATION'] = $notationrow['TYPE_OF_CITATION'];
+						$itemlist['DESCRIPTION'] = $notationrow['DESCRIPTION'];
+						$itemlist['NOTATIONID'] = $nid;
+
+						$this->db->insert('law_citation_notation_link', $itemlist);
+					}
+				}
+
+
+				$this->db->where('HASHNOTATIONID', $hashid);
+				$this->db->set('ACTION', 'Y');
+				$this->db->update('law_notation');
+				
+				return true;
+			}
+
 			
 		}	
 	}
@@ -735,6 +878,10 @@ class Notationmodel extends CI_Model {
 						$this->db->insert('law_citation_notation_link', $itemlist);
 					}
 				}
+
+				$this->db->where('HASHNOTATIONID', $hashid);
+				$this->db->set('ACTION', 'Y');
+				$this->db->update('law_notation');
 				
 				return true;
 			}

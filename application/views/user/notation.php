@@ -1,3 +1,13 @@
+<?php
+	if($this->session->userdata('username'))
+	{
+		//print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+	else
+	{
+		print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +36,7 @@
     <!-- Timeline CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>dist/css/timeline.css" />
     <!-- Custom Fonts -->
-    <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet"  href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
 	
 	<style>
 		
@@ -119,7 +128,7 @@
 						<div class="span3">
 							<div id="divbench" class="form-group">
 								<label class="control-label">Type of Bench</label>
-								<input  class="form-control" type="text" id="bench" name="bench" value=""/>
+								<input  class="form-control" type="text" id="bench" name="bench" maxlength="3" value=""/>
 							</div>
 						</div>
 						<!--
@@ -169,9 +178,9 @@
 								<thead>
 									<tr>
 										<th width="2%"></th>
-										<th width="15%">Statute</th>
-										<th width="25%">Section & Subsection</th>
-										<th width="5%">Concept</th>
+										<th width="15%">Statute <span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="25%">Section & Subsection <span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="5%">Concept <span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -268,6 +277,173 @@
 			</div>
 			<!-- /#page-wrapper -->
 		</div>
+		<!-- Statuate Modal Begin here-->
+		<div class="modal fade" id="todoModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Statuate</h4>
+					</div><!-- /.modal-header -->
+					<div class="modal-body">
+						<div class="row" style="margin:2%">
+							<div class="col-md-12">
+
+								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
+									<label for="todoTitle">Name</label>
+									<input id="statuateName" type="text" class="form-control" name="statuateName" value="">
+								</div>
+								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
+									<label for="statuateDes">Description</label>
+									<input id="statuateDes" type="text" class="form-control" name="statuateDes" value="">
+								</div>
+								
+								<div class="clearfix"><br></div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4"></div>
+										<div class="col-md-8" id="statuateAction" style="display:none;">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" name="saveStatuate" id="saveStatuate">Save</button>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div><!-- /.modal-body -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->	
+
+	<!-- Statuate Modal End here-->
+
+	<!-- Statuate sub Section Modal Begin here-->
+	<div class="modal fade" id="modalValidate">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">New Subsection</h4>
+              </div>
+              <div class="modal-body">
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label class="control-label">Statuate</label>
+                        <select class="form-control" id="statuatename" name="statuatename" >
+                            <option value="">Select</option>
+                            <?php
+                                foreach ($StatuateSubsection as $k=>$v) {
+                                    echo '<option value="'.$k.'">'.$v.'</option>';
+                                }
+                            ?>
+                        </select>
+                        
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label class="control-label">Subsection Name</label>
+                        <input  class="form-control" type="text" id="subsectionname" name="subsectionname" value=""/>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label  for="description" class="control-label">Description</label>
+                        <input  class="form-control" type="text" disabled="true" id="description" name="description" value=""/>
+                    </div>
+                </div>
+
+                <div class="clearfix"><br></div>
+                <div class="center modalButton" id="subsectionAction"  style="display:none;">
+                  <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="proceedButton" id="proceedButton">Save</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+          </div><!--/.modal-content -->
+          </div><!--/.modal-dialog -->
+        </div> <!--/.modal -->
+	<!-- Statuate sub Section Modal End here-->        
+	<!-- Concept Modal Begin here-->
+		<div class="modal fade" id="conceptModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Concept</h4>
+					</div><!-- /.modal-header -->
+					<div class="modal-body">
+						<div class="row-fluid">
+		                    <div class="span12">
+		                        <label class="control-label">Statuate</label>
+		                        <select class="form-control" id="conceptStatuatename" name="conceptStatuatename" >
+		                            <option value="">Select</option>
+		                            <?php
+		                                foreach ($StatuateSubsection as $k=>$v) {
+		                                    echo '<option value="'.$k.'">'.$v.'</option>';
+		                                }
+		                            ?>
+		                        </select>
+		                    </div>
+			            </div>
+
+			            <div class="row-fluid">
+		                    <div class="span12">
+		                        <label for="conceptName">Name</label>
+		                        <input id="conceptName" type="text" class="form-control" name="conceptName" value="">
+		                    </div>
+			            </div>
+
+			            <div class="row-fluid">
+		                    <div class="span12">
+		                        <label for="conceptDescription">Description</label>
+		                        <input id="conceptDescription" type="text" class="form-control" name="conceptDescription" value="">
+		                    </div>
+			            </div>
+
+			            <div class="clearfix"><br></div>
+
+			            <div class="row-fluid">
+			            	<div class="span4"></div>
+		                    <div class="span4" id="conceptAction"  style="display:none;">
+		                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary" name="saveConcept" id="saveConcept">Save</button>
+		                    </div>
+		                    <div class="span4"></div>
+			            </div>
+			            <!--
+						<div class="row" style="margin:2%">
+							<div class="col-md-12">
+
+								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
+									<label for="conceptName">Name</label>
+									<input id="conceptName" type="text" class="form-control" name="conceptName" value="">
+								</div>
+								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
+									<label for="conceptDescription">Description</label>
+									<input id="conceptDescription" type="text" class="form-control" name="conceptDescription" value="">
+								</div>
+								
+								<div class="clearfix"><br></div>
+								<div class="row">
+									<div class="col-md-12">
+										<div class="col-md-4"></div>
+										<div class="col-md-8"  id="conceptAction"  style="display:none;">
+											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+											<button type="button" class="btn btn-primary" name="saveConcept" id="saveConcept">Save</button>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</div>-->
+					</div><!-- /.modal-body -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->	
+
+	<!-- Concept Modal End here-->
 	</form>		
     <!-- /#wrapper -->
 
@@ -548,7 +724,7 @@
 			var year = $("#year").val();
 
 			var bench = $("#bench").val();
-			var facts_of_case = $("#facts_of_case").val();
+			var facts_of_case = $("#facts_of_case").text();
 			var status = $("#status").val();
 			var notationid = $("#ntype").val();
 
@@ -574,6 +750,7 @@
 				success: function( msg ) {
 					//alert(msg);
 					$("#ntype").val(msg);
+					clearInterval(interval);
 				}
 			});
 			$(".blockUIOverlay").hide();
@@ -659,6 +836,7 @@
 			minLength: 2
 		});
 	});
+
 	$(document).on("keyup.autocomplete","#citation",function(e){
 
 	       var term =  $(this ).val();
@@ -771,7 +949,182 @@
 		//window.location.href =  '<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid;
 		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_blank')
 	}
+
+	$(document).on('click', '#saveStatuate', function(e) {
+		var errorMessage = '';
+		if ( $("#statuateName").val() == ""  || $("#statuateName").val() == null) {
+			errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+		}
+
+		if ( $("#statuateDes").val() == ""  || $("#statuateDes").val() == null) {
+			errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
+		}
+
+		if ( errorMessage != "" ) {
+			alert(errorMessage);
+			return;
+		}
+
+		$.ajax({
+			url : '../admin/listofstatuate/insertStatuate',
+			type : 'POST',
+			async: false,
+			cache: false,
+			data : {
+			  	statuatename: $("#statuateName").val(),
+			  	description: $("#statuateDes").val()
+			},
+			success: function(dat) {
+							  	
+			  	$("#statuateName").val('');
+			  	$("#statuateDes").val('');
+			  	$("#todoModal").modal('hide');
+			  	$('#statuatename')
+				    .find('option')
+				    .remove()
+				    .end()
+				    .append('<option value="">Select</option>');
+
+				$.ajax({
+					url : '../admin/listofstatuatesubsection/fetchUserListOfStatuateSubSection',
+					type : 'POST',
+					async: false,
+					cache: false,
+					dataType: "json",
+					success: function(data) {
+						$.each(data, function(key, item) {
+						    alert(item.DESCRIPTION);
+						    
+						    $('#statuatename').append($('<option>', { 
+						        value: item.STID,
+						        text : item.DESCRIPTION 
+						    }));
+						});
+					}
+				});
+			}
+		});
+	});
+
+	$(document).on('click', '#saveConcept', function(e) {
+		var errorMessage = '';
+		/*
+		if ( $("#conceptStatuatename").val() == ""  || $("#conceptStatuatename").val() == null) {
+			errorMessage = errorMessage + 'Statuate cannot be empty!!\n' ;
+		}*/
+
+		if ( $("#conceptName").val() == ""  || $("#conceptName").val() == null) {
+			errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+		}
+
+		if ( $("#conceptDescription").val() == ""  || $("#conceptDescription").val() == null) {
+			errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
+		}
+
+		if ( errorMessage != "" ) {
+			alert(errorMessage);
+			return;
+		}
+
+		$.ajax({
+			url : '../admin/listofconcept/insertConcept',
+			type : 'POST',
+			async: false,
+			cache: false,
+			data : {
+			  	conceptname: $("#conceptName").val(),
+			  	description: $("#conceptDescription").val()
+			},
+			success: function(dat) {
+							  	
+			  	$("#conceptName").val('');
+			  	$("#description").val('');
+			  	$("#conceptModal").modal('hide');
+			}
+		});
+	});
+
+	$(document).on('blur','#statuateName',function(){
+		if($("#statuateName").val() != '')
+		{
+			
+			$.ajax({
+				url : '../admin/listofstatuate/checkStatuateNameAvailable',
+				dataType: "json",
+				method: 'post',
+				data: {
+				   statuatename: $("#statuateName").val(),
+				},
+				success: function( data ) {
+					//alert(data);
+					if(data=="true"){
+						$("#statuateAction").css("display","block");
+					}
+					else{
+						$("#statuateAction").css("display","none");	
+					}
+				}
+			});
+		}
+	});
+
+	$(document).on('blur','#subsectionname',function(){
+		if($("#subsectionname").val() != '')
+		{
+			
+			$.ajax({
+				url : '../admin/listofstatuatesubsection/checkSubsectionStatuateNameAvailable',
+				dataType: "json",
+				method: 'post',
+				data: {
+				   'statuatename':$("#statuatename").val(), 'subsectionname':$("#subsectionname").val()
+				},
+				success: function( data ) {
+					
+					if(data=="true"){
+                    
+                        $("#description").prop('disabled',false);
+                        //$("#proceedButton").css("display","block");
+                        $("#subsectionname").css("border","1px solid #ccc");
+                        $("#subsectionname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                        $("#subsectionAction").css("display","block");
+                    }
+                    else{
+                    	$("#description").prop('disabled',true);
+                        $("#subsectionname").css("border","1px solid #c7254e");
+                        $("#subsectionname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                        $("#subsectionAction").css("display","none");	
+                    }
+				}
+			});
+		}
+	});
+	
+	$( "#conceptName" ).blur(function() {
+        $.ajax({
+            type: 'post',
+            dataType: "json",
+            url: '../admin/listofconcept/checkConceptNameAvailable',
+            data: {'conceptname':$("#conceptName").val()},
+            success:function(data){
+                //alert(data);
+                if(data=="true"){
+                    $("#conceptDescription").prop('disabled',false);
+                    //$("#proceedButton").css("display","block");
+                    $("#conceptName").css("border","1px solid #ccc");
+                    $("#conceptName").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                    $("#conceptAction").css("display","block");
+                }
+                else{
+                    $("#conceptDescription").prop('disabled',true);
+                    $("#conceptName").css("border","1px solid #c7254e");
+                    $("#conceptName").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                    $("#conceptAction").css("display","none");
+                }
+            }
+        });
+    });
+
 	</script>
 </body>
-
 </html>

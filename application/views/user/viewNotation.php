@@ -1,3 +1,13 @@
+<?php
+	if($this->session->userdata('username'))
+	{
+		//print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+	else
+	{
+		print "<script>window.location.href='".site_url('login')."';</script>";
+	}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +93,7 @@
 							<label class="control-label">Judge Name: <?php echo ucfirst($judge_name); ?></label>
 						</div>
 						<div class="span3">
-							<label class="control-label">Year of Judgement: <?php echo date('d-m-Y',$year); ?></label>
+							<label class="control-label">Year of Judgement: <?php echo $year; ?></label>
 						</div>
 						<div class="span3">
 							<label class="control-label">Type of Bench: <?php echo $bench; ?></label>
@@ -194,23 +204,27 @@
 
 	            <div class="row-fluid" style="margin-bottom:10px;">
 					<?php if($type != 'draft'){ ?>
-					<div class="span4" style="text-align:center;">
-						<button type="button" class="btn btn-primary" id="saveAsDraft">
-			                Save as Draft<i class="fa fa-close"></i>
+					<div class="span3" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="saveAsPrivate">
+			                Keep Private<i class="fa fa-close"></i>
 			            </button>
 					</div>
-					<?php } else {?>
-					<div class="span4" style="text-align:center;">
-					</div>
 					<?php } ?>
+					<div class="span3" style="text-align:center;">
+						<button type="button" class="btn btn-primary" id="editNotation">
+			                Edit Notation<i class="fa fa-close"></i>
+			            </button>
+					</div>
+					
 					<?php if($this->session->userdata('role') == "Admin" && $type != 'dbversion') { ?>
-					<div class="span4" style="text-align:center;">
+					<div class="span3" style="text-align:center;">
 						<button type="button" class="btn btn-primary" id="dbVersion">
 			                Database Version<i class="fa fa-close"></i>
 			            </button>
 					</div>
 					<?php } ?>
-					<div class="span4" style="text-align:center;">
+
+					<div class="span3" style="text-align:center;">
 						<button type="button" class="btn btn-primary" id="tag" data-toggle="modal" data-target="#modalValidate" >
 			                Tag a Notation<i class="fa fa-close"></i>
 			            </button>
@@ -272,9 +286,9 @@
 	
 	<script>
 		$(document).ready(function() {
-			$("#saveAsDraft").click(function(){
+			$("#saveAsPrivate").click(function(){
 				$.ajax({
-					url : 'viewnotation/saveAsDraft',
+					url : 'viewnotation/saveAsPrivate',
 					dataType: "text",
 					method: 'post',
 					data: {
@@ -282,9 +296,9 @@
 					},
 					success : function(data) {
 						if(data == "Admin")
-							window.location.href="http://localhost:2020/lawyer/admin/homepage";
+							window.location.href="http://localhost/lawyer/admin/homepage";
 						else
-							window.location.href="http://localhost:2020/lawyer/user/homepage";
+							window.location.href="http://localhost/lawyer/user/homepage";
 					}
 				});
 			});
@@ -299,11 +313,15 @@
 					},
 					success : function(data) {
 						if(data == "Admin")
-							window.location.href="http://localhost:2020/lawyer/admin/homepage";
+							window.location.href="http://localhost/lawyer/admin/homepage";
 						else
-							window.location.href="http://localhost:2020/lawyer/user/homepage";
+							window.location.href="http://localhost/lawyer/user/homepage";
 					}
 				});
+			});
+
+			$("#editNotation").click(function(){
+				window.location.href="http://localhost/lawyer/user/transfernotation?nid="+$("#hashid").val();
 			});
 
 			$(document).on('focus','.autocomplete_tag',function(){

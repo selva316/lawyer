@@ -8,6 +8,20 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function fetchStatuate()
+	{
+		$str = "select * from law_statuate";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
+	public function fetchConcept()
+	{
+		$str = "select * from law_concepts";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
 	public function fetchYear($year)
 	{
 		$query = $this->db->query("select year from law_year where (UPPER(year) LIKE '%".strtoupper($year)."%')");
@@ -168,12 +182,15 @@ class Configurationmodel extends CI_Model {
 
 	public function ajaxStatuate()
 	{
-		
+
 		$type = $this->input->post('type');
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
-				
-		$query = $this->db->query("select ls.NAME as sname, lsss.NAME as subname from law_statuate ls inner join law_statuate_sub_section lsss  on ls.STID=lsss.STID where userid='$userid' and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+
+		$query = $this->db->query("select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		
+		//echo "select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (userid='$userid' or userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')";
+
 		$data = array();
 		if ($query->num_rows() > 0)
 		{
@@ -194,7 +211,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 				
-		$query = $this->db->query("select name from law_concepts  where userid='$userid' and (UPPER(name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select name from law_concepts  where role='Admin' or userid='$userid' and (UPPER(name) LIKE '%".strtoupper($name)."%')");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{

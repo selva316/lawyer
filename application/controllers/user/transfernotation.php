@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class EditNotation extends CI_Controller {
+class TransferNotation extends CI_Controller {
 
 	public function __construct()
 	{
@@ -32,7 +32,7 @@ class EditNotation extends CI_Controller {
 		$data['status'] = $this->notationmodel->fetchStatus();
 		$data['StatuateSubsection'] = $this->listofstatuatesubsectionmodel->fetchUserListOfStatuateSubSection();
 		//print_r($data);
-		$this->load->view('user/editNotation',$data);
+		$this->load->view('user/transferNotation',$data);
 	}
 	
 	public function ajax()
@@ -115,6 +115,20 @@ class EditNotation extends CI_Controller {
 			//$this->load->view('user/homepage');
 			redirect('user/homepage');
 		}
+	}
+
+	public function saveAsDraft()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->saveAsDraft();
+		return $this->session->userdata('role');
+	}
+	
+	public function dbVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->dbVersion();
+		return $this->session->userdata('role');
 	}
 
 }

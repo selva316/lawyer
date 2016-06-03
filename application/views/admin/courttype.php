@@ -1,3 +1,13 @@
+<?php
+    if($this->session->userdata('username'))
+    {
+        //print "<script>window.location.href='".site_url('login')."';</script>";
+    }
+    else
+    {
+        print "<script>window.location.href='".site_url('login')."';</script>";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

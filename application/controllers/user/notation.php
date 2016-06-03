@@ -27,11 +27,13 @@ class Notation extends CI_Controller {
 	{
 		$this->load->model('configurationmodel');
 		$this->load->model('notationmodel');
+		$this->load->model('listofstatuatesubsectionmodel');
 		$data = array();
 		
 		$data['courtDetails'] = $this->configurationmodel->fetchCourtType();
 		$data['typeOfCitation'] = $this->configurationmodel->fetchTypeOfCitation();
 		$data['status'] = $this->notationmodel->fetchStatus();
+		$data['StatuateSubsection'] = $this->listofstatuatesubsectionmodel->fetchUserListOfStatuateSubSection();
 
 		$this->load->view('user/notation',$data);
 	}
@@ -112,6 +114,11 @@ class Notation extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function insertStatuate()
+	{
+
+	}
+	
 	public function save(){
 		
 		if(isset($_POST))
@@ -128,7 +135,7 @@ class Notation extends CI_Controller {
 				$data['court_name'] = $this->input->post('court_name');
 				$data['casenumber'] = $this->input->post('casenumber');
 
-				$data['year'] = strtotime($this->input->post('year'));
+				$data['year'] = $this->input->post('year');
 				$data['bench'] = $this->input->post('bench');
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
@@ -150,7 +157,7 @@ class Notation extends CI_Controller {
 				$data['court_name'] = $this->input->post('court_name');
 				$data['casenumber'] = $this->input->post('casenumber');
 
-				$data['year'] = strtotime($this->input->post('year'));
+				$data['year'] = $this->input->post('year');
 				$data['bench'] = $this->input->post('bench');
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
@@ -189,7 +196,7 @@ class Notation extends CI_Controller {
 				}
 				
 				if($this->input->post('year')){
-					$data['year'] = strtotime($this->input->post('year'));	
+					$data['year'] = $this->input->post('year');	
 				}
 				
 				if($this->input->post('bench')){
@@ -199,7 +206,7 @@ class Notation extends CI_Controller {
 				if($this->input->post('facts_of_case') != '')
 				{
 					$data['facts_of_case'] = $this->input->post('facts_of_case');	
-					}
+				}
 				
 				if($this->input->post('status') != '' && $this->input->post('notationid') != '')
 				{

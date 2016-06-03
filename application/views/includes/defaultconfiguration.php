@@ -15,7 +15,16 @@
             <a href="<?php echo site_url('admin/listofcourt');?>">List of Courts</a>
         </li>
         <li  class="test">
-            <a href="<?php echo site_url('login');?>">Logout</a>
+            <a href="<?php echo site_url('admin/listofstatuate');?>">List of Statuate</a>
+        </li>
+        <li  class="test">
+            <a href="<?php echo site_url('admin/listofstatuatesubsection');?>">List of Sub Section</a>
+        </li>
+        <li  class="test">
+            <a href="<?php echo site_url('admin/listofconcept');?>">List of Concepts</a>
+        </li>
+        <li  class="test">
+            <a href="<?php echo site_url('login/logout');?>">Logout</a>
         </li>
     </ul>
 </nav>

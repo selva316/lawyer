@@ -38,6 +38,13 @@ class ViewNotation extends CI_Controller {
 		return $this->session->userdata('role');
 	}
 	
+	public function saveAsPrivate()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->saveAsPrivate();
+		return $this->session->userdata('role');
+	}
+
 	public function dbVersion()
 	{
 		$this->load->model('notationmodel');

@@ -357,7 +357,7 @@
                 <div class="clearfix"><br></div>
                 <div class="center modalButton" id="subsectionAction"  style="display:none;">
                   <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="proceedButton" id="proceedButton">Save</button>
+                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="saveSubsection" id="saveSubsection">Save</button>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -946,7 +946,6 @@
 
 	function viewCitation(notationid)
 	{
-		//window.location.href =  '<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid;
 		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_blank')
 	}
 
@@ -993,7 +992,6 @@
 					dataType: "json",
 					success: function(data) {
 						$.each(data, function(key, item) {
-						    alert(item.DESCRIPTION);
 						    
 						    $('#statuatename').append($('<option>', { 
 						        value: item.STID,
@@ -1008,10 +1006,6 @@
 
 	$(document).on('click', '#saveConcept', function(e) {
 		var errorMessage = '';
-		/*
-		if ( $("#conceptStatuatename").val() == ""  || $("#conceptStatuatename").val() == null) {
-			errorMessage = errorMessage + 'Statuate cannot be empty!!\n' ;
-		}*/
 
 		if ( $("#conceptName").val() == ""  || $("#conceptName").val() == null) {
 			errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
@@ -1047,7 +1041,6 @@
 	$(document).on('blur','#statuateName',function(){
 		if($("#statuateName").val() != '')
 		{
-			
 			$.ajax({
 				url : '../admin/listofstatuate/checkStatuateNameAvailable',
 				dataType: "json",
@@ -1071,7 +1064,6 @@
 	$(document).on('blur','#subsectionname',function(){
 		if($("#subsectionname").val() != '')
 		{
-			
 			$.ajax({
 				url : '../admin/listofstatuatesubsection/checkSubsectionStatuateNameAvailable',
 				dataType: "json",
@@ -1090,6 +1082,7 @@
                         $("#subsectionAction").css("display","block");
                     }
                     else{
+                    	$("#description").val('');
                     	$("#description").prop('disabled',true);
                         $("#subsectionname").css("border","1px solid #c7254e");
                         $("#subsectionname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
@@ -1099,6 +1092,41 @@
 			});
 		}
 	});
+
+	$('#saveSubsection').click(function () {
+
+        var errorMessage = '';
+        if ( $("#statuatename").val() == ""  || $("#statuatename").val() == null) {
+            errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+        }
+        if ( $("#subsectionname").val() == ""  || $("#subsectionname").val() == null) {
+            errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+        }
+        if ( $("#description").val() == ""  || $("#description").val() == null) {
+            errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
+        }
+
+        if ( errorMessage != "" ) {
+            alert(errorMessage);
+            return;
+        }
+
+        $.ajax({
+            type: 'post',
+            dataType: "json",
+            url: '../admin/listofstatuatesubsection/insertSubSection',
+            data: {'statuatename':$("#statuatename").val(),'subsectionname':$("#subsectionname").val(),'description':$("#description").val()},
+            success:function(data){
+            	$("#statuatename").val('');
+            	$("#subsectionname").val('');
+            	$("#description").val('');
+
+            	$("#description").prop('disabled',true);
+                $("#subsectionname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                $("#subsectionAction").css("display","none");	
+            }
+        });
+    });
 	
 	$( "#conceptName" ).blur(function() {
         $.ajax({

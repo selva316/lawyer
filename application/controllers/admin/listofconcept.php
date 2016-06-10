@@ -41,7 +41,7 @@ class ListOfConcept extends CI_Controller {
 	public function insertConcept()
 	{
 		$this->load->model('listofconceptmodel');
-		$data =  $this->listofconceptmodel->insertConcept($this->input->post('conceptname'),$this->input->post('description'));
+		$data =  $this->listofconceptmodel->insertConcept($this->input->post('conceptname'),$this->input->post('description'),$this->input->post('statuate'));
 		echo json_encode($data);
 	}
 

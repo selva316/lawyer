@@ -48,33 +48,37 @@ class Listofstatuatesubsectionmodel extends CI_Model {
 		return $data;
 	}
 
-	public function insertSubSection($statuateid, $subsectionname, $description){
+	public function insertSubSection($statuateid, $subsectionname){
 
 		$role = $this->session->userdata('role');
 
-		$data = array();
-		$data['STID'] = $statuateid;
-		$data['NAME'] = $subsectionname;
-		$data['DESCRIPTION'] = $description;
-		
-		if($role == 'Admin')
-			$data['ROLE'] = 'Admin';
-		else
-			$data['ROLE'] = 'User';
+		$subsectionexplore = explode(',', $subsectionname);
+		foreach ($subsectionexplore as $subval) {
+			$data = array();
 
-		$data['USERID'] = $this->session->userdata('userid');
-
-		$data['DISABLE'] = 'N';		
-
-		$this->db->insert('law_statuate_sub_section', $data); 
-		$autoid = $this->db->insert_id();
-		
-		$this->db->where('id', $autoid);
-		$ctid = 'SS'.$autoid;
-		
-		$this->db->set('SSID', $ctid);
+			$data['STID'] = $statuateid;
+			$data['DESCRIPTION'] = $subval;
+			$data['NAME'] = $subval;
 			
-		$this->db->update('law_statuate_sub_section');
+			if($role == 'Admin')
+				$data['ROLE'] = 'Admin';
+			else
+				$data['ROLE'] = 'User';
+
+			$data['USERID'] = $this->session->userdata('userid');
+
+			$data['DISABLE'] = 'N';		
+
+			$this->db->insert('law_statuate_sub_section', $data); 
+			$autoid = $this->db->insert_id();
+			
+			$this->db->where('id', $autoid);
+			$ctid = 'SS'.$autoid;
+			
+			$this->db->set('SSID', $ctid);
+				
+			$this->db->update('law_statuate_sub_section');
+		}
 
 		$dArray = array();
 		array_push($dArray, true);

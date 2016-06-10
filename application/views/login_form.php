@@ -21,7 +21,7 @@
     <style type='text/css' media='screen'>
 
       body.login.example2 {
-        background-image: url("${request.contextPath}/images/bg_2.png");
+        background-image: url("/images/bg_2.png");
         background-color: rgba(255, 255, 255, 0);
       }
       body.login {
@@ -109,7 +109,8 @@
 <body>
 
   <div id='login' class="main-login col-sm-4 col-sm-offset-4">
-    <div class="logo"><img src="${request.contextPath}/images/syniverse-logo.png" alt="Law Logo">
+    <div class="logo">
+    <img src="<?php echo base_url();?>img/advocateq.png" style="width:300px;height: 90px;" alt="Law Logo" />
     </div>
     <div style="display: block;" class="box-login">
       <h3>Sign in to your account</h3>

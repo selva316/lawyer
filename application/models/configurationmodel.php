@@ -187,7 +187,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 		
 		//echo "select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (userid='$userid' or userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')";
 
@@ -197,7 +197,7 @@ class Configurationmodel extends CI_Model {
 			$result = $query->result_array();
 			foreach($result as $row)
 			{
-				$name = $row['sname'].'|'.$row['subname'];//i am not want item code i,eeeeeeeeeeee
+				$name = $row['sname'].'|'.$row['subname'].'|'.$row['stid'];//i am not want item code i,eeeeeeeeeeee
 				array_push($data, $name);
 			}
 		}

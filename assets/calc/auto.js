@@ -2,7 +2,7 @@
  * Site : http:www.smarttutorials.net
  * @author muni
  */
-	
+
 //adds extra table rows
 var i=$('.tableStatuate tr').length;
 $(".addmore").on('click',function(){
@@ -17,6 +17,17 @@ $(".addmore").on('click',function(){
 });
 
 
+//adds extra table rows	Sub Section
+var s=$('.tableNewSubSection tr').length;
+$(".addSub").on('click',function(){
+	html = '<tr id="rowss_'+s+'">';
+	//html += '<td><input class="case_sub" type="checkbox"/></td>';
+	html += '<td><input type="text" name="subsectionname[]" id="subsectionname_'+s+'" class="form-control" autocomplete="off"></td>';
+	html += '</tr>';
+	$('.tableNewSubSection').append(html);
+	s++;
+});
+
 //adds extra table rows  	Type of Citation
 var j=$('.tableCitation tr').length;
 $(".typeAddmore").on('click',function(){
@@ -28,6 +39,17 @@ $(".typeAddmore").on('click',function(){
 	html += '</tr>';
 	$('.tableCitation').append(html);
 	i++;
+});
+
+//adds extra table rows	Concept
+var k=$('.tableNewConcept tr').length;
+$(".addConceptStatuate").on('click',function(){
+	html = '<tr id="rowcon_'+k+'">';
+	html += '<td><input type="hidden" name="hiddenconstatuate[]" id="hiddenconceptstatuate_'+k+'" class="form-control"><input type="text" data-type="'+k+'" name="constatuate[]" id="conceptstatuate_'+k+'" class="form-control autocomplete_statuate" autocomplete="off"></td>';
+	html += '<td><input type="text" name="conceptsubsection[]" id="conceptsubsection_'+k+'" class="form-control" autocomplete="off"></td>';
+	html += '</tr>';
+	$('.tableNewConcept').append(html);
+	k++;
 });
 
 //to check all checkboxes
@@ -48,11 +70,18 @@ $(".typeDelete").on('click', function() {
 	$('#check_all').prop("checked", false); 
 });
 
+//deletes the selected table rows
+$(".deleteSub").on('click', function() {
+	$('.case_sub:checkbox:checked').parents("tr").remove();
+	$('#check_all').prop("checked", false); 
+});
 
 
-
-
-//It restrict the non-numbers
+//deletes the selected table rows
+$(".typeDelete").on('click', function() {
+	$('.case_citation:checkbox:checked').parents("tr").remove();
+	$('#check_all').prop("checked", false); 
+});//It restrict the non-numbers
 var specialKeys = new Array();
 specialKeys.push(8,46); //Backspace
 function IsNumeric(e) {

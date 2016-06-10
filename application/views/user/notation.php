@@ -48,6 +48,10 @@
 			font-size:14px;
 			padding-left:40%;
 		}
+
+		.ui-autocomplete {
+			z-index: 9999;
+		}
 	</style>
 </head>
 
@@ -341,6 +345,30 @@
                         
                     </div>
                 </div>
+                <div class="row-fluid" style="margin-top: 10px;">
+                	<div class="span12">
+                		<table class="table table-bordered table-striped tableNewSubSection">
+							<thead>
+								<tr>
+									<th colspan="2">Subsection Name</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<!--<td><input class="case_sub" type="checkbox"/></td>-->
+									<td>
+									<input type="text" name="subsectionname[]" id="subsectionname_1" class="form-control" autocomplete="off"></td>
+									
+								</tr>
+							</tbody>
+						</table>
+						<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+				  			<!---<button type="button" class="btn btn-danger deleteSub"><i class="fa fa-trash-o" aria-hidden="true"></i></button>-->
+				  			<button type="button" class="btn btn-success addSub"><i class="fa fa-plus" aria-hidden="true"></i></button>
+				  		</div>
+                	</div>
+                </div>
+                <!--
                 <div class="row-fluid">
                     <div class="span12">
                         <label class="control-label">Subsection Name</label>
@@ -352,12 +380,12 @@
                         <label  for="description" class="control-label">Description</label>
                         <input  class="form-control" type="text" disabled="true" id="description" name="description" value=""/>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="clearfix"><br></div>
-                <div class="center modalButton" id="subsectionAction"  style="display:none;">
+                <div class="center modalButton" id="subsectionAction"  style="text-align:center;">
                   <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="saveSubsection" id="saveSubsection">Save</button>
+                  <button type="button" class="btn btn-primary nonEisValidate" name="saveSubsection" id="saveSubsection">Save</button>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -374,7 +402,7 @@
 						<h4 class="modal-title"  style="font-weight:bold;">Add Concept</h4>
 					</div><!-- /.modal-header -->
 					<div class="modal-body">
-						<div class="row-fluid">
+						<!--<div class="row-fluid">
 		                    <div class="span12">
 		                        <label class="control-label">Statuate</label>
 		                        <select class="form-control" id="conceptStatuatename" name="conceptStatuatename" >
@@ -386,7 +414,7 @@
 		                            ?>
 		                        </select>
 		                    </div>
-			            </div>
+			            </div>-->
 
 			            <div class="row-fluid">
 		                    <div class="span12">
@@ -402,11 +430,38 @@
 		                    </div>
 			            </div>
 
+			            <div class="row-fluid" style="margin-top: 10px;">
+		                	<div class="span12">
+		                		<table class="table table-bordered table-striped tableNewConcept">
+									<thead>
+										<tr>
+											<th>Statuate</th>
+											<th>Subsection</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id="rowcon_1">
+											<td>
+											<input type="hidden" name="hiddenconstatuate[]" id="hiddenconceptstatuate_1" class="form-control">
+											<input type="text" data-type="1" name="constatuate[]" id="conceptstatuate_1" class="form-control autocomplete_statuate" autocomplete="off"></td>
+											<td>
+											<input type="text" name="conceptsubsection[]" id="conceptsubsection_1" class="form-control" autocomplete="off"></td>
+											
+										</tr>
+									</tbody>
+								</table>
+								<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+						  			<!---<button type="button" class="btn btn-danger deleteSub"><i class="fa fa-trash-o" aria-hidden="true"></i></button>-->
+						  			<button type="button" class="btn btn-success addConceptStatuate"><i class="fa fa-plus" aria-hidden="true"></i></button>
+						  		</div>
+		                	</div>
+		                </div>
+
 			            <div class="clearfix"><br></div>
 
 			            <div class="row-fluid">
 			            	<div class="span4"></div>
-		                    <div class="span4" id="conceptAction"  style="display:none;">
+		                    <div class="span4" id="conceptAction">
 		                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 								<button type="button" class="btn btn-primary" name="saveConcept" id="saveConcept">Save</button>
 		                    </div>
@@ -709,6 +764,48 @@
 	
 	});
 
+	
+	$(document).on('focus','.autocomplete_statuate',function(){
+		
+		type = $(this).data('type');
+		url = 'notation/statuateAjax';
+		autoTypeNo=0;
+
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : url,
+					dataType: "json",
+					method: 'post',
+					data: {
+					   name_startsWith: request.term,
+					   type: type
+					},
+					 success: function( data ) {
+						 response( $.map( data, function( item ) {
+						 	var code = item.split("|");
+							return {
+								label: item,
+								value: code[autoTypeNo],
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 0,
+			select: function( event, ui ) {
+				var names = ui.item.data.split("|");						
+				id_arr = $(this).attr('id');
+		  		id = id_arr.split("_");
+		  		//hiddenconceptstatuate_
+				$('#conceptstatuate_'+id[1]).val(names[0]);
+				$('#conceptsubsection_'+id[1]).val(names[1]);
+				$('#hiddenconceptstatuate_'+id[1]).val(names[2]);
+			}
+		});
+	});
 
 	function ajaxCreateCitation(){
 		
@@ -1015,6 +1112,25 @@
 			errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
 		}
 
+
+        var si = $('.tableNewConcept tr').length - 1;
+        
+        var temp = [];
+        for(i=1;i<=si;i++)
+        {
+        	var conceptcontrol = "#hiddenconceptstatuate_"+i;
+        	if ( $(conceptcontrol).val() == ""  || $(conceptcontrol).val() == null) {
+            	continue;
+        	}
+        	temp.push($(conceptcontrol).val());
+        }
+
+        if(temp.length == 0)
+		{
+			errorMessage = errorMessage + 'Statuate should not be empty!!\n' ;
+		}
+
+
 		if ( errorMessage != "" ) {
 			alert(errorMessage);
 			return;
@@ -1027,12 +1143,24 @@
 			cache: false,
 			data : {
 			  	conceptname: $("#conceptName").val(),
-			  	description: $("#conceptDescription").val()
+			  	description: $("#conceptDescription").val(),
+			  	statuate: temp.join(",")
 			},
 			success: function(dat) {
 							  	
 			  	$("#conceptName").val('');
 			  	$("#description").val('');
+
+			  	$("#rhiddenconceptstatuate_1").val('');
+			  	$("#conceptstatuate_1").val('');
+			  	$("#conceptsubsection_1").val('');
+
+            	for(j=2;j<=si;j++)
+		        {
+		        	var rowtr = "#rowcon_"+j;
+		        	$(rowtr).remove();
+		        }
+
 			  	$("#conceptModal").modal('hide');
 			}
 		});
@@ -1097,33 +1225,56 @@
 
         var errorMessage = '';
         if ( $("#statuatename").val() == ""  || $("#statuatename").val() == null) {
-            errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
+            errorMessage = errorMessage + 'Statuate name cannot be empty!!\n' ;
         }
-        if ( $("#subsectionname").val() == ""  || $("#subsectionname").val() == null) {
+        
+        var si = $('.tableNewSubSection tr').length - 1;
+        
+        var temp = [];
+        for(i=1;i<=si;i++)
+        {
+        	var subcontrol = "#subsectionname_"+i;
+        	if ( $(subcontrol).val() == ""  || $(subcontrol).val() == null) {
+            	continue;
+        	}
+        	temp.push($(subcontrol).val());
+        }
+
+        if(temp.length == 0)
+		{
+			errorMessage = errorMessage + 'Sub Section should not be empty!!\n' ;
+		}
+
+        /*if ( $("#subsectionname").val() == ""  || $("#subsectionname").val() == null) {
             errorMessage = errorMessage + 'Name cannot be empty!!\n' ;
         }
         if ( $("#description").val() == ""  || $("#description").val() == null) {
             errorMessage = errorMessage + 'Description cannot be empty!!\n' ;
         }
+        */
 
         if ( errorMessage != "" ) {
             alert(errorMessage);
             return;
         }
 
+        //$("#modalValidate").modal('hide');
+        
         $.ajax({
             type: 'post',
             dataType: "json",
             url: '../admin/listofstatuatesubsection/insertSubSection',
-            data: {'statuatename':$("#statuatename").val(),'subsectionname':$("#subsectionname").val(),'description':$("#description").val()},
+            data: {'statuatename':$("#statuatename").val(),'subsectionname':temp.join(",")},
             success:function(data){
             	$("#statuatename").val('');
-            	$("#subsectionname").val('');
-            	$("#description").val('');
+            	$("#rowss_1").val('');
 
-            	$("#description").prop('disabled',true);
-                $("#subsectionname").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
-                $("#subsectionAction").css("display","none");	
+            	for(j=2;j<=si;j++)
+		        {
+		        	var rowtr = "#rowss_"+j;
+		        	$(rowtr).remove();
+		        }
+                $("#modalValidate").modal('hide');
             }
         });
     });

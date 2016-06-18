@@ -173,7 +173,7 @@
 			
 			<div class="clear-both" style="margin-top:20px;"></div>
 
-			<div class="panel panel-default">
+			<div class="panel panel-info">
                 <div class="panel-heading">Statute and Concepts</div>
                 <div class="panel-body">
                 	<div class='row-fluid'>
@@ -207,7 +207,7 @@
 
             <div class="clear-both" style="margin-top:20px;"></div>
 
-			<div class="panel panel-default">
+			<div class="panel panel-danger">
                 <div class="panel-heading">List of Citation</div>
                 <div class="panel-body">
                 	<div class="row-fluid">
@@ -242,6 +242,40 @@
 							<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
 					  			<button class="btn btn-danger typeDelete" type="button">- Delete</button>
 					  			<button class="btn btn-success typeAddmore" type="button">+ Add More</button>
+					  		</div>	
+						</div>
+					</div>
+            	</div>
+            </div>
+
+
+            <div class="clear-both" style="margin-top:20px;"></div>
+
+			<div class="panel panel-warning">
+                <div class="panel-heading">Phrase and Legal Definitions</div>
+                <div class="panel-body">
+                	<div class="row-fluid">
+						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+							<table class="table table-bordered table-hover tablePhrase">
+								<thead>
+									<tr>
+										<th></th>
+										<th>Phrase</th>
+										<th>Legal Definitions</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><input class="case_phrase" type="checkbox"/></td>
+										<td><input type="text" data-type="phrase" name="phrase[]" id="phrase_1" class="form-control" autocomplete="off"></td>
+										<td><textarea  name="legal[]" id="legal_1" class="form-control"></textarea> </td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="clear-both" style="margin-top:20px;"></div>
+							<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
+					  			<button class="btn btn-danger phraseDelete" type="button">- Delete</button>
+					  			<button class="btn btn-success phraseAddmore" type="button">+ Add More</button>
 					  		</div>	
 						</div>
 					</div>
@@ -933,7 +967,7 @@
 			minLength: 2
 		});
 	});
-
+	/*
 	$(document).on("keyup.autocomplete","#citation",function(e){
 
 	       var term =  $(this ).val();
@@ -976,6 +1010,7 @@
 	    });
 
 	});
+	*/
 
 	/*
 	$(document).on('blur','#citation',function(){
@@ -999,6 +1034,7 @@
 		}
 	});
 	*/
+	/*
 	$(document).on("keyup.autocomplete",".autocomplete_citation",function(e){
 
 	       var term =  $(this).val();
@@ -1040,6 +1076,7 @@
 
 	    });
 	});
+	*/
 
 	function viewCitation(notationid)
 	{

@@ -41,6 +41,18 @@ $(".typeAddmore").on('click',function(){
 	i++;
 });
 
+//adds extra table rows Word phrase and Legal Definition
+var n=$('.tablePhrase tr').length;
+$(".phraseAddmore").on('click',function(){
+	html = '<tr>';
+	html += '<td><input class="case_phrase" type="checkbox"/></td>';
+	html += '<td><input type="text" data-type="phrase" name="phrase[]" id="phrase_'+j+'" class="form-control autocomplete_citation" autocomplete="off"></td>';
+	html += '<td><textarea  name="legal[]" id="legal_'+j+'" class="form-control"></textarea> </td>';
+	html += '</tr>';
+	$('.tablePhrase').append(html);
+	n++;
+});
+
 //adds extra table rows	Concept
 var k=$('.tableNewConcept tr').length;
 $(".addConceptStatuate").on('click',function(){
@@ -76,6 +88,11 @@ $(".deleteSub").on('click', function() {
 	$('#check_all').prop("checked", false); 
 });
 
+//deletes the selected table rows
+$(".phraseDelete").on('click', function() {
+	$('.case_phrase:checkbox:checked').parents("tr").remove();
+	$('#check_all').prop("checked", false); 
+});
 
 //deletes the selected table rows
 $(".typeDelete").on('click', function() {

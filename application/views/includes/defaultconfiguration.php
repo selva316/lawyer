@@ -24,6 +24,12 @@
             <a href="<?php echo site_url('admin/listofconcept');?>">List of Concepts</a>
         </li>
         <li  class="test">
+            <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
+        </li>
+        <li  class="test">
+            <a href="<?php echo site_url('admin/userdetails');?>">User Details</a>
+        </li>
+        <li  class="test">
             <a href="<?php echo site_url('login/logout');?>">Logout</a>
         </li>
     </ul>

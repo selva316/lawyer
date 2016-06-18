@@ -1,6 +1,20 @@
 <?php 
 class Configurationmodel extends CI_Model {
 
+	public function fetchListOfUser()
+	{
+		$str = "select * from law_login";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
+	public function fetchListOfRole()
+	{
+		$str = "select * from law_role";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
 	public function fetchCourtType()
 	{
 		$str = "select * from law_courttype";
@@ -11,6 +25,13 @@ class Configurationmodel extends CI_Model {
 	public function fetchStatuate()
 	{
 		$str = "select * from law_statuate";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
+	public function fetchClient()
+	{
+		$str = "select * from law_client_master";
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -371,6 +392,14 @@ class Configurationmodel extends CI_Model {
 		}
 
 		return $username;
+	}
+
+	public function fetchCaseNumber(){
+		$userid = $this->session->userdata('userid');
+		$str = "select * from law_notation where created_by='".$userid."' or (type='public' or type='dbversion')";
+		
+		$query = $this->db->query($str);
+		return $query->result_array();	
 	}
 }
 

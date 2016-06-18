@@ -123,6 +123,29 @@ class Notationmodel extends CI_Model {
 			}
 		}
 
+		/* Word Pharse and Legal Definition */
+
+		$number_of_phrase = count($this->input->post('phrase'));
+		$phrase = $this->input->post('phrase');
+		$legal = $this->input->post('legal');
+
+		if($number_of_phrase >= 0)
+		{
+			for ($i=0; $i <$number_of_phrase ; $i++) { 
+				
+				$phraselist = array();
+
+				if(($phrase[$i] == "")  || ($nid == ""))
+					continue;
+
+				$phraselist['PHRASE'] = $phrase[$i];
+				$phraselist['EXPLANATION'] = $legal[$i];
+				$phraselist['NOTATIONID'] = $nid;
+
+				$this->db->insert('law_notation_phrase', $phraselist); 
+			}
+		}
+
 		$listcitation = $this->input->post('citation');
 		echo "citation: ".$listcitation;
 		if (strpos($listcitation, ',') !== false) {
@@ -256,6 +279,29 @@ class Notationmodel extends CI_Model {
 				$this->db->insert('law_citation_notation_link', $itemlist); 
 			}
 		}
+		/* Word Pharse and Legal Definition */
+
+		$number_of_phrase = count($this->input->post('phrase'));
+		$phrase = $this->input->post('phrase');
+		$legal = $this->input->post('legal');
+
+		if($number_of_phrase >= 0)
+		{
+			for ($i=0; $i <$number_of_phrase ; $i++) { 
+				
+				$phraselist = array();
+
+				if(($phrase[$i] == "")  || ($nid == ""))
+					continue;
+
+				$phraselist['PHRASE'] = $phrase[$i];
+				$phraselist['EXPLANATION'] = $legal[$i];
+				$phraselist['NOTATIONID'] = $nid;
+
+				$this->db->insert('law_notation_phrase', $phraselist); 
+			}
+		}
+		
 		$listcitation = $this->input->post('citation');
 		echo "citation: ".$listcitation;
 		if (strpos($listcitation, ',') !== false) {

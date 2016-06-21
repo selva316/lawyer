@@ -40,18 +40,6 @@
     <!-- Custom Fonts -->
     <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    
-    <style>
-        
-        .navbar{
-            border:none;
-        }
-        
-        .nav {
-            font-size:14px;
-            padding-left:40%;
-        }
-    </style>
 </head>
 
 <body>

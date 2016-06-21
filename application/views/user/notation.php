@@ -39,16 +39,6 @@
     <link rel="stylesheet"  href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
 	
 	<style>
-		
-		.navbar{
-			border:none;
-		}
-		
-		.nav {
-			font-size:14px;
-			padding-left:40%;
-		}
-
 		.ui-autocomplete {
 			z-index: 9999;
 		}

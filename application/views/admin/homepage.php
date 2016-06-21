@@ -42,21 +42,7 @@
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	
 	<style>
-		
-		.navbar{
-			border:none;
-		}
-		
-		.selvanav {
-			font-size:14px;
-			padding-left:30%;
-		}
-
-		.nav {
-			font-size:14px;
-			padding-left:30%;
-		}
-	
+			
 		.tab-pane{
 			margin-top: 10px;
 		}

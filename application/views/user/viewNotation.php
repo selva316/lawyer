@@ -40,16 +40,6 @@
 	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	
 	<style>
-		
-		.navbar{
-			border:none;
-		}
-		
-		.nav {
-			font-size:14px;
-			padding-left:40%;
-		}
-
 		.ui-autocomplete {
 			z-index: 9999;
 		}

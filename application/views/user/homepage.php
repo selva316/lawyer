@@ -32,7 +32,6 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.css" />
 	
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/menu/css/menu.css" />
-	
     <!-- Timeline CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>dist/css/timeline.css" />
     <!-- Custom CSS -->
@@ -43,20 +42,6 @@
 	
 	<style>
 		
-		.navbar{
-			border:none;
-		}
-		
-		.selvanav {
-			font-size:14px;
-			padding-left:40%;
-		}
-
-		.nav {
-			font-size:14px;
-			padding-left:30%;
-		}
-	
 		.tab-pane{
 			margin-top: 10px;
 		}

@@ -45,6 +45,9 @@
             <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
         </li>
         <li  class="active">
+            <a href="<?php echo site_url('user/research');?>">Research Topic</a>
+        </li>
+        <li  class="active">
             <a href="<?php echo site_url('admin/userdetails');?>">User Details</a>
         </li>
         <li  class="active">

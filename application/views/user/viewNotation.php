@@ -242,13 +242,21 @@
 	                    <div class="span12">
 	                        <label class="control-label">Select Reesearch Topic</label>
 	                        <input  class="form-control autocomplete_tag" type="text" id="topicname" name="topicname"  autocomplete="off"  value=""/>
+	                        <input  class="form-control" type="hidden" id="rid" name="rid"  autocomplete="off"  value=""/>
 	                    </div>
 	                </div>
+
+					<div class="row-fluid" style="margin-top:20px;">
+						<div class="span12">
+							<label class="control-label">Tag Notes</label>
+							<textarea id="tagNote" class="form-control myTextEditor"  placeholder="Note" name="tagNote" rows="4" cols="45"></textarea>				
+						</div>
+					</div>
 
 	                <div class="clearfix"><br></div>
 	                <div class="center modalButton"  style="text-align:center;">
 	                  <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-	                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="proceedButton" id="proceedButton">Save</button>
+	                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="tagButton" id="tagButton">Save</button>
 	                </div>
 	                <div class="clearfix"></div>
 	              </div>
@@ -262,7 +270,7 @@
     <!-- jQuery -->
     <script src="<?php echo base_url();?>assets/jquery/jquery.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/jquery-ui.min.js"></script>
-
+	<script src="<?php echo base_url();?>assets/tinymce/js/tinymce/tinymce.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/bootstrap-datepicker.js"></script>
@@ -274,6 +282,13 @@
 	<!-- Metis Menu Plugin JavaScript -->
     <script src="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.js"></script>
 	
+	<script>
+	tinymce.init({  
+		mode : "specific_textareas",
+        editor_selector : "myTextEditor"
+	});
+	</script>
+
 	<script>
 		$(document).ready(function() {
 			$("#saveAsPrivate").click(function(){
@@ -314,23 +329,48 @@
 				window.location.href="http://localhost/lawyer/user/transfernotation?nid="+$("#hashid").val();
 			});
 
-			$(document).on('focus','.autocomplete_tag',function(){
+			$(document).on('click', '#tagButton', function(){
+				var tagNote = $("#tagNote").text();
+				alert(tagNote)
 				var topicname = $("#topicname").val();
+				var rid = $("#rid").val();
+				var nid = $("#ntype").val();
+				$.ajax({
+					url : 'research/notesSave',
+					dataType: "text",
+					method: 'post',
+					data: {
+						nid:nid,
+					    tagNote: tagNote, 
+					    topicname:topicname, 
+					    rid: rid
+					},
+					success: function( msg ) {
+						//alert(msg);
+						$("#topicname").val('');
+					}
+				});
+				$(".blockUIOverlay").hide();
+	    		$(".blockUILoading").hide();
+			});
+
+			$(document).on('focus','.autocomplete_tag',function(){
+				var topicname = $(this).val();
 				$(this).autocomplete({
 					source: function( request, response ) {
 						$.ajax({
-							url : 'notation/fetchResearchTopic',
+							url : 'research/accessResearchName',
 							dataType: "json",
 							method: 'post',
 							data: {
-							   name_startsWith: request.term,
-							   topicname: topicname
+							   topicname: request.term
 							},
 							 success: function( data ) {
 								 response( $.map( data, function( item ) {
+								 	var code = item.split("|");
 									return {
 										label: item,
-										value: item,
+										value: code[0],
 										data : item
 									}
 								}));
@@ -340,8 +380,9 @@
 					autoFocus: true,	      	
 					minLength: 0,
 					select: function( event, ui ) {
-						
-						$('#topicname').val(ui.item.data);
+						var names = ui.item.data.split("|");
+						$('#topicname').val(names[0]);
+						$('#rid').val(names[1]);
 					}		      	
 				});
 			});

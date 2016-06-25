@@ -129,6 +129,42 @@
           </div><!--/.modal-dialog -->
         </div> <!--/.modal -->
 
+        <!--Begin Research Topic modal -->
+		<div class="modal fade" id="researchModal">
+            <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit Research Topic</h4>
+              </div>
+              <div class="modal-body">
+                
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label class="control-label">Name</label>
+                        <input  class="form-control" type="text" id="edittopicname" name="edittopicname" value=""/>
+                        <input  class="form-control" type="hidden" id="researchid" name="researchid" value=""/>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <label class="control-label">Assign To</label>
+                        <input  class="form-control" type="text" id="editassignTo" name="editassignTo" value=""/>
+                    </div>
+                </div>
+
+                <div class="clearfix"><br></div>
+                <div class="center modalButton"  style="text-align:center;">
+                  <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="updateButton" id="updateButton">Update</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+          </div><!--/.modal-content -->
+          </div><!--/.modal-dialog -->
+        </div> 
+        <!--End Research Topic modal -->
+
 		</div>
 		<!-- /#wrapper -->
     </div>
@@ -196,7 +232,58 @@
 		            }
 		        });
 			}
+			else
+			{
+				alert("Topic name should not empty");
+			}
 	    });
+
+		$('#updateButton').click(function () {
+			if($("#edittopicname").val != "" && $("#editassignTo").val()!="")
+			{
+		        $.ajax({
+		            type: 'post',
+		            dataType: "json",
+		            url: 'research/updateReseaarchTopic',
+		            data: {'topicname':$("#edittopicname").val(),'assignTo':$("#editassignTo").val(), 'rid':$("#researchid").val()},
+		            success:function(data){
+		                //window.location.href="homepage";                
+		                fnResearchCalling();
+		                $("#edittopicname").val('');
+		                $("#editassignTo").val('');
+		            }
+		        });
+			}
+			else
+			{
+				alert("Topic name should not empty");
+			}
+	    });
+
+		$('#editassignTo').tokenfield({
+			autocomplete: {
+			  	//source: ['red','blue','green','yellow','violet','brown','purple','black','white','red','blue','green','yellow','violet','brown','purple','black','white'],
+			  	source: function( request, response ) {
+	             $.ajax({
+	                 url: "research/fetchUsers",
+	                 dataType: "json",
+	                 data: {term: request.term},
+	                 success: function(data) {
+	                        response($.map(data, function(item) {
+	                             return {
+	                                 label: item.fullname,
+	                                 id: item.userid
+	                                };
+	                         }));
+	                     }
+	                 });
+	            },
+			  delay: 100,
+			  minLength: 2
+			},
+			showAutocompleteOnFocus: true,
+			delimiter: '!'
+		});
 
 		$('#assignTo').tokenfield({
 			autocomplete: {
@@ -219,30 +306,32 @@
 			  delay: 100,
 			  minLength: 2
 			},
-		showAutocompleteOnFocus: true,
-		delimiter: '!'
+			showAutocompleteOnFocus: true,
+			delimiter: '!'
 		});
 
 	});
 
 	$(document).on('click','.editResearchGroup',function(){
-//		alert($(this).val());
+			var rid = $(this).val();
 
 		    $.ajax({
 		    	type:"POST",
-		       url: "research/fetchAssignUsers",
+		       url: "research/researchTopic",
 		       dataType: "json",
 		       data:{rid:$(this).val()},
 		       success: function(data) {
-		          
-		            console.log(data)
-		            $('#assignTo').tokenfield('setTokens', data.name);
+		        	//alert(data.topic)  
+		            console.log(data.name)
+		            $('#editassignTo').tokenfield('setTokens', data.name);
+		            $("#edittopicname").val(data.topic);
+		            $("#researchid").val(rid);
 		            //$('#userName').tokenfield('createToken', data.name);
 		           }
 		    });
 			
 
-		$("#modalValidate").modal('show');
+		$("#researchModal").modal('show');
 	});
 
 	function fnResearchCalling()

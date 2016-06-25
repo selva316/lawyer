@@ -8,9 +8,9 @@ var i=$('.tableStatuate tr').length;
 $(".addmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><input class="case" type="checkbox"/></td>';
-	html += '<td><input type="text" data-type="statuate" name="statuate[]" id="statuate_'+i+'" class="form-control autocomplete_process" autocomplete="off"></td>';
-	html += '<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_'+i+'" class="form-control autocomplete_process" autocomplete="off"></td>';
-	html += '<td><input type="text" data-type="concept" name="concept[]" id="concept_'+i+'" class="form-control autocomplete_concept" autocomplete="off"  ondrop="return false;" onpaste="return false;"></td>';
+	html += '<td><input type="text" data-type="'+i+'" name="statuate[]" id="statuate_'+i+'" class="form-control autocomplete_statuate" autocomplete="off"><input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_'+i+'" class="form-control" autocomplete="off"></td>';
+	html += '<td><input type="text" data-type="'+i+'" name="subsection[]" id="subsection_'+i+'" class="form-control autocomplete_subsection" autocomplete="off"><input type="hidden" name="hiddensubsection[]" id="hiddensubsection_'+i+'" class="form-control" autocomplete="off"></td>';
+	html += '<td><input type="text" data-type="'+i+'" name="concept[]" id="concept_'+i+'" class="form-control autocomplete_concept" autocomplete="off"  ondrop="return false;" onpaste="return false;"></td>';
 	html += '</tr>';
 	$('.tableStatuate').append(html);
 	i++;
@@ -57,12 +57,21 @@ $(".phraseAddmore").on('click',function(){
 var k=$('.tableNewConcept tr').length;
 $(".addConceptStatuate").on('click',function(){
 	html = '<tr id="rowcon_'+k+'">';
+	html += '<td><input type="text" placeholder="Concept Name" name="conceptName[]" id="conceptName_'+k+'" class="form-control " autocomplete="off"></td>';
+	//html += '<td><input type="text" placeholder="Description" name="conceptDescription[]" id="conceptDescription_'+k+'" class="form-control" autocomplete="off"></td></td>';
+	html += '</tr>';
+	$('.tableNewConcept').append(html);
+	k++;
+});
+/*var k=$('.tableNewConcept tr').length;
+$(".addConceptStatuate").on('click',function(){
+	html = '<tr id="rowcon_'+k+'">';
 	html += '<td><input type="hidden" name="hiddenconstatuate[]" id="hiddenconceptstatuate_'+k+'" class="form-control"><input type="text" data-type="'+k+'" name="constatuate[]" id="conceptstatuate_'+k+'" class="form-control autocomplete_statuate" autocomplete="off"></td>';
 	html += '<td><input type="text" name="conceptsubsection[]" id="conceptsubsection_'+k+'" class="form-control" autocomplete="off"></td>';
 	html += '</tr>';
 	$('.tableNewConcept').append(html);
 	k++;
-});
+});*/
 
 //to check all checkboxes
 $(document).on('change','#check_all',function(){

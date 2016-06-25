@@ -68,6 +68,22 @@ class Notation extends CI_Controller {
 		
 	}
 	
+	public function fetchUserStatuate()
+	{
+		$type = $this->input->post('type');
+		$this->load->model('configurationmodel');
+		$data = $this->configurationmodel->fetchUserStatuate();
+		echo json_encode($data);
+	}
+
+	public function fetchUserSubSection()
+	{
+		$type = $this->input->post('type');
+		$this->load->model('configurationmodel');
+		$data = $this->configurationmodel->fetchUserSubSection();
+		echo json_encode($data);
+	}
+
 	public function statuateAjax()
 	{
 		$type = $this->input->post('type');

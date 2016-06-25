@@ -50,6 +50,46 @@ class Researchmodel extends CI_Model {
 		$this->db->update('law_research_group');
 	}
 
+	public function updateResearchGroup()
+	{
+		$assignTo = $this->input->post('assignTo');
+		$topicname = $this->input->post('topicname');
+		$rid = $this->input->post('rid');
+		$userid = $this->session->userdata('userid');
+
+		if($assignTo != "" && $assignTo != "null")
+		{
+			$source_array = explode('!', $assignTo);
+			$userList = array_map('trim', $source_array);
+			//$this->researchmodel->deleteResearchGroupUser($userid);
+
+			$assign_userid = '';
+			foreach ($userList as $username) {
+				
+				$assign_userid .= $this->researchmodel->fetchUserID($username);
+				$assign_userid .=',';
+			}
+			$this->db->set('TOPIC', $topicname);
+			$this->db->set('BELONGS_TO', $userid);
+			$this->db->set('TIMESTAMP', time());
+			$this->db->set('ASSIGN_TO', $assign_userid);
+
+			$this->db->where('RID', $rid);
+			$this->db->update('law_research_group');
+		}
+		else
+		{
+			$this->db->set('TOPIC', $topicname);
+			$this->db->set('BELONGS_TO', $userid);
+			$this->db->set('TIMESTAMP', time());
+			$this->db->set('ASSIGN_TO', $userid);			
+
+			$this->db->where('RID', $rid);
+			$this->db->update('law_research_group');
+		}
+
+	}
+
 	public function deleteResearchGroupUser($userID)
 	{
 		$this->db->where('BELONGS_TO', $userID);
@@ -92,11 +132,48 @@ class Researchmodel extends CI_Model {
 		foreach($result as $r)
 		{
 			$username = $r['ASSIGN_TO'];
+			//$research_name = $r['TOPIC'];
 		}
 
 		return $username;
 	}
 
+	public function fetchResearchTopicName($rid)
+	{
+		$query = $this->db->query("select * from law_research_group where RID  = '".$rid."'");
+		$result = $query->result_array();
+		$research_name = '';
+		foreach($result as $r)
+		{
+			$research_name = $r['TOPIC'];
+		}
+
+		return $research_name;
+	}
+
+	public function accessResearchName($topicname)
+	{
+		$topicname = "%".$topicname."%";
+		$query = $this->db->query("select topic, rid from law_research_group where topic like '".$topicname."'");
+
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['topic'].'|'.$row['rid'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+	}
+
+	public function notesSave($data)
+	{
+		$this->db->insert('law_research_notation_link', $data);
+		return true;
+	}
 }
 /* End of file Logindetailsmodel.php */
 /* Location: ./application/models/Logindetailsmodel.php */

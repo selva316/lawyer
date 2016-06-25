@@ -101,7 +101,7 @@ class Cliententitymodel extends CI_Model {
 					$casesupernote = $this->input->post('casesupernote');
 					for ($j=0; $j <$number_of_case; $j++) {
 
-						$casenumber_array = explode(',', $casenumber[$j]);
+						$casenumber_array = explode('!', $casenumber[$j]);
 						$caseList = array_map('trim', $casenumber_array);
 
 					

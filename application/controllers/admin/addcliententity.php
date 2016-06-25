@@ -33,7 +33,7 @@ class Addcliententity extends CI_Controller {
 		foreach($result as $r)
 		{
 			$details = array(
-					'createdby'=>$r['CREATED_BY'],
+					'userid'=>$this->session->userdata('userid'),
 					'casenumber'=>$r['CASENUMBER']
 				);
 			array_push($detailsList, $details);
@@ -61,8 +61,24 @@ class Addcliententity extends CI_Controller {
 	public function insertClientEntities()
 	{
 		$this->load->model('cliententitymodel');
+		/*
 		print_r($this->input->post());
 
+		$number_of_case = count($this->input->post('casenumber'));
+		$casenumber = $this->input->post('casenumber');
+		
+		for ($j=0; $j <$number_of_case; $j++) {
+
+			$casenumber_array = explode('!', $casenumber[$j]);
+			$caseList = array_map('trim', $casenumber_array);
+
+		
+			foreach ($caseList as $singlecasenumber) {
+				echo "<BR/>".$singlecasenumber;
+				
+			}
+		}
+		exit;*/
 		if(isset($_POST))
 		{
 			$data = array();

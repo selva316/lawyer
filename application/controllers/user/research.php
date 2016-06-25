@@ -115,6 +115,57 @@ class Research extends CI_Controller {
 		echo json_encode($detailsList);
 	}
 
+	public function updateReseaarchTopic()
+	{
+		$topicname = $this->input->post('topicname');
+		$assignTo = $this->input->post('assignTo');
+		$rid = $this->input->post('rid');
+		$userid = $this->session->userdata('userid');
+
+		$this->load->model('researchmodel');
+		$this->researchmodel->updateResearchGroup();
+		/*
+		if($assignTo != "" && $assignTo != "null")
+		{
+			$source_array = explode('!', $assignTo);
+			$userList = array_map('trim', $source_array);
+			//$this->researchmodel->deleteResearchGroupUser($userid);
+
+			$assign_userid = '';
+			foreach ($userList as $username) {
+				
+				$assign_userid .= $this->researchmodel->fetchUserID($username);
+				$assign_userid .=',';
+			}
+
+			$data = array();
+
+			$data['TOPIC'] = $topicname;
+			$data['BELONGS_TO'] = $userid;
+			$data['TIMESTAMP'] = time();
+			$data['ASSIGN_TO'] = $assign_userid;
+
+			//$this->load->model('researchmodel');
+			$result =  $this->researchmodel->updateResearchGroup($data, $rid);
+		}
+		else
+		{
+
+			$data = array();
+
+			$data['TOPIC'] = $topicname;
+			$data['BELONGS_TO'] = $userid;
+			$data['TIMESTAMP'] = time();
+			$data['ASSIGN_TO'] = $userid;
+			$result =  $this->researchmodel->updateResearchGroup($data, $rid);
+		}
+		*/
+		$data = array();
+		$data['BELONGS_TO'] = $this->session->userdata('userid');
+		
+		echo json_encode($data);
+	}
+
 	public function insertReseaarchTopic()
 	{
 		$topicname = $this->input->post('topicname');
@@ -131,7 +182,6 @@ class Research extends CI_Controller {
 
 			$assign_userid = '';
 			foreach ($userList as $username) {
-				//echo $username."<BR/>";
 				
 				$assign_userid .= $this->researchmodel->fetchUserID($username);
 				$assign_userid .=',';
@@ -145,6 +195,17 @@ class Research extends CI_Controller {
 			$data['ASSIGN_TO'] = $assign_userid;
 
 			//$this->load->model('researchmodel');
+			$result =  $this->researchmodel->createResearchGroup($data);
+		}
+		else
+		{
+
+			$data = array();
+
+			$data['TOPIC'] = $topicname;
+			$data['BELONGS_TO'] = $userid;
+			$data['TIMESTAMP'] = time();
+			$data['ASSIGN_TO'] = $userid;
 			$result =  $this->researchmodel->createResearchGroup($data);
 		}
 		
@@ -161,25 +222,69 @@ class Research extends CI_Controller {
 		$this->load->model('researchmodel');
 		$assignTo =  $this->researchmodel->fetchResearchUsers($rid);
 		
-		$detailsList = array();
+		$assignTo = substr($assignTo, 0, -1);
+		$source_array = explode(',', $assignTo);
+		$userList = array_map('trim', $source_array);
+		$details = array();
+		
+		foreach ($userList as $username) {
+
+			array_push($details, $this->researchmodel->fetchUserName($username));
+		}
+		$detailsList = array('name'=>$details);
+		$collectionDetails= array('data'=>$detailsList);
+		//{"name":["Prabhu Ganapathilingam","Karthik Dhanabal"]}
+		//[{"name":"Selva Lingam"}]
+		echo json_encode($detailsList);	
+	}
+
+	public function researchTopic()
+	{
+		$rid = $this->input->post('rid');
+		$this->load->model('researchmodel');
+		$topic =  $this->researchmodel->fetchResearchTopicName($rid);
+		$assignTo =  $this->researchmodel->fetchResearchUsers($rid);
 		
 		$assignTo = substr($assignTo, 0, -1);
 		$source_array = explode(',', $assignTo);
 		$userList = array_map('trim', $source_array);
-
+		$details = array();
 		
 		foreach ($userList as $username) {
-			//echo $username."<BR/>";
-			
-			$details = array(
-					'name'=>$this->researchmodel->fetchUserName($username)
-				);
-			array_push($detailsList, $details);
+
+			array_push($details, $this->researchmodel->fetchUserName($username));
 		}
+		$detailsList = array('name'=>$details, 'topic'=>$topic);
+		
+		//{"name":["Prabhu Ganapathilingam","Karthik Dhanabal"]}
+		//[{"name":"Selva Lingam"}]
+		echo json_encode($detailsList);	
+		/*
+		$detailsList['topic'] = $topic;
 
-		$collectionDetails= array('data'=>$detailsList);
+		$collectionDetails= array('data'=>$detailsList);//, 'topic'=>$topic);
 
-		echo json_encode($collectionDetails);	
+		echo json_encode($collectionDetails);*/
+	}
+
+	public function notesSave()
+	{
+		$data = array();
+		$this->load->model('researchmodel');
+		$data['RID'] = $this->input->post('rid');
+		$data['NOTATIONID'] = $this->input->post('nid');
+		$data['NOTES'] = $this->input->post('tagNote');
+		$data['USERID'] = $this->session->userdata('userid');
+		$data['DISABLE'] = 'N';
+		$this->researchmodel->notesSave($data);
+	}
+
+	public function accessResearchName()
+	{
+		$topicname = $this->input->post('topicname');
+		$this->load->model('researchmodel');
+		$data =  $this->researchmodel->accessResearchName($topicname);
+		echo json_encode($data);
 	}
 
 }

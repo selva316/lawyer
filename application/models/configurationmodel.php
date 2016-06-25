@@ -208,7 +208,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select lsss.SSID as ssid, ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 		
 		//echo "select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (userid='$userid' or userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')";
 
@@ -218,21 +218,111 @@ class Configurationmodel extends CI_Model {
 			$result = $query->result_array();
 			foreach($result as $row)
 			{
-				$name = $row['sname'].'|'.$row['subname'].'|'.$row['stid'];//i am not want item code i,eeeeeeeeeeee
+				$name = $row['sname'].'|'.$row['subname'].'|'.$row['stid'].'|'.$row['ssid'];//i am not want item code i,eeeeeeeeeeee
 				array_push($data, $name);
 			}
 		}
 		return $data;
 	}
-	
+
+	public function fetchUserStatuate()
+	{
+		
+		$name = $this->input->post('name_startsWith');
+		$userid = $this->session->userdata('userid');
+
+		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['sname'].'|'.$row['stid'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;	
+	}
+
+	public function fetchUserSubSection()
+	{
+
+		$type = $this->input->post('type');
+		$name = $this->input->post('name_startsWith');
+		$userid = $this->session->userdata('userid');
+		$statuate = $this->input->post('statuate');
+
+		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.userid='Admin') and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
+		
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['subname'].'|'.$row['ssid'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+	}
+
 	public function ajaxConcept()
 	{
 		
 		$type = $this->input->post('type');
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
+		$statuate = $this->input->post('statuate');
+		$subsection = $this->input->post('subsection');
 				
-		$query = $this->db->query("select name from law_concepts  where role='Admin' or userid='$userid' and (UPPER(name) LIKE '%".strtoupper($name)."%')");
+		if($statuate != '')
+		{
+			$subsectionstr = '';
+			if($subsection !=''){
+				/*
+				$subsection_query = $this->db->query("SELECT SSID FROM law_statuate_sub_section where name='".$statuate."' AND STID IN ('".$statuate."')");
+				if($subsection_query->num_rows() > 0)
+				{
+					$subsectionstr = ' AND (';
+					$subresult = $subsection_query->result_array();
+					foreach ($subresult as $sr) {
+						$subsectionstr .= "SSID = '".$sr['SSID']."' OR ";
+					}
+					$subsectionstr = substr($subsectionstr, -1, 3);
+					$subsectionstr .= ')';
+				}*/
+				$subsectionstr = " AND SSID='".$subsection."'";
+			}
+			else
+				$subsectionstr = " AND SSID=''";	
+			
+			/*
+			$statuatestr = '';
+
+			$statuate_query = $this->db->query("SELECT STID FROM law_statuate where name='".$statuate."'");
+			if($statuate_query->num_rows() > 0)
+			{
+				$statuatestr = ' AND (';
+				$statuateresult = $statuate_query->result_array();
+				foreach ($statuateresult as $st) {
+					$statuatestr .= " (STID = '".$st['STID']."') OR ";
+				}
+				$statuatestr = substr($statuatestr, -1, 3);
+				$statuatestr .= ')';
+			}*/
+			$query = $this->db->query("SELECT name FROM `law_concepts` lc inner join law_statuate_concept_link lscl on lc.CID=lscl.CID where (lc.role='Admin' or lc.userid='$userid') and (UPPER(lc.name) LIKE '%".strtoupper($name)."%') AND lscl.STID='".$statuate."' ".$subsectionstr);
+
+			//$query = $this->db->query("select name from law_concepts  where (role='Admin' or userid='$userid') and (UPPER(name) LIKE '%".strtoupper($name)."%') ".$statuatestr.$subsectionstr);
+			//echo "SELECT name FROM `law_concepts` lc inner join law_statuate_concept_link lscl on lc.CID=lscl.CID where (lc.role='Admin' or lc.userid='$userid') and (UPPER(lc.name) LIKE '%".strtoupper($name)."%') AND lscl.STID='".$statuate."' ".$subsectionstr;
+		}
+		else
+		{
+			$query = $this->db->query("select name from law_concepts  where (role='Admin' or userid='$userid') and (UPPER(name) LIKE '%".strtoupper($name)."%')");	
+		}
+		
 		$data = array();
 		if ($query->num_rows() > 0)
 		{
@@ -396,8 +486,8 @@ class Configurationmodel extends CI_Model {
 
 	public function fetchCaseNumber(){
 		$userid = $this->session->userdata('userid');
-		$str = "select * from law_notation where created_by='".$userid."' or (type='public' or type='dbversion')";
-		
+		//$str = "select * from law_notation where created_by='".$userid."' or (type='public' or type='dbversion')";
+		$str = "select * from law_client_entity_case where clientid in (SELECT clientid FROM law_client_master where BELONGS_TO='".$userid."')";
 		$query = $this->db->query($str);
 		return $query->result_array();	
 	}

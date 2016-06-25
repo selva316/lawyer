@@ -173,16 +173,21 @@
 									<tr>
 										<th width="2%"></th>
 										<th width="15%">Statute <span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
-										<th width="25%">Section & Subsection <span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
-										<th width="5%">Concept <span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="15%">Section & Subsection <span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="15%">Concept <span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
 										<td><input class="case" type="checkbox"/></td>
-										<td><input type="text" data-type="statuate" name="statuate[]" id="statuate_1" class="form-control autocomplete_process" autocomplete="off"></td>
-										<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_1" class="form-control autocomplete_process" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
-										<td><input type="text" data-type="concept" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
+										<td>
+										<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
+										<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
+										</td>
+										<td><input type="text" data-type="1" name="subsection[]" id="subsection_1" class="form-control autocomplete_subsection" autocomplete="off" ondrop="return false;" onpaste="return false;">
+										<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_1" class="form-control" autocomplete="off">
+										</td>
+										<td><input type="text" data-type="1" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -240,7 +245,7 @@
 
 
             <div class="clear-both" style="margin-top:20px;"></div>
-
+            <!--
 			<div class="panel panel-warning">
                 <div class="panel-heading">Phrase and Legal Definitions</div>
                 <div class="panel-body">
@@ -270,7 +275,7 @@
 						</div>
 					</div>
             	</div>
-            </div>
+            </div>-->
 		</div>
 			<div class="clear-both" style="margin-top:20px;"></div>
 			<!--<div class="row">
@@ -426,20 +431,73 @@
 						<h4 class="modal-title"  style="font-weight:bold;">Add Concept</h4>
 					</div><!-- /.modal-header -->
 					<div class="modal-body">
-						<!--<div class="row-fluid">
+			            <div class="row-fluid">
 		                    <div class="span12">
-		                        <label class="control-label">Statuate</label>
-		                        <select class="form-control" id="conceptStatuatename" name="conceptStatuatename" >
-		                            <option value="">Select</option>
-		                            <?php
-		                                foreach ($StatuateSubsection as $k=>$v) {
-		                                    echo '<option value="'.$k.'">'.$v.'</option>';
-		                                }
-		                            ?>
-		                        </select>
+		                        <label for="constatuate">Statuate</label>
+		                        <input id="constatuate" type="text" class="form-control autocomplete_clonestatuate" name="constatuate" value="">
+		                        <input type="hidden" name="hiddenconceptstatuate" id="hiddenconceptstatuate" class="form-control" value="">
+		                        
 		                    </div>
-			            </div>-->
+			            </div>
 
+			            <div class="row-fluid">
+		                    <div class="span12">
+		                        <label for="conceptsubsection">Subsection</label>
+		                        <input id="conceptsubsection" type="text" class="form-control autocomplete_clonesubsection" name="conceptsubsection" value="">
+		                        <input type="hidden" name="hiddenconceptsubsection" id="hiddenconceptsubsection" class="form-control" value="">
+		                    </div>
+			            </div>
+
+			            <div class="row-fluid" style="margin-top: 10px;">
+		                	<div class="span12">
+		                		<table class="table table-bordered table-striped tableNewConcept">
+									<thead>
+										<tr>
+											<th>Name</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr id="rowcon_1">
+											<td>
+											<input type="text" placeholder="Concept Name" data-type="1" name="conceptName[]" id="conceptName_1" class="form-control " autocomplete="off"></td>
+											<!--<td>
+											<input type="text" placeholder="Description" name="conceptDescription[]" id="conceptDescription_1" class="form-control" autocomplete="off"></td>-->
+											
+										</tr>
+									</tbody>
+								</table>
+								<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+						  			<button type="button" class="btn btn-success addConceptStatuate"><i class="fa fa-plus" aria-hidden="true"></i></button>
+						  		</div>
+		                	</div>
+		                </div>
+
+			            <div class="clearfix"><br></div>
+
+			            <div class="row-fluid">
+			            	<div class="span4"></div>
+		                    <div class="span4" id="conceptAction">
+		                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<button type="button" class="btn btn-primary" name="saveConcept" id="saveConcept">Save</button>
+		                    </div>
+		                    <div class="span4"></div>
+			            </div>
+					</div><!-- /.modal-body -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->	
+
+	<!-- Concept Modal End here-->
+	
+	<!-- Concept Modal Begin here
+		<div class="modal fade" id="conceptModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Concept</h4>
+					</div>
+					<div class="modal-body">
 			            <div class="row-fluid">
 		                    <div class="span12">
 		                        <label for="conceptName">Name</label>
@@ -475,7 +533,6 @@
 									</tbody>
 								</table>
 								<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-						  			<!---<button type="button" class="btn btn-danger deleteSub"><i class="fa fa-trash-o" aria-hidden="true"></i></button>-->
 						  			<button type="button" class="btn btn-success addConceptStatuate"><i class="fa fa-plus" aria-hidden="true"></i></button>
 						  		</div>
 		                	</div>
@@ -491,38 +548,12 @@
 		                    </div>
 		                    <div class="span4"></div>
 			            </div>
-			            <!--
-						<div class="row" style="margin:2%">
-							<div class="col-md-12">
+					</div>
+				</div>
+			</div>
+		</div>
 
-								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
-									<label for="conceptName">Name</label>
-									<input id="conceptName" type="text" class="form-control" name="conceptName" value="">
-								</div>
-								<div style="margin-bottom: 15px; text-align:left; font-weight:bold;">
-									<label for="conceptDescription">Description</label>
-									<input id="conceptDescription" type="text" class="form-control" name="conceptDescription" value="">
-								</div>
-								
-								<div class="clearfix"><br></div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="col-md-4"></div>
-										<div class="col-md-8"  id="conceptAction"  style="display:none;">
-											<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-											<button type="button" class="btn btn-primary" name="saveConcept" id="saveConcept">Save</button>
-										</div>
-									</div>
-								</div>
-								<div class="clearfix"></div>
-							</div>
-						</div>-->
-					</div><!-- /.modal-body -->
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->	
-
-	<!-- Concept Modal End here-->
+	 Concept Modal End here-->
 	</form>		
     <!-- /#wrapper -->
 
@@ -530,7 +561,7 @@
     <script src="<?php echo base_url();?>assets/jquery/jquery.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/jquery-ui.min.js"></script>
 
-	<script src="<?php echo base_url();?>assets/tinymce/js/tinymce/tinymce.min.js"></script>	
+	<script src="<?php echo base_url();?>assets/tinymce/js/tinymce/tinymce.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="<?php echo base_url();?>assets/jquery/bootstrap-datepicker.js"></script>
@@ -679,7 +710,12 @@
 
 	$(document).on('focus','.autocomplete_concept',function(){
 		var type = $(this).data('type');
-		
+		var lstatuate = "#hiddenstatuate_"+type;
+		var lsubsection = "#hiddensubsection_"+type;
+
+		var vstatuate = $(lstatuate).val();
+		var vsubsection = $(lsubsection).val();
+
 		$(this).autocomplete({
 			source: function( request, response ) {
 				$.ajax({
@@ -688,7 +724,9 @@
 					method: 'post',
 					data: {
 					   name_startsWith: request.term,
-					   type: type
+					   type: type,
+					   statuate: vstatuate,
+					   subsection: vsubsection
 					},
 					 success: function( data ) {
 						 response( $.map( data, function( item ) {
@@ -788,7 +826,7 @@
 	
 	});
 
-	
+	/*
 	$(document).on('focus','.autocomplete_statuate',function(){
 		
 		type = $(this).data('type');
@@ -827,6 +865,185 @@
 				$('#conceptstatuate_'+id[1]).val(names[0]);
 				$('#conceptsubsection_'+id[1]).val(names[1]);
 				$('#hiddenconceptstatuate_'+id[1]).val(names[2]);
+			}
+		});
+	});*/
+	
+	$(document).on('focus','.autocomplete_subsection',function(){
+		
+		var type = $(this).data('type');
+		var statuateval = '#statuate_'+type;
+		var hiddenstatuate = '#hiddenstatuate_'+type;
+		if($(statuateval).val()!='')
+		{
+			url = 'notation/fetchUserSubSection';
+			autoTypeNo=0;
+
+			$(this).autocomplete({
+				source: function( request, response ) {
+					$.ajax({
+						url : url,
+						dataType: "json",
+						method: 'post',
+						data: {
+						   name_startsWith: request.term,
+						   type: type,
+						   statuate: $(hiddenstatuate).val()
+						},
+						 success: function( data ) {
+							 response( $.map( data, function( item ) {
+							 	var code = item.split("|");
+								return {
+									label: item,
+									value: code[autoTypeNo],
+									data : item
+								}
+							}));
+						}
+					});
+				},
+				autoFocus: true,	      	
+				minLength: 0,
+				select: function( event, ui ) {
+					var names = ui.item.data.split("|");						
+					id_arr = $(this).attr('id');
+			  		id = id_arr.split("_");
+			  		$('#subsection_'+id[1]).val(names[0]);
+			  		$('#hiddensubsection_'+id[1]).val(names[1]);
+					//$('#hiddensubsection_').val(names[0]);
+					//$("#hiddenconceptsubsection").val(names[1]);
+				}
+			});	
+		}
+	});
+
+	$(document).on('focus','.autocomplete_clonesubsection',function(){
+		
+		if($("#constatuate").val()!='')
+		{
+			url = 'notation/fetchUserSubSection';
+			autoTypeNo=0;
+
+			$(this).autocomplete({
+				source: function( request, response ) {
+					$.ajax({
+						url : url,
+						dataType: "json",
+						method: 'post',
+						data: {
+						   name_startsWith: request.term,
+						   statuate: $("#hiddenconceptstatuate").val()
+						},
+						 success: function( data ) {
+							 response( $.map( data, function( item ) {
+							 	var code = item.split("|");
+								return {
+									label: item,
+									value: code[autoTypeNo],
+									data : item
+								}
+							}));
+						}
+					});
+				},
+				autoFocus: true,	      	
+				minLength: 0,
+				select: function( event, ui ) {
+					var names = ui.item.data.split("|");						
+					id_arr = $(this).attr('id');
+			  		id = id_arr.split("_");
+			  		//$('#subsection_'+id[1]).val(names[0]);
+					$('#conceptsubsection').val(names[0]);
+					$("#hiddenconceptsubsection").val(names[1]);
+				}
+			});	
+		}
+	});
+
+	$(document).on('focus','.autocomplete_clonestatuate',function(){
+		
+		url = 'notation/fetchUserStatuate';
+		autoTypeNo=0;
+
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : url,
+					dataType: "json",
+					method: 'post',
+					data: {
+					   name_startsWith: request.term
+					},
+					 success: function( data ) {
+						 response( $.map( data, function( item ) {
+						 	var code = item.split("|");
+							return {
+								label: item,
+								value: code[autoTypeNo],
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 0,
+			select: function( event, ui ) {
+				var names = ui.item.data.split("|");						
+				id_arr = $(this).attr('id');
+		  		id = id_arr.split("_");
+		  		
+				$('#constatuate').val(names[0]);
+				//$('#conceptsubsection').val(names[1]);
+				$('#hiddenconceptstatuate').val(names[1]);
+				//$("#hiddenconceptsubsection").val(names[3]);
+			}
+		});
+	});
+
+	$(document).on('focus','.autocomplete_statuate',function(){
+		
+		var type = $(this).data('type');
+		var subsectionval = '#subsection_'+type;
+		
+		url = 'notation/fetchUserStatuate';
+		autoTypeNo=0;
+
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : url,
+					dataType: "json",
+					method: 'post',
+					data: {
+					   name_startsWith: request.term,
+					   type: type
+					},
+					 success: function( data ) {
+					 		$(subsectionval).val('');
+						 response( $.map( data, function( item ) {
+						 	var code = item.split("|");
+							return {
+								label: item,
+								value: code[autoTypeNo],
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 0,
+			select: function( event, ui ) {
+				var names = ui.item.data.split("|");						
+				id_arr = $(this).attr('id');
+		  		id = id_arr.split("_");
+		  		$('#statuate_'+id[1]).val(names[0]);
+		  		$('#hiddenstatuate_'+id[1]).val(names[1]);
+				//$('#constatuate').val(names[0]);
+				//$('#conceptsubsection').val(names[1]);
+				//$('#hiddenconceptstatuate').val(names[1]);
+				//$("#hiddenconceptsubsection").val(names[3]);
 			}
 		});
 	});
@@ -1127,7 +1344,75 @@
 			}
 		});
 	});
+	
+	/*Concept function begin*/
+	$(document).on('click', '#saveConcept', function(e) {
+		var errorMessage = '';
 
+		if ( $("#constatuate").val() == ""  || $("#constatuate").val() == null) {
+			errorMessage = errorMessage + 'Statuate cannot be empty!!\n' ;
+		}
+
+		/*
+		if ( $("#conceptsubsection").val() == ""  || $("#conceptsubsection").val() == null) {
+			errorMessage = errorMessage + 'Subsection cannot be empty!!\n' ;
+		}
+		*/
+
+        var si = $('.tableNewConcept tr').length - 1;
+        
+        var temp = [];
+        for(i=1;i<=si;i++)
+        {
+        	var conceptcontrol = "#conceptName_"+i;
+        	if ( $(conceptcontrol).val() == ""  || $(conceptcontrol).val() == null) {
+            	continue;
+        	}
+        	temp.push($(conceptcontrol).val());
+        }
+
+        if(temp.length == 0)
+		{
+			errorMessage = errorMessage + 'Concept should not be empty!!\n' ;
+		}
+
+
+		if ( errorMessage != "" ) {
+			alert(errorMessage);
+			return;
+		}
+
+		$.ajax({
+			url : '../admin/listofconcept/insertConcept',
+			type : 'POST',
+			async: false,
+			cache: false,
+			data : {
+			  	statuate: $("#hiddenconceptstatuate").val(),
+			  	subsection: $("#hiddenconceptsubsection").val(),
+			  	concept: temp.join(",")
+			},
+			success: function(dat) {
+							  	
+			  	$("#constatuate").val('');
+			  	$("#conceptsubsection").val('');
+
+			  	$("#hiddenconceptstatuate").val('');
+			  	$("#hiddenconceptsubsection").val('');
+			  	$("#conceptName_1").val('');
+
+            	for(j=2;j<=si;j++)
+		        {
+		        	var rowtr = "#rowcon_"+j;
+		        	$(rowtr).remove();
+		        }
+
+			  	$("#conceptModal").modal('hide');
+			}
+		});
+	});
+	/*Concept function end*/
+	/*
 	$(document).on('click', '#saveConcept', function(e) {
 		var errorMessage = '';
 
@@ -1192,7 +1477,7 @@
 			}
 		});
 	});
-
+	*/
 	$(document).on('blur','#statuateName',function(){
 		if($("#statuateName").val() != '')
 		{

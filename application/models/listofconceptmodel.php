@@ -76,11 +76,11 @@ class Listofconceptmodel extends CI_Model {
 		return $data;
 	}
 
-	public function insertConcept($conceptname, $description, $statuate){
-
+	public function newConcept($conceptname, $description)
+	{
 		$role = $this->session->userdata('role');
-
 		$data = array();
+
 		$data['NAME'] = $conceptname;
 		$data['DESCRIPTION'] = $description;
 		
@@ -103,15 +103,47 @@ class Listofconceptmodel extends CI_Model {
 			
 		$this->db->update('law_concepts');
 
-		$statuateExplore = explode(',', $statuate);
-		foreach ($statuateExplore as $subval) {
+		$dArray = array();
+		array_push($dArray, true);
+		return $dArray;
+	}
+
+	public function insertConcept($statuate, $subsection, $concept){
+
+		$role = $this->session->userdata('role');
+
+		$conceptexplore = explode(',', $concept);
+		foreach ($conceptexplore as $subval) {
+			$data = array();
+
+			$data['NAME'] = $subval;
+			$data['DESCRIPTION'] = $subval;
+			
+			if($role == 'Admin')
+				$data['ROLE'] = 'Admin';
+			else
+				$data['ROLE'] = 'User';
+
+			$data['USERID'] = $this->session->userdata('userid');
+
+			$data['DISABLE'] = 'N';		
+
+			$this->db->insert('law_concepts', $data); 
+			$autoid = $this->db->insert_id();
+			
+			$this->db->where('id', $autoid);
+			$ctid = 'C'.$autoid;
+			
+			$this->db->set('CID', $ctid);
+				
+			$this->db->update('law_concepts');
 		
+
 			$innerdata = array();
-			$innerdata['STID'] = $subval;
+			$innerdata['STID'] = $statuate;
+			$innerdata['SSID'] = $subsection;
 			$innerdata['CID'] = $ctid;
-
 			$innerdata['USERID'] = $this->session->userdata('userid');
-
 			$innerdata['DISABLE'] = 'N';		
 
 			$this->db->insert('law_statuate_concept_link', $innerdata); 
@@ -123,6 +155,7 @@ class Listofconceptmodel extends CI_Model {
 			$this->db->set('STCONID', $stconid);
 				
 			$this->db->update('law_statuate_concept_link');
+
 
 		}
 

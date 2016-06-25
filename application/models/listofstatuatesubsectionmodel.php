@@ -83,7 +83,6 @@ class Listofstatuatesubsectionmodel extends CI_Model {
 		$dArray = array();
 		array_push($dArray, true);
 		return $dArray;
-
 	}
 
 	public function subsectionDetails($ssid)

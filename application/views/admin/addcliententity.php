@@ -225,7 +225,7 @@
                             response($.map(data, function(item) {
                                  return {
                                      label: item.casenumber,
-                                     id: item.createdby
+                                     id: item.userid
                                     };
                              }));
                          }

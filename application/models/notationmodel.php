@@ -106,7 +106,7 @@ class Notationmodel extends CI_Model {
 
 		if($number_of_citation >= 0)
 		{
-			for ($i=0; $i <$number_of_citation ; $i++) { 
+			for ($i=1; $i <=$number_of_citation ; $i++) { 
 				
 				$itemlist = array();
 
@@ -115,6 +115,11 @@ class Notationmodel extends CI_Model {
 
 				$itemlist['CITATION'] = $this->_clean($citationNumber[$i]);
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
+				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
+				{
+					$this->_createMissingCitationDraft($citationNumber[$i]);
+				}
+
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
 				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
@@ -203,6 +208,128 @@ class Notationmodel extends CI_Model {
 		
 	}
 
+	function updateDraftNotation($data)
+	{
+		$nid = $this->input->post('ntype');
+		$this->db->where('NOTATIONID', $this->input->post('ntype'));
+		
+		$this->db->set('CASENAME', $this->input->post('casename'));
+		$this->db->set('CITATION', $this->input->post('citation'));
+		$this->db->set('DUP_CITATION', $this->_clean($this->input->post('citation')));
+
+		$this->db->set('JUDGE_NAME', $this->input->post('judge_name'));
+		$this->db->set('CASENUMBER', $this->input->post('casenumber'));
+		$this->db->set('COURT_NAME', $this->input->post('court_name'));
+		$this->db->set('YEAR', $this->input->post('year'));
+		$this->db->set('BENCH', $this->input->post('bench'));
+		$this->db->set('FACTS_OF_CASE', $this->input->post('facts_of_case'));
+		$this->db->set('TYPE', $this->input->post('status'));
+
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+
+		$this->db->update('law_notation');
+
+		/* Statuate , Sub Section and Concept */
+		$number_of_entries = count($this->input->post('statuate'));
+		$statuate = $this->input->post('statuate');
+		$subsection = $this->input->post('subsection');
+		$concept = $this->input->post('concept');
+
+		if($number_of_entries >= 0)
+		{
+			for ($i=0; $i <$number_of_entries ; $i++) { 
+				
+				$itemlist = array();
+
+				if(($statuate[$i] == "") && ($concept[$i] == "") || ($nid == ""))
+					continue;
+
+				$itemlist['STATUATE'] = $statuate[$i];
+				$itemlist['SUB_SECTION'] = $subsection[$i];
+				$itemlist['CONCEPT'] = $concept[$i];
+				$itemlist['NOTATIONID'] = $nid;
+
+				$this->db->insert('law_notation_statuate', $itemlist); 
+			}
+		}
+
+		/* Statuate , Sub Section and Concept */
+
+		$number_of_citation = count($this->input->post('citationNumber'));
+		$citationNumber = $this->input->post('citationNumber');
+		$typeCitation = $this->input->post('typeCitation');
+		$note = $this->input->post('note');
+
+		if($number_of_citation >= 0)
+		{
+			for ($i=0; $i <$number_of_citation ; $i++) { 
+				
+				$itemlist = array();
+
+				if(($typeCitation[$i] == "")  || ($nid == ""))
+					continue;
+
+				$itemlist['CITATION'] = $this->_clean($citationNumber[$i]);
+				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
+				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
+				{
+					$this->_createMissingCitationDraft($citationNumber[$i]);
+				}
+				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
+				$itemlist['DESCRIPTION'] = $note[$i];
+				$itemlist['NOTATIONID'] = $nid;
+
+				$this->db->insert('law_citation_notation_link', $itemlist); 
+			}
+		}
+		/* Word Pharse and Legal Definition */
+
+		$number_of_phrase = count($this->input->post('phrase'));
+		$phrase = $this->input->post('phrase');
+		$legal = $this->input->post('legal');
+
+		if($number_of_phrase >= 0)
+		{
+			for ($i=0; $i <$number_of_phrase ; $i++) { 
+				
+				$phraselist = array();
+
+				if(($phrase[$i] == "")  || ($nid == ""))
+					continue;
+
+				$phraselist['PHRASE'] = $phrase[$i];
+				$phraselist['EXPLANATION'] = $legal[$i];
+				$phraselist['NOTATIONID'] = $nid;
+
+				$this->db->insert('law_notation_phrase', $phraselist); 
+			}
+		}
+		
+		$listcitation = $this->input->post('citation');
+		echo "citation: ".$listcitation;
+		if (strpos($listcitation, ',') !== false) {
+			$citation_arr = explode(",",$listcitation);
+			foreach($citation_arr as $lcitation)
+			{
+				$itemlist = array();
+				$itemlist['CITATION'] = $lcitation;
+				$itemlist['NOTATIONID'] = $nid;
+				$this->db->insert('law_citation', $itemlist);
+				print_r($itemlist); 
+			}
+		}
+		else
+		{
+			$itemlist = array();
+			$itemlist['CITATION'] = $this->input->post('citation');
+			$itemlist['NOTATIONID'] = $nid;
+			$this->db->insert('law_citation', $itemlist); 
+			print_r($itemlist);
+		}
+		return true;
+	}
+
 	function updateNotation($data)
 	{
 		$nid = $this->input->post('ntype');
@@ -272,6 +399,10 @@ class Notationmodel extends CI_Model {
 
 				$itemlist['CITATION'] = $this->_clean($citationNumber[$i]);
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
+				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
+				{
+					$this->_createMissingCitationDraft($citationNumber[$i]);
+				}
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
 				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
@@ -538,7 +669,11 @@ class Notationmodel extends CI_Model {
 					foreach($statuateresult as $statuaterow)
 					{
 						$statuateData[$i]['statuate'] = $statuaterow['STATUATE'];
+						$statuateid = $this->fetchUserStatuate($statuaterow['STATUATE']);
+						$statuateData[$i]['hiddenstatuate'] = $statuateid;
 						$statuateData[$i]['sub_section'] = $statuaterow['SUB_SECTION'];
+						$subsectionid = $this->fetchUserSubSection($statuateid, $statuaterow['SUB_SECTION']);
+						$statuateData[$i]['hiddensubsection'] = $subsectionid;
 						$statuateData[$i]['concept'] = $statuaterow['CONCEPT'];
 						$i++;
 					}
@@ -570,6 +705,48 @@ class Notationmodel extends CI_Model {
 			}
 			
 		}
+	}
+
+	public function fetchUserStatuate($name)
+	{
+		$userid = $this->session->userdata('userid');
+
+		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+
+		$data = array();
+		$stid ='';
+		if ($query->num_rows() > 0)
+		{
+
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$stid = $row['stid'];//i am not want item code i,eeeeeeeeeeee
+			}
+		}
+		return $stid;	
+	}
+
+	public function fetchUserSubSection($statuateid, $subsection)
+	{
+
+		$name = $subsection;
+		$userid = $this->session->userdata('userid');
+		$statuate = $statuateid;
+
+		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.userid='Admin') and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
+		
+		$data = array();
+		$subsectionid = '';
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$subsectionid = $row['ssid'];//i am not want item code i,eeeeeeeeeeee
+			}
+		}
+		return $subsectionid;
 	}
 
 	public function saveAsDraft()
@@ -970,6 +1147,61 @@ class Notationmodel extends CI_Model {
 	public function _clean($string) {
    		$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
   	 	return preg_replace('/[^A-Za-z0-9\s\(\)\-\,]/', '', $string); // Removes special chars.
+	}
+
+	public function _checkCitationAvailable($citation)
+	{
+		$userid =  $this->session->userdata('userid');
+
+		$query = $this->db->query("select count(citation) as cntname from law_notation  where (created_by='$userid' or UPDATED_BY='userid' ) AND  (type='dbversion' OR type='public' OR type='draft') AND (UPPER(citation) = '".strtoupper($citation)."')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+
+		return $count;
+	}
+
+	public function _createMissingCitationDraft($citation)
+	{
+		$data['casename'] = 'No Casename';
+		$data['citation'] = $citation;
+
+		$this->db->insert('law_notation', $data); 
+		$autoid = $this->db->insert_id();
+		
+		$this->db->where('id', $autoid);
+		$nid = 'NT'.$autoid;
+		$hashnid = md5($nid.time());
+		$this->db->set('NOTATIONID', $nid);
+		$this->db->set('HASHNOTATIONID', $hashnid);
+		
+		$this->db->set('CREATED_BY', $this->session->userdata('userid'));
+		$this->db->set('CREATED_ON', time());
+
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+
+		$this->db->update('law_notation');
+
+	}
+
+	public function searchStringCollection($searchString, $searchFields)
+	{
+		$query = $this->db->query("SELECT * FROM law_notation WHERE MATCH(casename, citation, dup_citation, casenumber, judge_name, court_name, year, bench, facts_of_case) AGAINST('chennai')");
+		$count = 0;
+		$result = $query->result_array();
+		$details = '';
+		foreach($result as $row)
+		{
+		
+		}
+
 	}
 }
 /* End of file Logindetailsmodel.php */

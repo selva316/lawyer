@@ -38,6 +38,15 @@
     <!-- Custom Fonts -->
     <link rel="stylesheet"  href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
 
+    <style>
+		.ui-autocomplete {
+			z-index: 9999;
+		}
+
+		#mceu_28-body{
+			display: none;
+		}
+	</style>
 </head>
 
 <body>
@@ -488,10 +497,14 @@
 					   hashid: $("#hashid").val()
 					},
 					success : function(data) {
-						if(data == "Admin")
-							window.location.href="http://localhost/lawyer/admin/homepage";
-						else
-							window.location.href="http://localhost/lawyer/user/homepage";
+						if(data == "Admin"){
+							window.location.href="<?php echo site_url('admin/homepage')?>";
+							//window.location.href="http://localhost/lawyer/admin/homepage";
+						}
+						else{
+							window.location.href="<?php echo site_url('user/homepage')?>";
+							//window.location.href="http://localhost/lawyer/user/homepage";
+						}
 					}
 				});
 			});
@@ -505,10 +518,14 @@
 					   hashid: $("#hashid").val()
 					},
 					success : function(data) {
-						if(data == "Admin")
-							window.location.href="http://localhost/lawyer/admin/homepage";
-						else
-							window.location.href="http://localhost/lawyer/user/homepage";
+						if(data == "Admin"){
+							window.location.href="<?php echo site_url('admin/homepage')?>";
+							//window.location.href="http://localhost/lawyer/admin/homepage";
+						}
+						else{
+							window.location.href="<?php echo site_url('user/homepage')?>";
+							//window.location.href="http://localhost/lawyer/user/homepage";
+						}
 					}
 				});
 			});

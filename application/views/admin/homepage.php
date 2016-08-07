@@ -144,13 +144,12 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/dist/js/bootstrap.min.js"></script>
+	
 	<script src="<?php echo base_url();?>assets/jquery/bootstrap-datepicker.js"></script>
 	<script src="<?php echo base_url();?>assets/menu/js/menuscript.js"></script>
 	
 
-	<!-- Pill tab JavaScript -->
-	<script src="<?php echo base_url();?>pillscss/bootstrap.js"></script>
-    
+	
 	<!-- Bootstrap Wizard JavaScript -->
     <script src="<?php echo base_url();?>assets/bootstrap/bootstrap-wizard.js"></script>
 	
@@ -164,10 +163,11 @@
     <script src="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.js"></script>
 	
 	
-    <!-- Custom Theme JavaScript -->
-    <script src="<?php echo base_url();?>dist/js/sb-admin-2.js"></script>
 	<script>
 	$(document).ready(function() {
+
+		$("[rel='tooltip'], .tooltip").tooltip();
+
 		$('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'});	
 		window.prettyPrint && prettyPrint();
 	

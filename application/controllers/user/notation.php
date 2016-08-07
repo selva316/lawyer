@@ -247,6 +247,28 @@ class Notation extends CI_Controller {
 		}
 	}
 
+	public function autoSaveAsDraft()
+	{
+
+		$data['ntype'] = $this->input->post('ntype');
+		$data['casename'] = $this->input->post('casename');
+		$data['citation'] = $this->input->post('citation');
+		$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+
+		$data['judge_name'] = $this->input->post('judge_name');
+		$data['court_name'] = $this->input->post('court_name');
+		$data['casenumber'] = $this->input->post('casenumber');
+
+		$data['year'] = $this->input->post('year');
+		$data['bench'] = $this->input->post('bench');
+
+		$data['facts_of_case'] = $this->input->post('facts_of_case');
+		$data['type'] = $this->input->post('status');
+
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->updateDraftNotation($data);
+	}
+
 	public function fetchResearchTopic()
 	{
 		$topicname = $this->input->post('topicname');
@@ -273,6 +295,16 @@ class Notation extends CI_Controller {
 		$chkAvailable = $this->notationmodel->chkCasenameAndCitation($casename, $citation);
 
 		echo $chkAvailable;
+	}
+
+	public function searchAjax()
+	{
+		$this->load->model('notationmodel');
+		$searchString = $this->input->post('searchString');
+		$searchFields = $this->input->post('searchFields');
+
+		$result = $this->notationmodel->searchStringCollection($searchString, $searchFields);
+		echo $result;
 	}
 }
 

@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Homepage</title>
+    <title>Create Notation</title>
     <!-- jQuery UI CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
 	<!-- Bootstrap Core CSS -->
@@ -41,6 +41,10 @@
 	<style>
 		.ui-autocomplete {
 			z-index: 9999;
+		}
+
+		#mceu_28-body{
+			display: none;
 		}
 	</style>
 </head>
@@ -179,7 +183,7 @@
 								</thead>
 								<tbody>
 									<tr>
-										<td><input class="case" type="checkbox"/></td>
+										<td></td>
 										<td>
 										<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
 										<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
@@ -221,6 +225,7 @@
 										<td><input class="case_citation" type="checkbox"/></td>
 										<td>
 										<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
+											<option value="">Select</option>
 											<?php 
 												foreach ($typeOfCitation as $row) {
 													echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
@@ -568,6 +573,7 @@
 	<script src="<?php echo base_url();?>assets/menu/js/menuscript.js"></script>
 	
 	<script src="<?php echo base_url();?>assets/calc/auto.js"></script>
+	<script src="<?php echo base_url();?>assets/calc/generic.js"></script>
 	<script src="<?php echo base_url();?>assets/datatables/js/jquery.dataTables.js"></script>
 	
 	<!-- Metis Menu Plugin JavaScript -->
@@ -610,6 +616,7 @@
 		});
 
 		interval = setInterval(ajaxCreateCitation, 60000);
+	
 		//$("#court_name")
 	});
 
@@ -708,42 +715,7 @@
 		}
 	});
 
-	$(document).on('focus','.autocomplete_concept',function(){
-		var type = $(this).data('type');
-		var lstatuate = "#hiddenstatuate_"+type;
-		var lsubsection = "#hiddensubsection_"+type;
-
-		var vstatuate = $(lstatuate).val();
-		var vsubsection = $(lsubsection).val();
-
-		$(this).autocomplete({
-			source: function( request, response ) {
-				$.ajax({
-					url : 'notation/conceptAjax',
-					dataType: "json",
-					method: 'post',
-					data: {
-					   name_startsWith: request.term,
-					   type: type,
-					   statuate: vstatuate,
-					   subsection: vsubsection
-					},
-					 success: function( data ) {
-						 response( $.map( data, function( item ) {
-							return {
-								label: item,
-								value: item,
-								data : item
-							}
-						}));
-					}
-				});
-			},
-			autoFocus: true,	      	
-			minLength: 0		      	
-		});
-	});
-
+	
 	/*
 	$(document).on('focus','.autocomplete_citation',function(){
 		var type = $(this).data('citationNumber');
@@ -869,54 +841,7 @@
 		});
 	});*/
 	
-	$(document).on('focus','.autocomplete_subsection',function(){
-		
-		var type = $(this).data('type');
-		var statuateval = '#statuate_'+type;
-		var hiddenstatuate = '#hiddenstatuate_'+type;
-		if($(statuateval).val()!='')
-		{
-			url = 'notation/fetchUserSubSection';
-			autoTypeNo=0;
-
-			$(this).autocomplete({
-				source: function( request, response ) {
-					$.ajax({
-						url : url,
-						dataType: "json",
-						method: 'post',
-						data: {
-						   name_startsWith: request.term,
-						   type: type,
-						   statuate: $(hiddenstatuate).val()
-						},
-						 success: function( data ) {
-							 response( $.map( data, function( item ) {
-							 	var code = item.split("|");
-								return {
-									label: item,
-									value: code[autoTypeNo],
-									data : item
-								}
-							}));
-						}
-					});
-				},
-				autoFocus: true,	      	
-				minLength: 0,
-				select: function( event, ui ) {
-					var names = ui.item.data.split("|");						
-					id_arr = $(this).attr('id');
-			  		id = id_arr.split("_");
-			  		$('#subsection_'+id[1]).val(names[0]);
-			  		$('#hiddensubsection_'+id[1]).val(names[1]);
-					//$('#hiddensubsection_').val(names[0]);
-					//$("#hiddenconceptsubsection").val(names[1]);
-				}
-			});	
-		}
-	});
-
+	
 	$(document).on('focus','.autocomplete_clonesubsection',function(){
 		
 		if($("#constatuate").val()!='')
@@ -1001,52 +926,45 @@
 		});
 	});
 
-	$(document).on('focus','.autocomplete_statuate',function(){
-		
-		var type = $(this).data('type');
-		var subsectionval = '#subsection_'+type;
-		
-		url = 'notation/fetchUserStatuate';
-		autoTypeNo=0;
 
-		$(this).autocomplete({
-			source: function( request, response ) {
-				$.ajax({
-					url : url,
-					dataType: "json",
-					method: 'post',
-					data: {
-					   name_startsWith: request.term,
-					   type: type
-					},
-					 success: function( data ) {
-					 		$(subsectionval).val('');
-						 response( $.map( data, function( item ) {
-						 	var code = item.split("|");
-							return {
-								label: item,
-								value: code[autoTypeNo],
-								data : item
-							}
-						}));
-					}
-				});
-			},
-			autoFocus: true,	      	
-			minLength: 0,
-			select: function( event, ui ) {
-				var names = ui.item.data.split("|");						
-				id_arr = $(this).attr('id');
-		  		id = id_arr.split("_");
-		  		$('#statuate_'+id[1]).val(names[0]);
-		  		$('#hiddenstatuate_'+id[1]).val(names[1]);
-				//$('#constatuate').val(names[0]);
-				//$('#conceptsubsection').val(names[1]);
-				//$('#hiddenconceptstatuate').val(names[1]);
-				//$("#hiddenconceptsubsection").val(names[3]);
-			}
-		});
-	});
+	function saveAsDraft()
+	{
+		if($("#ntype").val() != '')
+		{
+			var casename  = $("#casename").val();
+			var citation = $("#citation").val();
+			var judge_name = $("#judge_name").val();
+			var court_name = $("#court_name").val();
+			var casenumber = $("#casenumber").val();
+			var year = $("#year").val();
+
+			var bench = $("#bench").val();
+			var facts_of_case = $("#facts_of_case").text();
+			var status = $("#status").val();
+
+			$.ajax({
+				url : 'notation/autoSaveAsDraft',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   ntype: $("#ntype").val(),
+				   casename: casename, 
+				   citation:citation, 
+				   judge_name: judge_name, 
+				   court_name:court_name, 
+				   casenumber:casenumber, 
+				   year:year, 
+				   bench:bench, 
+				   facts_of_case:facts_of_case, 
+				   status:status
+				},
+				success : function(data) {
+					
+				}
+			});
+
+		}
+	}
 
 	function ajaxCreateCitation(){
 		

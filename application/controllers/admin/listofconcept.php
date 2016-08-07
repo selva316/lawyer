@@ -54,6 +54,22 @@ class ListOfConcept extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function fetchUserConcept()
+	{
+		$type = $this->input->post('type');
+		$this->load->model('configurationmodel');
+		$data = $this->configurationmodel->fetchUserConcept();
+		echo json_encode($data);
+	}
+
+	/*
+	public function insertConcept()
+	{
+		$this->load->model('listofconceptmodel');
+		$data =  $this->listofconceptmodel->insertConcept($this->input->post('statuate'),$this->input->post('subsection'),$this->input->post('concept'));
+		echo json_encode($data);
+	}
+	*/
 	public function insertConcept()
 	{
 		$this->load->model('listofconceptmodel');

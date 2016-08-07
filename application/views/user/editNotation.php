@@ -37,6 +37,16 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>dist/css/timeline.css" />
     <!-- Custom Fonts -->
     <link rel="stylesheet"  href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
+
+    <style>
+		.ui-autocomplete {
+			z-index: 9999;
+		}
+
+		#mceu_28-body{
+			display: none;
+		}
+	</style>
 </head>
 
 <body>
@@ -168,9 +178,13 @@
 									?>
 									<tr>
 										<td><input class="case" type="checkbox"/></td>
-										<td><input type="text" data-type="statuate" name="statuate[]" id="statuate_<?php echo $k; ?>" class="form-control autocomplete_process" autocomplete="off" value="<?php echo $statuaterow['statuate']; ?>"></td>
-										<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_<?php echo $k; ?>" class="form-control autocomplete_process" autocomplete="off"  value="<?php echo $statuaterow['sub_section']; ?>" ondrop="return false;" onpaste="return false;"></td>
-										<td><input type="text" data-type="concept" name="concept[]" id="concept<?php echo $k; ?>" class="form-control autocomplete_concept" autocomplete="off"  value="<?php echo $statuaterow['concept']; ?>" ondrop="return false;" onpaste="return false;"></td>
+										<td><input type="text" data-type="<?php echo $k; ?>" name="statuate[]" id="statuate_<?php echo $k; ?>" class="form-control autocomplete_statuate" autocomplete="off" value="<?php echo $statuaterow['statuate']; ?>">
+										<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_<?php echo $k; ?>" class="form-control" autocomplete="off" value="<?php echo $statuaterow['hiddenstatuate']; ?>"></td>
+										<td>
+										<input type="text" data-type="<?php echo $k; ?>" name="subsection[]" id="subsection_<?php echo $k; ?>" class="form-control autocomplete_subsection" autocomplete="off" value="<?php echo $statuaterow['sub_section']; ?>" ondrop="return false;" onpaste="return false;">
+										<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_<?php echo $k; ?>" class="form-control" autocomplete="off" value="<?php echo $statuaterow['hiddensubsection']; ?>">
+										</td>
+										<td><input type="text" data-type="<?php echo $k; ?>" name="concept[]" id="concept_<?php echo $k; ?>" class="form-control autocomplete_concept" autocomplete="off"  value="<?php echo $statuaterow['concept']; ?>" ondrop="return false;" onpaste="return false;"></td>
 									</tr>
 									<?php
 										$k++;
@@ -225,6 +239,7 @@
 										<td><input class="case_citation" type="checkbox"/></td>
 										<td>
 										<select  class="form-control"  data-type="typeCitation" id="typeCitation_<?php echo $k; ?>" name="typeCitation[]">
+											<option value="">Select</option>
 											<?php 
 												foreach ($typeOfCitation as $row) {
 													if($citationrow['type_of_citation'] == $row['CIID'])
@@ -236,7 +251,7 @@
 										</select>
 										</td>
 										<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_<?php echo $k; ?>"  value="<?php echo $citationrow['actual_citation']; ?>" class="form-control autocomplete_citation" autocomplete="off"></td>
-										
+										<td><textarea  name="note[]" id="note_<?php echo $k; ?>" class="form-control"><?php echo $citationrow['description']?></textarea> </td>
 									</tr>
 									<?php 
 										$k++;
@@ -248,6 +263,7 @@
 											<td><input class="case_citation" type="checkbox"/></td>
 											<td>
 											<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
+												<option value="">Select</option>
 												<?php 
 													foreach ($typeOfCitation as $row) {
 														echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
@@ -448,6 +464,7 @@
 	<script src="<?php echo base_url();?>assets/menu/js/menuscript.js"></script>
 	
 	<script src="<?php echo base_url();?>assets/calc/auto.js"></script>
+	<script src="<?php echo base_url();?>assets/calc/generic.js"></script>
 	<script src="<?php echo base_url();?>assets/datatables/js/jquery.dataTables.js"></script>
 	
 	<!-- Metis Menu Plugin JavaScript -->
@@ -1027,6 +1044,7 @@
 			}
 		});
 	});
+
 	</script>
 </body>
 </html>

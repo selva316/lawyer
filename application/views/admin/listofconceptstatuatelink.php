@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>List of Concepts</title>
+    <title>List of Concept & Statuate Link</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -55,9 +55,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div style="margin-left:30px;margin-bottom:10px;">
-                            <!--<button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#conceptModal" > Add Concept <i class="fa fa-plus"></i> </button>-->
-                            
-                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#modalValidate" > Add Concept <i class="fa fa-plus"></i> </button>
+                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#conceptModal" > Concept, Statuate Link <i class="fa fa-plus"></i> </button>
                         </div>
 
                     </div>
@@ -126,7 +124,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"  style="font-weight:bold;">Add Concept</h4>
+                        <h4 class="modal-title"  style="font-weight:bold;">Statuate, Concept Link</h4>
                     </div><!-- /.modal-header -->
                     <div class="modal-body">
                         <div class="row-fluid">
@@ -157,7 +155,8 @@
                                     <tbody>
                                         <tr id="rowcon_1">
                                             <td>
-                                            <input type="text" placeholder="Concept Name" data-type="1" name="conceptName[]" id="conceptName_1" class="form-control " autocomplete="off"></td>
+                                            <input type="hidden" id="hiddenconceptname_1" name="hiddenconceptname[]"/>
+                                            <input type="text" placeholder="Concept Name" data-type="1" name="conceptName[]" id="conceptName_1" class="form-control autocomplete_cloneconcept" autocomplete="off"></td>
                                             <!--<td>
                                             <input type="text" placeholder="Description" name="conceptDescription[]" id="conceptDescription_1" class="form-control" autocomplete="off"></td>-->
                                             
@@ -331,7 +330,48 @@
             }
         });
 
-    
+        
+        $(document).on('focus','.autocomplete_cloneconcept',function(){
+            
+            var type = $(this).data('type');
+            var conceptName = "#conceptName_"+type
+            var hiddenconceptname = "#hiddenconceptname_"+type
+            $(this).autocomplete({
+                source: function( request, response ) {
+                    $.ajax({
+                        //url : 'listofconceptstatuatelink/conceptAjax',
+                        url : 'listofconcept/fetchUserConcept',
+                        dataType: "json",
+                        method: 'post',
+                        data: {
+                           name_startsWith: request.term,
+                           type: type
+                        },
+                         success: function( data ) {
+                             response( $.map( data, function( item ) {
+                                var code = item.split("|");
+                                return {
+                                    label: item,
+                                    value: code[0],
+                                    data : item
+                                }
+                            }));
+                        }
+                    });
+                },
+                autoFocus: true,            
+                minLength: 0,
+                select: function( event, ui ) {
+                        var names = ui.item.data.split("|");                        
+                        id_arr = $(this).attr('id');
+                        id = id_arr.split("_");
+                        
+                        //$('#subsection_'+id[1]).val(names[0]);
+                        $(conceptName).val(names[0]);
+                        $(hiddenconceptname).val(names[1]);
+                    }               
+            });
+        });    
 
         $( "#conceptname" ).blur(function() {
             $.ajax({
@@ -388,8 +428,6 @@
             data: {'conceptname':$("#conceptname").val(),'description':$("#description").val()},
             success:function(data){
                 //window.location.href="homepage";                
-                $("#conceptname").val('');
-                $("#description").val('');
                 fnTableCalling();
             }
         });
@@ -453,7 +491,8 @@
         var temp = [];
         for(i=1;i<=si;i++)
         {
-            var conceptcontrol = "#conceptName_"+i;
+            //var conceptcontrol = "#conceptName_"+i;
+            var conceptcontrol = "#hiddenconceptname_"+i;
             if ( $(conceptcontrol).val() == ""  || $(conceptcontrol).val() == null) {
                 continue;
             }

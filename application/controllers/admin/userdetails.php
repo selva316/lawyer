@@ -72,7 +72,7 @@ class Userdetails extends CI_Controller {
 	{
 		$this->load->model('userdetailsmodel');
 		$data = array();
-		$data['USERNAME'] = $this->input->post('username');
+		$data['USERNAME'] = strtolower($this->input->post('username'));
 		$data['PASSWORD'] = md5($this->input->post('password'));
 		$data['ROLE'] = $this->input->post('userrole');
 		$data['FIRSTNAME'] = $this->input->post('firstname');

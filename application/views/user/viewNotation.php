@@ -50,11 +50,11 @@
     <div class="container-fluid">
     	<?php $this->load->view('includes/defaultconfiguration');?>
 
-		<div class="panel panel-success">
+		<!--<div class="panel panel-success">
 			<div class="panel-heading">
 				<center><label><b>View Notation</b></label></center>
 			</div>
-		</div>		
+		</div>	-->	
 		<div id="page-wrapper" style="margin: auto 20px;">
 			<div class="panel panel-info">
                 <div class="panel-heading">Case Information</div>
@@ -96,7 +96,7 @@
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span8">
-							<label  class="control-label" >Fact of Case:</label>
+							<label  class="control-label" >Notes:</label>
 							<?php echo $facts_of_case; ?>
 						</div>
 					</div>
@@ -155,6 +155,7 @@
 										<th>ID</th>
 										<th>Type of Citation</th>
 										<th>Citation Number</th>
+										<th>Notes</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -176,7 +177,7 @@
 											?>
 										</td>
 										<td><?php echo $citationrow['actual_citation'];?> </td>
-											
+										<td><?php echo $citationrow['description'];?></td>
 									</tr>
 									<?php 
 										$k++;
@@ -300,10 +301,14 @@
 					   hashid: $("#hashid").val()
 					},
 					success : function(data) {
-						if(data == "Admin")
-							window.location.href="http://localhost/lawyer/admin/homepage";
-						else
-							window.location.href="http://localhost/lawyer/user/homepage";
+						if(data == "Admin"){
+							window.location.href="<?php echo site_url('admin/homepage')?>";
+							//window.location.href="http://localhost/lawyer/admin/homepage";
+						}
+						else{
+							window.location.href="<?php echo site_url('user/homepage')?>";
+							//window.location.href="http://localhost/lawyer/user/homepage";
+						}
 					}
 				});
 			});
@@ -317,16 +322,21 @@
 					   hashid: $("#hashid").val()
 					},
 					success : function(data) {
-						if(data == "Admin")
-							window.location.href="http://localhost/lawyer/admin/homepage";
-						else
-							window.location.href="http://localhost/lawyer/user/homepage";
+						if(data == "Admin"){
+							window.location.href="<?php echo site_url('admin/homepage')?>";
+							//window.location.href="http://localhost/lawyer/admin/homepage";
+						}
+						else{
+							window.location.href="<?php echo site_url('user/homepage')?>";
+							//window.location.href="http://localhost/lawyer/user/homepage";
+						}
 					}
 				});
 			});
 
 			$("#editNotation").click(function(){
-				window.location.href="http://localhost/lawyer/user/transfernotation?nid="+$("#hashid").val();
+				window.location.href="<?php echo site_url('user/transfernotation')?>?nid="+$("#hashid").val();
+				//window.location.href="http://localhost/lawyer/user/transfernotation?nid="+$("#hashid").val();
 			});
 
 			$(document).on('click', '#tagButton', function(){

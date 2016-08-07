@@ -4,8 +4,8 @@ class Logindetailsmodel extends CI_Model {
 	
 	public function useravailable()
 	{
-		$this->db->where('username',$this->input->post('j_username'));
-		$this->db->where('password',md5($this->input->post('j_password')));
+		$this->db->where('username', strtolower($this->input->post('j_username')));
+		$this->db->where('password', md5($this->input->post('j_password')));
 		$this->db->where('disable','N');
 		$query = $this->db->get('law_login');
 		

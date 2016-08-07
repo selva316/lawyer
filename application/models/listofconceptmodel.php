@@ -108,6 +108,7 @@ class Listofconceptmodel extends CI_Model {
 		return $dArray;
 	}
 
+	/*
 	public function insertConcept($statuate, $subsection, $concept){
 
 		$role = $this->session->userdata('role');
@@ -143,6 +144,40 @@ class Listofconceptmodel extends CI_Model {
 			$innerdata['STID'] = $statuate;
 			$innerdata['SSID'] = $subsection;
 			$innerdata['CID'] = $ctid;
+			$innerdata['USERID'] = $this->session->userdata('userid');
+			$innerdata['DISABLE'] = 'N';		
+
+			$this->db->insert('law_statuate_concept_link', $innerdata); 
+			$autoid = $this->db->insert_id();
+			
+			$this->db->where('id', $autoid);
+			$stconid = 'STCON'.$autoid;
+			
+			$this->db->set('STCONID', $stconid);
+				
+			$this->db->update('law_statuate_concept_link');
+
+
+		}
+
+		$dArray = array();
+		array_push($dArray, true);
+		return $dArray;
+
+	}
+	*/
+
+	public function insertConcept($statuate, $subsection, $concept){
+
+		$role = $this->session->userdata('role');
+
+		$conceptexplore = explode(',', $concept);
+		foreach ($conceptexplore as $subval) {
+
+			$innerdata = array();
+			$innerdata['STID'] = $statuate;
+			$innerdata['SSID'] = $subsection;
+			$innerdata['CID'] = $subval;
 			$innerdata['USERID'] = $this->session->userdata('userid');
 			$innerdata['DISABLE'] = 'N';		
 

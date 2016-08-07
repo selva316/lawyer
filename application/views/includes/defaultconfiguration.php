@@ -29,7 +29,10 @@
                 <li>
                     <a href="<?php echo site_url('admin/listofconcept');?>">List of Concepts</a>
                 </li>
-                
+                <li class="divider"></li>
+                <li>
+                    <a href="<?php echo site_url('admin/listofconceptstatuatelink');?>">List of Concepts Statuate Link</a>
+                </li>
                 <!--<li class="dropdown-submenu"><a tabindex="-1" href="/#">Reports</a>
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="/Report/topClientsAging">Top 40 Clients Aging</a></li>
@@ -49,6 +52,9 @@
         </li>
         <li  class="active">
             <a href="<?php echo site_url('admin/userdetails');?>">User Details</a>
+        </li>
+        <li  class="active">
+            <a href="<?php echo site_url('admin/searchbuilder');?>">Search Builder</a>
         </li>
         <li  class="active">
             <a href="<?php echo site_url('login/logout');?>">Logout</a>

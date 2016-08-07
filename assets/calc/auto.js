@@ -33,7 +33,7 @@ var j=$('.tableCitation tr').length;
 $(".typeAddmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><input class="case_citation" type="checkbox"/></td>';
-	html += '<td><select  class="form-control"  data-type="courtType" id="courtType_'+j+'" name="courtType[]"><option value="CIID12345">Approved</option><option value="CIID12346">Followed</option><option value="CIID12347">Distinguished</option><option value="CIID12348">Modified</option><optionvalue="CIID12349">Overruled</option><option value="CIID12350">Appealed from</option><option value="CIID12351">Other</option></select></td>';
+	html += '<td><select  class="form-control"  data-type="typeCitation" id="typeCitation_'+j+'" name="typeCitation[]"><option value="">Select</option><option value="CIID12345">Approved</option><option value="CIID12346">Followed</option><option value="CIID12347">Distinguished</option><option value="CIID12348">Modified</option><option value="CIID12349">Overruled</option><option value="CIID12350">Appealed from</option><option value="CIID12351">Other</option></select></td>';
 	html += '<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_'+j+'" class="form-control autocomplete_citation" autocomplete="off"></td>';
 	html += '<td><textarea  name="note[]" id="note_'+j+'" class="form-control"></textarea> </td>';
 	html += '</tr>';
@@ -57,7 +57,7 @@ $(".phraseAddmore").on('click',function(){
 var k=$('.tableNewConcept tr').length;
 $(".addConceptStatuate").on('click',function(){
 	html = '<tr id="rowcon_'+k+'">';
-	html += '<td><input type="text" placeholder="Concept Name" name="conceptName[]" id="conceptName_'+k+'" class="form-control " autocomplete="off"></td>';
+	html += '<td><input type="hidden" id="hiddenconceptname_'+k+'" name="hiddenconceptname[]" /><input type="text" placeholder="Concept Name" data-type="'+k+'" name="conceptName[]" id="conceptName_'+k+'" class="form-control autocomplete_cloneconcept" autocomplete="off"></td>';
 	//html += '<td><input type="text" placeholder="Description" name="conceptDescription[]" id="conceptDescription_'+k+'" class="form-control" autocomplete="off"></td></td>';
 	html += '</tr>';
 	$('.tableNewConcept').append(html);

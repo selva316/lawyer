@@ -246,6 +246,27 @@ class Configurationmodel extends CI_Model {
 		return $data;	
 	}
 
+	public function fetchUserConcept()
+	{
+
+		$name = $this->input->post('name_startsWith');
+		$userid = $this->session->userdata('userid');
+
+		$query = $this->db->query("select ls.NAME as cname, ls.CID as cid from law_concepts ls where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['cname'].'|'.$row['cid'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+	}
+
 	public function fetchUserSubSection()
 	{
 
@@ -491,6 +512,12 @@ class Configurationmodel extends CI_Model {
 		$query = $this->db->query($str);
 		return $query->result_array();	
 	}
+
+	public function fetchConceptStatuateLink()
+	{
+
+	}
+
 }
 
 /* End of file Configurationmodel.php */

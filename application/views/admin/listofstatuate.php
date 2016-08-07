@@ -231,7 +231,9 @@
             url: 'listofstatuate/insertStatuate',
             data: {'statuatename':$("#statuatename").val(),'description':$("#description").val()},
             success:function(data){
-                //window.location.href="homepage";                
+                //window.location.href="homepage";   
+                $("#statuatename").val('');
+                $("#description").val('');
                 fnTableCalling();
             }
         });

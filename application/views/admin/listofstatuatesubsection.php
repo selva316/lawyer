@@ -259,7 +259,10 @@
             url: 'listofstatuatesubsection/insertSubSection',
             data: {'statuatename':$("#statuatename").val(),'subsectionname':$("#subsectionname").val(),'description':$("#description").val()},
             success:function(data){
-                //window.location.href="homepage";                
+                //window.location.href="homepage";  
+                $("#statuatename").val('');
+                $("#subsectionname").val('');
+                $("#description").val('');
                 fnTableCalling();
             }
         });

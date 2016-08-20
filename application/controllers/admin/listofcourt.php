@@ -21,7 +21,7 @@ class ListOfCourt extends CI_Controller {
 		$this->load->model('configurationmodel');
 		$data['result'] = $this->configurationmodel->fetchCourtType();
 		
-		$this->load->view('admin/listofCourt',$data);
+		$this->load->view('admin/listofcourt',$data);
 	}
 	
 	public function checkCourtNameAvailable()

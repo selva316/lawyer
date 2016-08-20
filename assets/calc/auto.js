@@ -38,7 +38,7 @@ $(".typeAddmore").on('click',function(){
 	html += '<td><textarea  name="note[]" id="note_'+j+'" class="form-control"></textarea> </td>';
 	html += '</tr>';
 	$('.tableCitation').append(html);
-	i++;
+	j++;
 });
 
 //adds extra table rows Word phrase and Legal Definition

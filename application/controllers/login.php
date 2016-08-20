@@ -19,6 +19,29 @@ class Login extends CI_Controller {
 		$this->load->view('includes/template',$data);
 	}
 	
+	public function webservice_credentials()
+	{
+		$this->load->model('logindetailsmodel');
+		$result = $this->logindetailsmodel->useravailable();
+		if($result)
+		{
+			$userid = $this->logindetailsmodel->userid($this->input->post('j_username'));
+			$jsonUserdetails = array(
+				'userid'=>$userid,
+				'status'=>'Success'
+			);
+			
+		}
+		else
+		{
+			$jsonUserdetails = array(
+				'userid'=>$userid,
+				'status'=>'Success'
+			);
+		}
+		echo json_encode($jsonUserdetails);
+	}
+
 	public function validate_credentials(){
 		
 		$this->load->model('logindetailsmodel');

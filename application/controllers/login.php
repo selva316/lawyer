@@ -36,7 +36,7 @@ class Login extends CI_Controller {
 		{
 			$jsonUserdetails = array(
 				'userid'=>$userid,
-				'status'=>'Success'
+				'status'=>'Failure'
 			);
 		}
 		echo json_encode($jsonUserdetails);

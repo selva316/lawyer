@@ -54,6 +54,9 @@
 		  border: 3px solid #66afe9;
 		  z-index: 11001;
 		}*/
+		#mceu_29-0{
+			display: none;
+		}
 	</style>
 </head>
 

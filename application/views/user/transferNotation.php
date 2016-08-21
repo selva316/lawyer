@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Edit Notation</title>
+    <title>Transfer Notation</title>
     <!-- jQuery UI CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
 	<!-- Bootstrap Core CSS -->
@@ -43,14 +43,14 @@
 			z-index: 9999;
 		}
 
-		#mceu_28-body{
+		#mceu_29-0{
 			display: none;
 		}
 	</style>
 </head>
 
 <body>
-	<form name="frminvoice" action="transfernotation/changeowner" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
+	<form name="frmNotation" id="frmNotation" action="transfernotation/changeowner" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
     <div class="container-fluid">
     	<?php $this->load->view('includes/defaultconfiguration');?>
     	
@@ -61,7 +61,7 @@
 
 		<div class="panel panel-success">
 			<div class="panel-heading">
-				<center><label><b>Edit Notation</b></label></center>
+				<center><label><b>Transfer Notation</b></label></center>
 			</div>
 		</div>		
 		<div id="page-wrapper" style="margin: auto 20px;">
@@ -488,26 +488,7 @@
 			}]
 		});
 
-		$("#saveAsPrivate").click(function(){
-				$.ajax({
-					url : 'transfernotation/saveAsDraft',
-					dataType: "text",
-					method: 'post',
-					data: {
-					   hashid: $("#hashid").val()
-					},
-					success : function(data) {
-						if(data == "Admin"){
-							window.location.href="<?php echo site_url('admin/homepage')?>";
-							//window.location.href="http://localhost/lawyer/admin/homepage";
-						}
-						else{
-							window.location.href="<?php echo site_url('user/homepage')?>";
-							//window.location.href="http://localhost/lawyer/user/homepage";
-						}
-					}
-				});
-			});
+		
 
 			$("#dbVersion").click(function(){
 				$.ajax({
@@ -546,6 +527,27 @@
 
 		//interval = setInterval(ajaxCreateCitation, 60000);
 		//$("#court_name")
+	});
+
+	$(document).on('click', '#saveAsPrivate', function() {
+		$.ajax({
+			url : 'transfernotation/saveAsDraft',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $("#hashid").val()
+			},
+			success : function(data) {
+				if(data == "Admin"){
+					window.location.href="<?php echo site_url('admin/homepage')?>";
+					//window.location.href="http://localhost/lawyer/admin/homepage";
+				}
+				else{
+					window.location.href="<?php echo site_url('user/homepage')?>";
+					//window.location.href="http://localhost/lawyer/user/homepage";
+				}
+			}
+		});
 	});
 
 	$(document).on('change', '#chkPrivate', function() {
@@ -877,7 +879,7 @@
 				});
 			},
 			autoFocus: true,	      	
-			minLength: 2
+			minLength: 1
 		});
 	});
 	

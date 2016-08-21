@@ -55,6 +55,7 @@
 		<div class="panel panel-success">
 		<div class="panel-heading">
 			<center><label><b>Notation List</b></label></center></div>
+			<input type="hidden" name="tabVal" id="tabVal" value="<?php echo $this->session->userdata('pilltabsValue') ?>"> </input>
 		</div>		
 		<div id="page-wrapper">
 				<div class="row">
@@ -70,10 +71,10 @@
 					<div class="span12">
 						<div id="rootwizard">
 							<ul class="nav nav-pills">
-								<li class="active"><a href="#tab1" data-toggle="tab">Draft Notation</a></li>
-								<li class=""><a href="#tab2" data-toggle="tab">User Notation</a></li>
-								<li class=""><a href="#tab3" data-toggle="tab">Notation Edit By Users</a></li>
-								<li class=""><a href="#tab4" data-toggle="tab">Case Details</a></li>
+								<li id="draftNotation" class="active"><a href="#tab1" data-toggle="tab">Draft Notation</a></li>
+								<li id="userNotation" class=""><a href="#tab2" data-toggle="tab">Notation List</a></li>
+								<li id="editedNotation" class=""><a href="#tab3" data-toggle="tab">Notation Edited by Users</a></li>
+								<li class=""><a href="#tab4" data-toggle="tab">Reported Errors/Comments</a></li>
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">
@@ -171,6 +172,10 @@
 		$('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'});	
 		window.prettyPrint && prettyPrint();
 	
+		var tabSelection = "#"+$("#tabVal").val();
+		//$(".nav-pills>li.active").removeClass("active");
+		//$(tabSelection).addClass('active');
+
 		var table;
 		var notationlist;
 		$('#example').dataTable().fnDestroy();

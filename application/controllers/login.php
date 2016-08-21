@@ -55,6 +55,7 @@ class Login extends CI_Controller {
 			if($role == 1){
 				
 				$this->session->set_userdata('username',$this->input->post('j_username'));
+				$this->session->set_userdata('role','Admin');
 				$result = $this->logindetailsmodel->session_tracking($this->session->all_userdata());
 				
 				$session_value = array(
@@ -62,18 +63,21 @@ class Login extends CI_Controller {
 					'role'=>'Admin'
 				);
 				
+				$this->session->set_userdata('pilltabsValue', 'draftNotation');
 				$this->session->set_userdata($session_value);
 				redirect('admin/homepage');
 			}
 			else{
 				
 				$this->session->set_userdata('username',$this->input->post('j_username'));
+				$this->session->set_userdata('role','User');
 
 				$result = $this->logindetailsmodel->session_tracking($this->session->all_userdata());
 				$session_value = array(
 					'roleid'=>'2',
 					'role'=>'Lawyer'
 				);
+				$this->session->set_userdata('pilltabsValue', 'draftNotation');
 				$this->session->set_userdata($session_value);
 				
 				redirect('user/homepage');

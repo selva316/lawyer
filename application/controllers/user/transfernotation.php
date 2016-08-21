@@ -113,7 +113,12 @@ class TransferNotation extends CI_Controller {
 			$this->load->model('notationmodel');
 			$data = $this->notationmodel->updateNotation($data);
 			//$this->load->view('user/homepage');
-			redirect('user/homepage');
+			$this->session->set_userdata('pilltabsValue', 'userNotation');
+			if($this->session->userdata('role') == 'Admin')
+				redirect('admin/homepage');
+			else
+				redirect('user/homepage');
+			
 		}
 	}
 

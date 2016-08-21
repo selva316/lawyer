@@ -43,6 +43,10 @@
 		.ui-autocomplete {
 			z-index: 9999;
 		}
+
+		#mceu_29-0{
+			display: none;
+		}
 	</style>
 </head>
 
@@ -241,7 +245,7 @@
 	                
 	                <div class="row-fluid">
 	                    <div class="span12">
-	                        <label class="control-label">Select Reesearch Topic</label>
+	                        <label class="control-label">Select Research Topic</label>
 	                        <input  class="form-control autocomplete_tag" type="text" id="topicname" name="topicname"  autocomplete="off"  value=""/>
 	                        <input  class="form-control" type="hidden" id="rid" name="rid"  autocomplete="off"  value=""/>
 	                    </div>

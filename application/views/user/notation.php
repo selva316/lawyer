@@ -43,14 +43,14 @@
 			z-index: 9999;
 		}
 
-		#mceu_28-body{
+		#mceu_29-0{
 			display: none;
 		}
 	</style>
 </head>
 
 <body>
-	<form name="frminvoice" action="notation/save" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
+	<form name="frmNotation" id="frmNotation" action="notation/save" method="post" onsubmit="return frmvalidation()"  autocomplete="off">
     <div class="container-fluid">
     	<?php $this->load->view('includes/defaultconfiguration');?>
     	
@@ -582,6 +582,7 @@
 	<script>
 	tinymce.init({  
 		mode : "specific_textareas",
+		plugins: "autoresize",
         editor_selector : "myTextEditor"
 	});
 	</script>
@@ -980,7 +981,7 @@
 			var year = $("#year").val();
 
 			var bench = $("#bench").val();
-			var facts_of_case = $("#facts_of_case").text();
+			var facts_of_case = tinymce.get('facts_of_case').getContent(); //$("#facts_of_case").val();
 			var status = $("#status").val();
 			var notationid = $("#ntype").val();
 
@@ -1006,7 +1007,7 @@
 				success: function( msg ) {
 					//alert(msg);
 					$("#ntype").val(msg);
-					clearInterval(interval);
+					//clearInterval(interval);
 				}
 			});
 			$(".blockUIOverlay").hide();
@@ -1089,7 +1090,7 @@
 				});
 			},
 			autoFocus: true,	      	
-			minLength: 2
+			minLength: 1
 		});
 	});
 	/*

@@ -183,7 +183,11 @@ class Notation extends CI_Controller {
 				$data = $this->notationmodel->updateNotation($data);
 			}
 			//$this->load->view('user/homepage');
-			redirect('user/homepage');
+			$this->session->set_userdata('pilltabsValue', 'userNotation');
+			if($this->session->userdata('role') == 'Admin')
+				redirect('admin/homepage');
+			else
+				redirect('user/homepage');
 		}
 	}
 
@@ -224,6 +228,7 @@ class Notation extends CI_Controller {
 					$data['facts_of_case'] = $this->input->post('facts_of_case');	
 				}
 				
+				/*
 				if($this->input->post('status') != '' && $this->input->post('notationid') != '')
 				{
 					$data['type'] = $this->input->post('status');	
@@ -231,13 +236,15 @@ class Notation extends CI_Controller {
 				else
 				{
 					$data['type'] = 'draft';	
-				}
+				}*/
+
+				$data['type'] = 'draft';	
 				
 				$notationid = '';
 				if($this->input->post('notationid') != '' && strlen($this->input->post('notationid')) > 0)
 				{
-					$hashnotationid = $this->input->post('notationid');
-					$notationid = $this->notationmodel->fetchNotationID($hashnotationid);
+					$notationid = $this->input->post('notationid');
+					//$notationid = $this->notationmodel->fetchNotationID($hashnotationid);
 				}
 
 				$this->load->model('notationmodel');

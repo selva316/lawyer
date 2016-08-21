@@ -158,12 +158,20 @@ function frmvalidation()
 		}
 		
 	}
+
+	if(parseInt(bench)<1 && parseInt(bench)>100)
+	{
+		valid = false;
+		errorstr += "Enter valid bench!"+ "<BR/>";
+		$('#divbench').addClass('has-error');
+	}
+
 	/*
 	if(casenumber==''){
 		valid = false;
 		errorstr += "Enter valid Case Number!"+ "<BR/>";
 		$('#divcasenumber').addClass('has-error');
-	}*/
+	}
 	
 	if(court_name==''){
 		valid = false;
@@ -193,7 +201,7 @@ function frmvalidation()
 		valid = false;
 		errorstr += "Enter valid status!"+ "<BR/>";
 		$('#divstatus').addClass('has-error');
-	}
+	}*/
 	
 	if(!valid)
 	{
@@ -235,4 +243,21 @@ function frmvalidation()
 			//$("#errmsg").html("Digits Only").show().fadeOut("slow");
 	     	return false;
 		}
+	});
+
+	$("#year").keypress(function (e) {
+		//if the letter is not digit then display error and don't type anything
+		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+		//display error message
+			//$("#errmsg").html("Digits Only").show().fadeOut("slow");
+	     	return false;
+		}
+	});
+
+	$('#frmNotation').on('keyup keypress', function(e) {
+	  	var keyCode = e.keyCode || e.which;
+	  	if (keyCode === 13) { 
+	    	e.preventDefault();
+	    return false;
+	  }
 	});

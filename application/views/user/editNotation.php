@@ -116,7 +116,7 @@
 						<div class="span3">
 							<div id="divbench" class="form-group">
 								<label class="control-label">Type of Bench</label>
-								<input  class="form-control" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
+								<input  class="form-control" tabindex="1" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
 							</div>
 						</div>
 						<!--
@@ -147,7 +147,7 @@
 					</div> 
 
 					<div class="row-fluid" style="margin-top:20px;">
-						<div class="span8">
+						<div class="span12">
 							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"><?php echo $facts_of_case; ?></textarea>				
 						</div>
 					</div>
@@ -695,7 +695,7 @@
 						 response( $.map( data, function( item ) {
 						 	var code = item.split("|");
 							return {
-								label: item,
+								label: code[autoTypeNo],
 								value: code[autoTypeNo],
 								data : item
 							}

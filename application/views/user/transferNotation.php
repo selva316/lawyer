@@ -125,7 +125,7 @@
 					</div> 
 
 					<div class="row-fluid" style="margin-top:20px;">
-						<div class="span8">
+						<div class="span12">
 							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"><?php echo $facts_of_case; ?></textarea>				
 						</div>
 					</div>

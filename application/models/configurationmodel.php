@@ -208,7 +208,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select lsss.SSID as ssid, ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%') order by ls.NAME");
+		$query = $this->db->query("select lsss.SSID as ssid, ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%') order by ls.NAME");
 		
 		//echo "select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (userid='$userid' or userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')";
 
@@ -231,7 +231,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -252,7 +252,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as cname, ls.CID as cid from law_concepts ls where (ls.userid='$userid' or ls.userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select ls.NAME as cname, ls.CID as cid from law_concepts ls where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -275,7 +275,7 @@ class Configurationmodel extends CI_Model {
 		$userid = $this->session->userdata('userid');
 		$statuate = $this->input->post('statuate');
 
-		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.userid='Admin') and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
+		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.role='Admin') and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
 		
 		$data = array();
 		if ($query->num_rows() > 0)

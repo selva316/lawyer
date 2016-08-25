@@ -84,8 +84,6 @@
 											<table id="example" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														
-														<th width="10%">Notation ID</th>
 														<th>Case Name</th>
 														<th>Citation</th>
 														<th>Court Name</th>
@@ -105,8 +103,7 @@
 											<table id="notationlist" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th  width="10%">Notation ID</th>
-														<th>Case Name</th>
+														<th width="10%">Case Name</th>
 														<th>Citation</th>
 														<th>Created On</th>
 														<th>Created By</th>
@@ -187,7 +184,7 @@
                         }
                     ],
             "columns": [
-               { "data": "notation" },  
+               //{ "data": "notation" },  
                { "data": "casename" },  
                { "data": "citation" },  
                { "data": "court_name" },
@@ -205,7 +202,7 @@
                         }
                     ],
             "columns": [
-               { "data": "notation" },  
+               //{ "data": "notation" },  
                { "data": "casename" },  
                { "data": "citation" },  
                { "data": "date_of_creation" },

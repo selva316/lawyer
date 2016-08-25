@@ -38,8 +38,8 @@ class Homepage extends CI_Controller {
 			foreach($result as $r)
 			{
 				$details = array(
-					'notation'=>$r['NOTATIONID'],
-					'casename'=>$r['CASENAME'],
+					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
 					'court_name' => $r['COURT_NAME'],
 					'type' => ucfirst($r['TYPE']),
@@ -73,8 +73,8 @@ class Homepage extends CI_Controller {
 			foreach($result as $r)
 			{
 				$details = array(
-					'notation'=>$r['NOTATIONID'],
-					'casename'=>$r['CASENAME'],
+					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
 					'court_name' => $r['COURT_NAME'],
 					'type' => ucfirst($r['TYPE']),

@@ -23,6 +23,7 @@ class Login extends CI_Controller {
 	{
 		$this->load->model('logindetailsmodel');
 		$result = $this->logindetailsmodel->useravailable();
+		$userid = '';
 		if($result)
 		{
 			$userid = $this->logindetailsmodel->userid($this->input->post('j_username'));

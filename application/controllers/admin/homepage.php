@@ -39,8 +39,9 @@ class Homepage extends CI_Controller {
 			{
 				$details = array(
 					//'notation'=>$r['NOTATIONID'],
-					'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
-					'casename'=>$r['CASENAME'],
+					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					
 					'citation'=>$r['CITATION'],
 					'court_name' => $r['COURT_NAME'],
 					'type' => ucfirst($r['TYPE']),
@@ -83,8 +84,9 @@ class Homepage extends CI_Controller {
 				$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
 
 				$details = array(
-					'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
-					'casename'=>$r['CASENAME'],
+					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
 					//'court_name' => $r['COURT_NAME'],
 					'date_of_creation' => date('d-m-Y',$r['CREATED_ON']),

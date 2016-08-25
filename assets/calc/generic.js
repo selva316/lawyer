@@ -23,7 +23,7 @@ $(document).on('focus','.autocomplete_subsection',function(){
 						 response( $.map( data, function( item ) {
 						 	var code = item.split("|");
 							return {
-								label: item,
+								label: code[autoTypeNo],
 								value: code[autoTypeNo],
 								data : item
 							}
@@ -106,7 +106,7 @@ $(document).on('focus','.autocomplete_statuate',function(){
 					 response( $.map( data, function( item ) {
 					 	var code = item.split("|");
 						return {
-							label: item,
+							label: code[autoTypeNo],
 							value: code[autoTypeNo],
 							data : item
 						}

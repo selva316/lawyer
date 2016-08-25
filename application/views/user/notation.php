@@ -120,13 +120,13 @@
 						<div class="span3">
 							<div id="divyear" class="form-group">
 								<label class="control-label">Year of Judgement</label>
-								<input  class="form-control" type="text" id="year" name="year" value=""/>
+								<input class="form-control" type="text" id="year" name="year" value=""/>
 							</div>
 						</div>
 						<div class="span3">
 							<div id="divbench" class="form-group">
 								<label class="control-label">Type of Bench</label>
-								<input  class="form-control" type="text" id="bench" name="bench" maxlength="3" value=""/>
+								<input  class="form-control" tabindex="1" type="text" id="bench" name="bench" maxlength="3" value=""/>
 							</div>
 						</div>
 						<!--
@@ -157,7 +157,7 @@
 					</div> 
 
 					<div class="row-fluid" style="margin-top:20px;">
-						<div class="span8">
+						<div class="span12">
 							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"></textarea>				
 						</div>
 					</div>
@@ -652,7 +652,10 @@
 					   type: type
 					},
 					 success: function( data ) {
-						 response( $.map( data, function( item ) {
+					 	/*if(!data.length) {
+
+					 	}*/
+						response( $.map( data, function( item ) {
 							return {
 								label: item,
 								value: item,
@@ -777,7 +780,7 @@
 						 response( $.map( data, function( item ) {
 						 	var code = item.split("|");
 							return {
-								label: item,
+								label: code[autoTypeNo],
 								value: code[autoTypeNo],
 								data : item
 							}
@@ -864,7 +867,7 @@
 							 response( $.map( data, function( item ) {
 							 	var code = item.split("|");
 								return {
-									label: item,
+									label: code[autoTypeNo],
 									value: code[autoTypeNo],
 									data : item
 								}
@@ -904,7 +907,8 @@
 						 response( $.map( data, function( item ) {
 						 	var code = item.split("|");
 							return {
-								label: item,
+								
+								label: code[autoTypeNo],
 								value: code[autoTypeNo],
 								data : item
 							}
@@ -918,11 +922,8 @@
 				var names = ui.item.data.split("|");						
 				id_arr = $(this).attr('id');
 		  		id = id_arr.split("_");
-		  		
 				$('#constatuate').val(names[0]);
-				//$('#conceptsubsection').val(names[1]);
 				$('#hiddenconceptstatuate').val(names[1]);
-				//$("#hiddenconceptsubsection").val(names[3]);
 			}
 		});
 	});
@@ -940,7 +941,7 @@
 			var year = $("#year").val();
 
 			var bench = $("#bench").val();
-			var facts_of_case = $("#facts_of_case").text();
+			var facts_of_case = tinymce.get('facts_of_case').getContent();
 			var status = $("#status").val();
 
 			$.ajax({
@@ -969,6 +970,29 @@
 
 	function ajaxCreateCitation(){
 		
+
+		var statuateTableSize = $('.tableStatuate tr').length;
+		var listOfStatuate = '';
+		for(i=1;i<statuateTableSize;i++)
+		{
+			var statuateStr = "#statuate_"+i;
+			var statuate = $(statuateStr).val();
+
+			var hiddenStatuateStr = "#hiddenstatuate_"+i;
+			var hiddenStatuate = $(hiddenStatuateStr).val();
+
+			var subsectionStr = "#subsection_"+i;
+			var subsection = $(subsectionStr).val();
+
+			var hiddenSubsectionStr = "#hiddensubsection_"+i;
+			var hiddenSubsection = $(hiddenSubsectionStr).val();
+
+			var conceptStr = "#concept_"+i;
+			var concept = $(conceptStr).val();
+			
+			listOfStatuate += statuate+"--$$--"+hiddenStatuate+"--$$--"+subsection+"--$$--"+hiddenSubsection+"--$$--"+concept+"--^--";
+		}
+
 		var citation = $("#citation").val();
 		var casename = $("#casename").val();
 		if(citation != '' && casename !='')
@@ -1001,7 +1025,8 @@
 				   year:year, 
 				   bench:bench, 
 				   facts_of_case:facts_of_case, 
-				   status:status, 
+				   status:status,
+				   listOfStatuate:listOfStatuate, 
 				   notationid:notationid
 				},
 				success: function( msg ) {
@@ -1080,6 +1105,7 @@
 					},
 					 success: function( data ) {
 						 response( $.map( data, function( item ) {
+
 							return {
 								label: item,
 								value: item,

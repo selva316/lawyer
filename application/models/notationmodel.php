@@ -176,17 +176,304 @@ class Notationmodel extends CI_Model {
 		return true;
 	}
 
-	function autoSaveNotation($data, $notationid)
+	function autoSaveNotation($notationData, $notationid)
 	{
+		$userid = $this->session->userdata('userid');
+		$role = $this->session->userdata('role');
+
 		if(strlen($notationid)>0 && $notationid != '')
 		{
+			$listOfStatuate = $this->input->post('listOfStatuate');
+			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
+			foreach ($listOfStatuate_arr as $los_arr) {
+				$statuateContent = explode('--$$--', $los_arr);
+				
+				$ctid = '';
+				$ssid = '';
+				$contid = '';
+				if(isset($statuateContent[0])){
+					echo "Statuate: ".$statuateContent[0];
+					$statuateAvailable = $this->fnStatuateAvailable($statuateContent[0], $userid);
+					if($statuateAvailable ==0 && $statuateContent[0] !='')
+					{
+						$data = array();
+						$data['NAME'] = $statuateContent[0];
+						$data['DESCRIPTION'] = $statuateContent[0];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_statuate', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$ctid = 'ST'.$autoid;
+						
+						$this->db->set('STID', $ctid);
+							
+						$this->db->update('law_statuate');
+
+						$dArray = array();
+						array_push($dArray, true);
+					}
+					else
+						$ctid = $statuateContent[1];
+				}
+				
+				if(isset($statuateContent[1])){
+					echo "Hidden Statuate: ".$statuateContent[1];
+				}
+				
+				if(isset($statuateContent[2])){
+					$subsectionAvailable = $this->fnSubSectionAvailable($statuateContent[2], $userid, $ctid);
+					if($subsectionAvailable == 0 && $statuateContent[2] != '' && $ctid != '')
+					{
+						$data = array();
+
+						$data['STID'] = $ctid;
+						$data['DESCRIPTION'] = $statuateContent[2];
+						$data['NAME'] = $statuateContent[2];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_statuate_sub_section', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$ssid = 'SS'.$autoid;
+						
+						$this->db->set('SSID', $ssid);
+							
+						$this->db->update('law_statuate_sub_section');
+					}
+					else
+						$ssid = $statuateContent[3];
+				}
+				
+				if(isset($statuateContent[3])){
+					echo "Hidden Subsection: ".$statuateContent[3];
+				}
+
+				if(isset($statuateContent[4])){
+					$conceptAvailable = $this->fnConceptAvailable($statuateContent[4], $userid);
+					echo "Concept: ".$statuateContent[4];
+					if($conceptAvailable == 0 && $statuateContent[4] != '')
+					{
+						$data = array();
+
+						$data['NAME'] = $statuateContent[4];
+						$data['DESCRIPTION'] = $statuateContent[4];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_concepts', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$contid = 'C'.$autoid;
+						
+						$this->db->set('CID', $contid);
+							
+						$this->db->update('law_concepts');
+
+					}
+					else
+					{
+						$contid = $this->fnFetchConceptId($statuateContent[4], $userid);
+					}
+
+					if($ctid != '' && $contid != '')
+					{
+						$innerdata = array();
+						$innerdata['STID'] = $ctid;
+						$innerdata['SSID'] = $ssid;
+						$innerdata['CID'] = $contid;
+						$innerdata['USERID'] = $this->session->userdata('userid');
+						$innerdata['DISABLE'] = 'N';		
+						$this->db->insert('law_statuate_concept_link', $innerdata); 
+						$autoid = $this->db->insert_id();
+					
+						$this->db->where('id', $autoid);
+						$stconid = 'STCON'.$autoid;
+					
+						$this->db->set('STCONID', $stconid);
+							
+						$this->db->update('law_statuate_concept_link');	
+					}
+					
+				}
+			}
+			exit;
+
 			$this->db->where('NOTATIONID', $notationid);
-			$this->db->update('law_notation', $data);
+			$this->db->update('law_notation', $notationData);
 			return $notationid;
 		}
 		else
 		{
-			$this->db->insert('law_notation', $data); 
+			$listOfStatuate = $this->input->post('listOfStatuate');
+			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
+			foreach ($listOfStatuate_arr as $los_arr) {
+				$statuateContent = explode('--$$--', $los_arr);
+				
+				$ctid = '';
+				$ssid = '';
+				$contid = '';
+				if(isset($statuateContent[0])){
+					echo "Statuate: ".$statuateContent[0];
+					$statuateAvailable = $this->fnStatuateAvailable($statuateContent[0], $userid);
+					if($statuateAvailable ==0 && $statuateContent[0] !='')
+					{
+						$data = array();
+						$data['NAME'] = $statuateContent[0];
+						$data['DESCRIPTION'] = $statuateContent[0];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_statuate', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$ctid = 'ST'.$autoid;
+						
+						$this->db->set('STID', $ctid);
+							
+						$this->db->update('law_statuate');
+
+						$dArray = array();
+						array_push($dArray, true);
+					}
+					else
+						$ctid = $statuateContent[1];
+				}
+				
+				if(isset($statuateContent[1])){
+					echo "Hidden Statuate: ".$statuateContent[1];
+				}
+				
+				if(isset($statuateContent[2])){
+					$subsectionAvailable = $this->fnSubSectionAvailable($statuateContent[2], $userid, $ctid);
+					if($subsectionAvailable == 0 && $statuateContent[2] != '' && $ctid != '')
+					{
+						$data = array();
+
+						$data['STID'] = $ctid;
+						$data['DESCRIPTION'] = $statuateContent[2];
+						$data['NAME'] = $statuateContent[2];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_statuate_sub_section', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$ssid = 'SS'.$autoid;
+						
+						$this->db->set('SSID', $ssid);
+							
+						$this->db->update('law_statuate_sub_section');
+					}
+					else
+						$ssid = $statuateContent[3];
+				}
+				
+				if(isset($statuateContent[3])){
+					echo "Hidden Subsection: ".$statuateContent[3];
+				}
+
+				if(isset($statuateContent[4])){
+					$conceptAvailable = $this->fnConceptAvailable($statuateContent[4], $userid);
+					echo "Concept: ".$statuateContent[4];
+					if($conceptAvailable == 0 && $statuateContent[4] != '')
+					{
+						$data = array();
+
+						$data['NAME'] = $statuateContent[4];
+						$data['DESCRIPTION'] = $statuateContent[4];
+						
+						if($role == 'Admin')
+							$data['ROLE'] = 'Admin';
+						else
+							$data['ROLE'] = 'User';
+
+						$data['USERID'] = $this->session->userdata('userid');
+
+						$data['DISABLE'] = 'N';		
+
+						$this->db->insert('law_concepts', $data); 
+						$autoid = $this->db->insert_id();
+						
+						$this->db->where('id', $autoid);
+						$contid = 'C'.$autoid;
+						
+						$this->db->set('CID', $contid);
+							
+						$this->db->update('law_concepts');
+
+					}
+					else
+					{
+						$contid = $this->fnFetchConceptId($statuateContent[4], $userid);
+					}
+
+					if($ctid != '' && $contid != '')
+					{
+						$innerdata = array();
+						$innerdata['STID'] = $ctid;
+						$innerdata['SSID'] = $ssid;
+						$innerdata['CID'] = $contid;
+						$innerdata['USERID'] = $this->session->userdata('userid');
+						$innerdata['DISABLE'] = 'N';		
+						$this->db->insert('law_statuate_concept_link', $innerdata); 
+						$autoid = $this->db->insert_id();
+					
+						$this->db->where('id', $autoid);
+						$stconid = 'STCON'.$autoid;
+					
+						$this->db->set('STCONID', $stconid);
+							
+						$this->db->update('law_statuate_concept_link');	
+					}
+					
+				}
+			}
+			exit;
+
+			$this->db->insert('law_notation', $notationData); 
 			$autoid = $this->db->insert_id();
 			
 			$this->db->where('id', $autoid);
@@ -1203,6 +1490,70 @@ class Notationmodel extends CI_Model {
 		}
 
 	}
+
+	public function fnStatuateAvailable($statuateName, $userid)
+	{
+		$query = $this->db->query("select count(name) as cntname from law_statuate  where (UPPER(name) = '".strtoupper($statuateName)."') and (userid='".$userid."' or role='Admin')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+		
+		return $count;
+	}
+
+	public function fnSubSectionAvailable($subSection, $userid, $ctid)
+	{
+		
+		$query = $this->db->query("select count(name) as cntname from law_statuate_sub_section where STID IN (select STID from law_statuate  where (stid = '".$ctid."') and (userid='".$userid."' or role='Admin')) and upper(name)='".strtoupper($subSection)."'");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+		
+		return $count;	
+	}
+
+	public function fnConceptAvailable($conceptName, $userid)
+	{
+		$query = $this->db->query("select count(name) as cntname from law_concepts  where (UPPER(name) = '".strtoupper($conceptName)."') and (userid='".$userid."' or role='Admin')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+		return $count;	
+	}
+
+	public function fnFetchConceptId($conceptName, $userid)
+	{
+		$query = $this->db->query("select CID from law_concepts  where (UPPER(name) = '".strtoupper($conceptName)."') and (userid='".$userid."' or role='Admin')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['CID'];//i am not want item code i,eeeeeeeeeeee
+		}
+		return $count;		
+	}
+
 }
 /* End of file Logindetailsmodel.php */
 /* Location: ./application/models/Logindetailsmodel.php */

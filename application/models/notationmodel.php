@@ -328,6 +328,28 @@ class Notationmodel extends CI_Model {
 
 			$this->db->where('NOTATIONID', $notationid);
 			$this->db->update('law_notation', $notationData);
+			
+			$listOfStatuate = $this->input->post('listOfStatuate');
+			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
+			foreach ($listOfStatuate_arr as $los_arr) {
+				$statuateContent = explode('--$$--', $los_arr);
+				$notationStatuateAvailable = $this->fnNotationStatuateAvailable($statuateContent[0],$statuateContent[2],$statuateContent[4], $notationid);
+				if($notationStatuateAvailable == 0)
+				{
+					if(($statuateContent[0] == "") && ($statuateContent[4] == "") || ($notationid == ""))
+						continue;					
+
+					$itemlist = array();
+
+					$itemlist['STATUATE'] = $statuateContent[0];
+					$itemlist['SUB_SECTION'] = $statuateContent[2];
+					$itemlist['CONCEPT'] = $statuateContent[4];
+					$itemlist['NOTATIONID'] = $notationid;
+
+					$this->db->insert('law_notation_statuate', $itemlist); 
+				}
+			}
+
 			return $notationid;
 		}
 		else
@@ -463,7 +485,6 @@ class Notationmodel extends CI_Model {
 					
 				}
 			}
-			exit;
 
 			$this->db->insert('law_notation', $notationData); 
 			$autoid = $this->db->insert_id();
@@ -482,6 +503,28 @@ class Notationmodel extends CI_Model {
 
 			$this->db->update('law_notation');
 	
+
+			$listOfStatuate = $this->input->post('listOfStatuate');
+			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
+			foreach ($listOfStatuate_arr as $los_arr) {
+				$statuateContent = explode('--$$--', $los_arr);
+				$notationStatuateAvailable = $this->fnNotationStatuateAvailable($statuateContent[0],$statuateContent[2],$statuateContent[4], $nid);
+				if($notationStatuateAvailable == 0)
+				{
+					if(($statuateContent[0] == "") && ($statuateContent[4] == "") || ($nid == ""))
+						continue;					
+
+					$itemlist = array();
+
+					$itemlist['STATUATE'] = $statuateContent[0];
+					$itemlist['SUB_SECTION'] = $statuateContent[2];
+					$itemlist['CONCEPT'] = $statuateContent[4];
+					$itemlist['NOTATIONID'] = $nid;
+
+					$this->db->insert('law_notation_statuate', $itemlist); 
+				}
+			}
+			
 			return $nid;
 		}
 		
@@ -1537,6 +1580,22 @@ class Notationmodel extends CI_Model {
 	public function fnStatuateAvailable($statuateName, $userid)
 	{
 		$query = $this->db->query("select count(name) as cntname from law_statuate  where (UPPER(name) = '".strtoupper($statuateName)."') and (userid='".$userid."' or role='Admin')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+		
+		return $count;
+	}
+
+	public function fnNotationStatuateAvailable($statuate, $subsection, $concept, $nid)
+	{
+		$query = $this->db->query("select count(STATUATE) as cntname from law_notation_statuate  where (UPPER(STATUATE) = '".strtoupper($statuate)."') and (UPPER(SUB_SECTION) = '".strtoupper($subsection)."') and (UPPER(CONCEPT) = '".strtoupper($concept)."') and (NOTATIONID='".$nid."')");
 		
 		$data = array();
 		

@@ -63,8 +63,6 @@ class Notationmodel extends CI_Model {
 		$this->db->set('NOTATIONID', $nid);
 		$this->db->set('HASHNOTATIONID', $hashnid);
 		
-		echo "notationid: ".$nid;
-		echo "<BR/>";
 		$this->db->set('CREATED_BY', $this->session->userdata('userid'));
 		$this->db->set('CREATED_ON', time());
 
@@ -78,7 +76,7 @@ class Notationmodel extends CI_Model {
 		$statuate = $this->input->post('statuate');
 		$subsection = $this->input->post('subsection');
 		$concept = $this->input->post('concept');
-		echo "number_of_entries: ".$number_of_entries;
+
 		if($number_of_entries >= 0)
 		{
 			for ($i=0; $i <$number_of_entries ; $i++) { 
@@ -99,14 +97,16 @@ class Notationmodel extends CI_Model {
 
 		/* Statuate , Sub Section and Concept */
 
-		$number_of_citation = count($this->input->post('citationNumber'));
+		
+		$numberOfCitationEntries = $this->input->post('numberOfCitationEntries');
 		$citationNumber = $this->input->post('citationNumber');
+		$listCaseName = $this->input->post('listCaseName');
 		$typeCitation = $this->input->post('typeCitation');
 		$note = $this->input->post('note');
 
-		if($number_of_citation >= 0)
+		if($numberOfCitationEntries > 0)
 		{
-			for ($i=1; $i <=$number_of_citation ; $i++) { 
+			for ($i=1; $i <$numberOfCitationEntries ; $i++) { 
 				
 				$itemlist = array();
 
@@ -117,8 +117,18 @@ class Notationmodel extends CI_Model {
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
 				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
 				{
-					$this->_createMissingCitationDraft($citationNumber[$i]);
+					if($listCaseName[$i] != '')
+						$l_caseName = $listCaseName[$i];
+					else
+						$l_caseName = 'No Casename';
+
+					$this->_createMissingCitationDraft($citationNumber[$i], $l_caseName);
 				}
+
+				if($listCaseName[$i] != '')
+					$itemlist['CASENUMBER'] = $listCaseName[$i];
+				else
+					$itemlist['CASENUMBER'] = 'No Casename';
 
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
 				$itemlist['DESCRIPTION'] = $note[$i];
@@ -152,7 +162,7 @@ class Notationmodel extends CI_Model {
 		}
 
 		$listcitation = $this->input->post('citation');
-		echo "citation: ".$listcitation;
+
 		if (strpos($listcitation, ',') !== false) {
 			$citation_arr = explode(",",$listcitation);
 			foreach($citation_arr as $lcitation)
@@ -192,7 +202,6 @@ class Notationmodel extends CI_Model {
 				$ssid = '';
 				$contid = '';
 				if(isset($statuateContent[0])){
-					echo "Statuate: ".$statuateContent[0];
 					$statuateAvailable = $this->fnStatuateAvailable($statuateContent[0], $userid);
 					if($statuateAvailable ==0 && $statuateContent[0] !='')
 					{
@@ -226,9 +235,6 @@ class Notationmodel extends CI_Model {
 						$ctid = $statuateContent[1];
 				}
 				
-				if(isset($statuateContent[1])){
-					echo "Hidden Statuate: ".$statuateContent[1];
-				}
 				
 				if(isset($statuateContent[2])){
 					$subsectionAvailable = $this->fnSubSectionAvailable($statuateContent[2], $userid, $ctid);
@@ -263,13 +269,9 @@ class Notationmodel extends CI_Model {
 						$ssid = $statuateContent[3];
 				}
 				
-				if(isset($statuateContent[3])){
-					echo "Hidden Subsection: ".$statuateContent[3];
-				}
 
 				if(isset($statuateContent[4])){
 					$conceptAvailable = $this->fnConceptAvailable($statuateContent[4], $userid);
-					echo "Concept: ".$statuateContent[4];
 					if($conceptAvailable == 0 && $statuateContent[4] != '')
 					{
 						$data = array();
@@ -323,7 +325,6 @@ class Notationmodel extends CI_Model {
 					
 				}
 			}
-			exit;
 
 			$this->db->where('NOTATIONID', $notationid);
 			$this->db->update('law_notation', $notationData);
@@ -340,7 +341,7 @@ class Notationmodel extends CI_Model {
 				$ssid = '';
 				$contid = '';
 				if(isset($statuateContent[0])){
-					echo "Statuate: ".$statuateContent[0];
+					
 					$statuateAvailable = $this->fnStatuateAvailable($statuateContent[0], $userid);
 					if($statuateAvailable ==0 && $statuateContent[0] !='')
 					{
@@ -355,7 +356,7 @@ class Notationmodel extends CI_Model {
 
 						$data['USERID'] = $this->session->userdata('userid');
 
-						$data['DISABLE'] = 'N';		
+						$data['DISABLE'] = 'N';
 
 						$this->db->insert('law_statuate', $data); 
 						$autoid = $this->db->insert_id();
@@ -373,11 +374,7 @@ class Notationmodel extends CI_Model {
 					else
 						$ctid = $statuateContent[1];
 				}
-				
-				if(isset($statuateContent[1])){
-					echo "Hidden Statuate: ".$statuateContent[1];
-				}
-				
+								
 				if(isset($statuateContent[2])){
 					$subsectionAvailable = $this->fnSubSectionAvailable($statuateContent[2], $userid, $ctid);
 					if($subsectionAvailable == 0 && $statuateContent[2] != '' && $ctid != '')
@@ -411,13 +408,8 @@ class Notationmodel extends CI_Model {
 						$ssid = $statuateContent[3];
 				}
 				
-				if(isset($statuateContent[3])){
-					echo "Hidden Subsection: ".$statuateContent[3];
-				}
-
 				if(isset($statuateContent[4])){
 					$conceptAvailable = $this->fnConceptAvailable($statuateContent[4], $userid);
-					echo "Concept: ".$statuateContent[4];
 					if($conceptAvailable == 0 && $statuateContent[4] != '')
 					{
 						$data = array();
@@ -543,14 +535,16 @@ class Notationmodel extends CI_Model {
 
 		/* Statuate , Sub Section and Concept */
 
-		$number_of_citation = count($this->input->post('citationNumber'));
+		
+		$numberOfCitationEntries = $this->input->post('numberOfCitationEntries');
 		$citationNumber = $this->input->post('citationNumber');
+		$listCaseName = $this->input->post('listCaseName');
 		$typeCitation = $this->input->post('typeCitation');
 		$note = $this->input->post('note');
 
-		if($number_of_citation >= 0)
+		if($numberOfCitationEntries > 0)
 		{
-			for ($i=0; $i <$number_of_citation ; $i++) { 
+			for ($i=0; $i <$numberOfCitationEntries; $i++) { 
 				
 				$itemlist = array();
 
@@ -561,8 +555,19 @@ class Notationmodel extends CI_Model {
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
 				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
 				{
-					$this->_createMissingCitationDraft($citationNumber[$i]);
+					if($listCaseName[$i] != '')
+						$l_caseName = $listCaseName[$i];
+					else
+						$l_caseName = 'No Casename';
+
+					$this->_createMissingCitationDraft($citationNumber[$i], $l_caseName);
 				}
+
+				if($listCaseName[$i] !='')
+					$itemlist['CASENUMBER'] = $listCaseName[$i];
+				else
+					$itemlist['CASENUMBER'] = 'No Casename';
+				
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
 				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
@@ -594,7 +599,6 @@ class Notationmodel extends CI_Model {
 		}
 		
 		$listcitation = $this->input->post('citation');
-		echo "citation: ".$listcitation;
 		if (strpos($listcitation, ',') !== false) {
 			$citation_arr = explode(",",$listcitation);
 			foreach($citation_arr as $lcitation)
@@ -670,14 +674,15 @@ class Notationmodel extends CI_Model {
 
 		/* Statuate , Sub Section and Concept */
 
-		$number_of_citation = count($this->input->post('citationNumber'));
+		$numberOfCitationEntries = $this->input->post('numberOfCitationEntries');
 		$citationNumber = $this->input->post('citationNumber');
+		$listCaseName = $this->input->post('listCaseName');
 		$typeCitation = $this->input->post('typeCitation');
 		$note = $this->input->post('note');
 
-		if($number_of_citation >= 0)
+		if($numberOfCitationEntries > 0)
 		{
-			for ($i=0; $i <$number_of_citation ; $i++) { 
+			for ($i=0; $i <$numberOfCitationEntries ; $i++) {
 				
 				$itemlist = array();
 
@@ -688,8 +693,19 @@ class Notationmodel extends CI_Model {
 				$itemlist['ACTUAL_CITATION'] = $citationNumber[$i];
 				if($this->_checkCitationAvailable($citationNumber[$i]) <= 0)
 				{
-					$this->_createMissingCitationDraft($citationNumber[$i]);
+					if($listCaseName[$i] != '')
+						$l_caseName = $listCaseName[$i];
+					else
+						$l_caseName = 'No Casename';
+
+					$this->_createMissingCitationDraft($citationNumber[$i], $l_caseName);
 				}
+
+				if($listCaseName[$i] !='')
+					$itemlist['CASENUMBER'] = $listCaseName[$i];
+				else
+					$itemlist['CASENUMBER'] = 'No Casename';
+
 				$itemlist['TYPE_OF_CITATION'] = $typeCitation[$i];
 				$itemlist['DESCRIPTION'] = $note[$i];
 				$itemlist['NOTATIONID'] = $nid;
@@ -721,7 +737,7 @@ class Notationmodel extends CI_Model {
 		}
 		
 		$listcitation = $this->input->post('citation');
-		echo "citation: ".$listcitation;
+		
 		if (strpos($listcitation, ',') !== false) {
 			$citation_arr = explode(",",$listcitation);
 			foreach($citation_arr as $lcitation)
@@ -983,6 +999,7 @@ class Notationmodel extends CI_Model {
 						$notationdata[$i]['citation'] = $notationrow['CITATION'];
 						$notationdata[$i]['actual_citation'] = $notationrow['ACTUAL_CITATION'];
 						$notationdata[$i]['type_of_citation'] = $notationrow['TYPE_OF_CITATION'];
+						$notationdata[$i]['casenumber'] = $notationrow['CASENUMBER'];
 						$notationdata[$i]['description'] = $notationrow['DESCRIPTION'];
 						$i++;
 					}
@@ -1454,9 +1471,9 @@ class Notationmodel extends CI_Model {
 		return $count;
 	}
 
-	public function _createMissingCitationDraft($citation)
+	public function _createMissingCitationDraft($citation, $l_caseName)
 	{
-		$data['casename'] = 'No Casename';
+		$data['casename'] = $l_caseName;
 		$data['citation'] = $citation;
 
 		$this->db->insert('law_notation', $data); 
@@ -1478,17 +1495,43 @@ class Notationmodel extends CI_Model {
 
 	}
 
-	public function searchStringCollection($searchString, $searchFields)
+	public function searchStringCollection($searchString)
 	{
-		$query = $this->db->query("SELECT * FROM law_notation WHERE MATCH(casename, citation, dup_citation, casenumber, judge_name, court_name, year, bench, facts_of_case) AGAINST('chennai')");
-		$count = 0;
-		$result = $query->result_array();
-		$details = '';
-		foreach($result as $row)
-		{
-		
-		}
+		$listOfSearchStringArray = explode("--^--",$searchString);
+		$allColumn = 'casename, citation, dup_citation, casenumber, judge_name, court_name, YEAR, bench, facts_of_case';
+		$searchQuery = "SELECT * FROM law_notation WHERE ";
+		$i = 0;
+		foreach ($listOfSearchStringArray as $ss_arr) {
+			$searchStringContent = explode('--$$--', $ss_arr);
+			
+			if(isset($searchStringContent[1])){
+				if($searchStringContent[1] !='')
+				{
+					$searchColumn = $searchStringContent[0];
+					$searchContent = $searchStringContent[1];
+					$logical = $searchStringContent[2];
 
+					if($searchColumn != '')
+					{
+						if($i == 0)
+							$searchQuery .= "  MATCH ( ".$searchColumn." ) AGAINST ("."'".$searchContent."*'"." IN BOOLEAN MODE) ";
+						else
+							$searchQuery .= $logical."  MATCH ( ".$searchColumn." ) AGAINST ("."'".$searchContent."*'"." IN BOOLEAN MODE) ";
+					}
+					else
+					{
+						if($i == 0)
+							$searchQuery .= "  MATCH ( ".$allColumn." ) AGAINST ("."'".$searchContent."*'"." IN BOOLEAN MODE) ";
+						else
+							$searchQuery .= $logical."  MATCH ( ".$allColumn." ) AGAINST ("."'".$searchContent."*'"." IN BOOLEAN MODE) ";
+					}
+					++$i;
+				}
+			}
+		}
+		//echo $searchQuery;
+		$query = $this->db->query($searchQuery);
+		return $query->result_array();
 	}
 
 	public function fnStatuateAvailable($statuateName, $userid)

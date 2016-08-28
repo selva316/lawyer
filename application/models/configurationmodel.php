@@ -182,11 +182,11 @@ class Configurationmodel extends CI_Model {
 
 	public function ajaxcall()
 	{
-		
+		$userid = $this->session->userdata('userid');	
 		$name = $this->input->post('name_startsWith');
 		$court_type = $this->input->post('court_type');		
 		
-		$query = $this->db->query("select NAME from law_list_of_courts where (UPPER(name) LIKE '%".strtoupper($name)."%') order by name");
+		$query = $this->db->query("select NAME from law_list_of_courts where (userid='$userid' or role='Admin') and (UPPER(name) LIKE '%".strtoupper($name)."%') and disable='N' order by name");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{
@@ -201,6 +201,25 @@ class Configurationmodel extends CI_Model {
 		
 	}
 
+	public function fetchAllJudges()
+	{
+		$userid = $this->session->userdata('userid');	
+		$name = $this->input->post('name_startsWith');
+		
+		$query = $this->db->query("select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name");
+		$data = array();
+		if ($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$name = $row['judge_name'];//i am not want item code i,eeeeeeeeeeee
+				array_push($data, $name);
+			}
+		}
+		return $data;
+	}
+
 	public function ajaxStatuate()
 	{
 
@@ -208,7 +227,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select lsss.SSID as ssid, ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%') order by ls.NAME");
+		$query = $this->db->query("select lsss.SSID as ssid, ls.NAME as sname, lsss.NAME as subname, ls.STID as stid from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (ls.userid='$userid' or ls.role='Admin')  and ls.disable='N' and (UPPER(ls.name) LIKE '%".strtoupper($name)."%') order by ls.NAME");
 		
 		//echo "select ls.NAME as sname, lsss.NAME as subname from law_statuate ls left join law_statuate_sub_section lsss  on ls.STID=lsss.STID where (userid='$userid' or userid='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')";
 
@@ -231,7 +250,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select ls.NAME as sname, ls.STID as stid from law_statuate ls where (ls.userid='$userid' or ls.role='Admin')  and ls.disable='N' and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -252,7 +271,7 @@ class Configurationmodel extends CI_Model {
 		$name = $this->input->post('name_startsWith');
 		$userid = $this->session->userdata('userid');
 
-		$query = $this->db->query("select ls.NAME as cname, ls.CID as cid from law_concepts ls where (ls.userid='$userid' or ls.role='Admin')and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
+		$query = $this->db->query("select ls.NAME as cname, ls.CID as cid from law_concepts ls where (ls.userid='$userid' or ls.role='Admin')  and ls.disable='N' and (UPPER(ls.name) LIKE '%".strtoupper($name)."%')");
 
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -275,7 +294,7 @@ class Configurationmodel extends CI_Model {
 		$userid = $this->session->userdata('userid');
 		$statuate = $this->input->post('statuate');
 
-		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.role='Admin') and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
+		$query = $this->db->query("select lsss.SSID as ssid, lsss.NAME as subname from law_statuate_sub_section lsss where (lsss.userid='$userid' or lsss.role='Admin')  and lsss.disable='N' and (UPPER(lsss.name) LIKE '%".strtoupper($name)."%') and STID='$statuate'");
 		
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -334,14 +353,14 @@ class Configurationmodel extends CI_Model {
 				$statuatestr = substr($statuatestr, -1, 3);
 				$statuatestr .= ')';
 			}*/
-			$query = $this->db->query("SELECT name FROM `law_concepts` lc inner join law_statuate_concept_link lscl on lc.CID=lscl.CID where (lc.role='Admin' or lc.userid='$userid') and (UPPER(lc.name) LIKE '%".strtoupper($name)."%') AND lscl.STID='".$statuate."' ".$subsectionstr." order by name");
+			$query = $this->db->query("SELECT name FROM `law_concepts` lc inner join law_statuate_concept_link lscl on lc.CID=lscl.CID where (lc.role='Admin' or lc.userid='$userid')  and lc.disable='N' and (UPPER(lc.name) LIKE '%".strtoupper($name)."%') AND lscl.STID='".$statuate."' ".$subsectionstr." order by name");
 
 			//$query = $this->db->query("select name from law_concepts  where (role='Admin' or userid='$userid') and (UPPER(name) LIKE '%".strtoupper($name)."%') ".$statuatestr.$subsectionstr);
 			//echo "SELECT name FROM `law_concepts` lc inner join law_statuate_concept_link lscl on lc.CID=lscl.CID where (lc.role='Admin' or lc.userid='$userid') and (UPPER(lc.name) LIKE '%".strtoupper($name)."%') AND lscl.STID='".$statuate."' ".$subsectionstr;
 		}
 		else
 		{
-			$query = $this->db->query("select name from law_concepts  where (role='Admin' or userid='$userid') and (UPPER(name) LIKE '%".strtoupper($name)."%') order by name");	
+			$query = $this->db->query("select name from law_concepts  where (role='Admin' or userid='$userid')  and disable='N' and (UPPER(name) LIKE '%".strtoupper($name)."%') order by name");	
 		}
 		
 		$data = array();
@@ -363,7 +382,7 @@ class Configurationmodel extends CI_Model {
 		$type = $this->input->post('type');
 		$name = $this->input->post('name_startsWith');
 						
-		$query = $this->db->query("select citation from law_citation_notation_link where (UPPER(citation) LIKE '%".strtoupper($name)."%') order by citation");
+		$query = $this->db->query("select citation from law_citation_notation_link where  disable='N' AND (UPPER(citation) LIKE '%".strtoupper($name)."%') order by citation");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{

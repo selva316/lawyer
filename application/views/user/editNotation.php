@@ -104,7 +104,7 @@
 						<div class="span3">
 							<div id="divjudge_name" class="form-group">
 								<label class="control-label">Name of Judge</label>
-								<input  class="form-control" type="text" id="judge_name" name="judge_name" value="<?php echo $judge_name; ?>"/>
+								<input  class="form-control autocomplete_judge" type="text" id="judge_name" name="judge_name" value="<?php echo $judge_name; ?>"/>
 							</div>
 						</div>
 						<div class="span3">
@@ -115,7 +115,7 @@
 						</div>
 						<div class="span3">
 							<div id="divbench" class="form-group">
-								<label class="control-label">Type of Bench</label>
+								<label class="control-label">Number of Judges</label>
 								<input  class="form-control" tabindex="1" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
 							</div>
 						</div>
@@ -166,9 +166,9 @@
 								<thead>
 									<tr>
 										<th width="2%"></th>
-										<th width="15%">Statute <span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
-										<th width="25%">Section & Subsection <span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
-										<th width="5%">Concept <span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="15%">Statute <!--<span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
+										<th width="25%">Section & Subsection <!--<span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
+										<th width="5%">Concept <!--<span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i>--></span></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -220,12 +220,14 @@
                 <div class="panel-body">
                 	<div class="row-fluid">
 						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+							<input type="hidden" id="numberOfCitationEntries" name="numberOfCitationEntries" value="<?php echo count($citationdetails); ?>"> </input>
 							<table class="table table-bordered table-hover tableCitation">
 								<thead>
 									<tr>
 										<th></th>
 										<th>Type of Citation</th>
-										<th>Citation Number</th>
+										<th>Citation</th>
+										<th>Case Name</th>
 										<th>Note</th>
 									</tr>
 								</thead>
@@ -251,6 +253,7 @@
 										</select>
 										</td>
 										<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_<?php echo $k; ?>"  value="<?php echo $citationrow['actual_citation']; ?>" class="form-control autocomplete_citation" autocomplete="off"></td>
+										<td><input type="text" data-type="<?php echo $k; ?>" name="listCaseName[]" id="listCaseName_<?php echo $k; ?>" class="form-control autocomplete_casename" autocomplete="off" value="<?php echo $citationrow['casenumber'];?>"/></td>
 										<td><textarea  name="note[]" id="note_<?php echo $k; ?>" class="form-control"><?php echo $citationrow['description']?></textarea> </td>
 									</tr>
 									<?php 
@@ -510,17 +513,6 @@
 		interval = setInterval(ajaxCreateCitation, 60000);
 		//$("#court_name")
 	});
-
-	$(document).on('change', '#chkPrivate', function() {
-        if(this.checked)
-        {
-            $("#status").val('private');
-        }
-        else
-        {
-            $("#status").val('public');
-        }
-    });
 
 	function split(val) {
 		return val.split(/,\s*/);

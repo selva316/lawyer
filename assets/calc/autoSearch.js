@@ -4,15 +4,17 @@
  */
 
 //adds extra table rows
+var table;
 var i=$('.tableSearchBuilder tr').length;
 $(".addmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><select name="logical[]" id="logicalops_1"  class="form-control"><option value="and">AND</option><option value="or">OR</option><option value="not">NOT</option></select></td>';
-	html += '<td><select name="fields[]" data-type="'+i+'" id="conditionalSearch_'+i+'" class="form-control"><option value="">All Fields</option></select></td>';
+	html += '<td><select name="fields[]" data-type="'+i+'" id="conditionalSearch_'+i+'" class="form-control"><option value="">All Fields</option><option value="casename">Case Name</option><option value="citation">Citation</option><option value="judge_name">Judge Name</option><option value="court_name">Court Name</option><option value="year">Year</option></select></td>';
 	html += '<td><input type="text" data-type="'+i+'" name="searchContent[]" id="searchcontent_'+i+'" class="form-control autocomplete_searchcontent" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>';
 	html += '<td><input class="searchCase" type="checkbox"/></td>'
 	html += '</tr>';
 	$('.tableSearchBuilder').append(html);
+	$("#numberOfSearchEntries").val(i);
 	i++;
 });
 
@@ -28,132 +30,95 @@ $(".delete").on('click', function() {
 	$('#check_all').prop("checked", false); 
 });
 
-//It restrict the non-numbers
-var specialKeys = new Array();
-specialKeys.push(8,46); //Backspace
-function IsNumeric(e) {
-    var keyCode = e.which ? e.which : e.keyCode;
-    console.log( keyCode );
-    var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
-    return ret;
-}
+$(document).on('click','.searchBuilder',function(){
 
-//datepicker
-$(function () {
-    $('#quotationdate').datepicker({});
+    var errorMessage = '';
+    var temp = [];
+    var tempFields = [];
+    var si = $("#numberOfSearchEntries").val();
+    for(i=1;i<=si;i++)
+    {
+        var searchContent = "#searchcontent_"+i;
+        var searchField = "#conditionalSearch_"+i;
+
+        if ( $(searchContent).val() == ""  || $(searchContent).val() == null) {
+            continue;
+        }
+        else{
+            temp.push($(searchContent).val());    
+        }
+        
+        if ( $(searchField).val() == ""  || $(searchField).val() == null) {
+            continue;
+        }
+        else{
+            tempFields.push($(searchField).val());    
+        }
+    }
+
+    if(temp.length == 0)
+    {
+        errorMessage = errorMessage + 'Search string should not be empty!!\n' ;
+    }
+
+
+    if ( errorMessage != "" ) {
+        alert(errorMessage);
+        return;
+    }
+
+    var listOfSearchBuilder = '';
+    for(i=1;i<=si;i++)
+    {
+        var conditionalStr = "#conditionalSearch_"+i;
+        var condition = $(conditionalStr).val();
+
+        var searchcontentStr = "#searchcontent_"+i;
+        var searchcontent = $(searchcontentStr).val();
+
+        if(i==1){
+            var logicalopsStr = "#logicalops_"+i;
+            var logicalops = $(logicalopsStr).val();    
+        }
+        
+        
+        listOfSearchBuilder += condition+"--$$--"+searchcontent+"--$$--"+logicalops+"--^--";
+    }
+    listOfSearchBuilder = listOfSearchBuilder.substring(0,listOfSearchBuilder.length-5);
+
+    /*
+    $.ajax({
+        url : 'searchbuilder/searchAjax',
+        dataType: "text",
+        method: 'post',
+        data: {
+           searchString: listOfSearchBuilder
+        },
+        success: function( data ) {
+            alert(data)    
+        }
+    });*/
+    $("#searchResult").css("display","block");
+    $('#searchBuilderTable').dataTable().fnDestroy();
+	table = $('#searchBuilderTable').DataTable({
+	    "ajax": 
+	    {
+	    	"type" : "POST",
+	    	"url":"searchbuilder/searchAjax",
+	    	"data" : {
+	    		searchString: listOfSearchBuilder
+	    	}
+	    },
+	    "columnDefs": [
+	                { 
+	                    "visible": false
+	                }
+	            ],
+	    "columns": [
+	       { "data": "casename" },  
+	       { "data": "citation" },  
+	       { "data": "court_name" },
+	       { "data": "judge_name" }
+	    ]
+	});
 });
-
-function frmvalidation()
-{
-	var casename = $('#casename').val();
-	var citation = $('#citation').val();
-	var casenumber = $('#casenumber').val();
-	var court_name = $('#court_name').val();
-	var judge_name = $('#judge_name').val();
-	var year = $('#year').val();
-	var bench = $('#bench').val();
-	var status = $('#status').val();
-	var valid=true;
-	
-	var errorstr = '';
-	
-	if(casename==''){
-		valid = false;
-		errorstr += "Enter valid Case Name!"+ "<BR/>";
-		$('#divcasename').addClass('has-error');
-	}
-	
-	if(citation==''){
-		
-		if(casenumber == '')
-		{
-			valid = false;
-			errorstr += "Enter valid Case Number!"+ "<BR/>";
-			$('#divcasenumber').addClass('has-error');
-		}
-		else
-		{
-			valid = false;
-			errorstr += "Enter valid Citation Number!"+ "<BR/>";
-			$('#divcitation').addClass('has-error');	
-		}
-		
-	}
-	/*
-	if(casenumber==''){
-		valid = false;
-		errorstr += "Enter valid Case Number!"+ "<BR/>";
-		$('#divcasenumber').addClass('has-error');
-	}*/
-	
-	if(court_name==''){
-		valid = false;
-		errorstr += "Enter valid Court Name!"+ "<BR/>";
-		$('#divcourt_name').addClass('has-error');
-	}
-	
-	if(judge_name==''){
-		valid = false;
-		errorstr += "Enter valid Judge Name!"+ "<BR/>";
-		$('#divjudge_name').addClass('has-error');
-	}
-	
-	if(year==''){
-		valid = false;
-		errorstr += "Enter valid Year!"+ "<BR/>";
-		$('#divyear').addClass('has-error');
-	}
-	
-	if(bench==''){
-		valid = false;
-		errorstr += "Enter valid bench!"+ "<BR/>";
-		$('#divbench').addClass('has-error');
-	}
-	
-	if(status==''){
-		valid = false;
-		errorstr += "Enter valid status!"+ "<BR/>";
-		$('#divstatus').addClass('has-error');
-	}
-	
-	if(!valid)
-	{
-		alert(errorstr);
-	}
-	
-	return valid;
-	
-}
-
-	$(":input").keypress(function() {
-		//$('div').removeClass('has-error');
-		eleid = "#div"+$(this).attr('id');
-		$(eleid).removeClass('has-error');
-		
-		inid = "#"+$(this).attr('id');
-		$(inid).removeClass('clsalerttext');
-	});
-	
-	$(":input").mousedown(function() {
-		//$('div').removeClass('has-error');
-		eleid = "#div"+$(this).attr('id');
-		$(eleid).removeClass('has-error');
-		
-		inid = "#"+$(this).attr('id');
-		$(inid).removeClass('clsalerttext');
-	});
-	
-	$("select").mousedown(function() {
-		//$('div').removeClass('has-error');
-		eleid = "#div"+$(this).attr('id');
-		$(eleid).removeClass('has-error');
-	});
-
-	$("#bench").keypress(function (e) {
-		//if the letter is not digit then display error and don't type anything
-		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-		//display error message
-			//$("#errmsg").html("Digits Only").show().fadeOut("slow");
-	     	return false;
-		}
-	});

@@ -53,6 +53,7 @@
         <div id="page-wrapper">
             <div class='row-fluid'>
                 <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+                    <input type="hidden" id="numberOfSearchEntries" name="numberOfSearchEntries" value="1"> </input>
                     <table class="table table-bordered table-hover tableSearchBuilder">
                         <thead>
                             <tr>
@@ -68,6 +69,11 @@
                                 <td>
                                     <select name="fields[]" data-type="1" id="conditionalSearch_1" class="form-control">
                                         <option value="">All Fields</option>
+                                        <option value="casename">Case Name</option>
+                                        <option value="citation">Citation</option>
+                                        <option value="judge_name">Judge Name</option>
+                                        <option value="court_name">Court Name</option>
+                                        <option value="year">Year</option>
                                     </select>
                                 </td>
                                 <td>
@@ -90,6 +96,24 @@
                     <button class="btn btn-success searchBuilder" type="button">Search <i class="fa fa-search" aria-hidden="true"></i></button>
                 </div>
                 <div class="span5"></div>
+            </div>
+        </div>
+        <div id="searchResult" style="display: none;">
+            <div class="panel panel-info">
+                <div class="panel-heading">Search Result</div>
+                <div class="panel-body">
+                    <table id="searchBuilderTable" class="display" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Case Name</th>
+                                <th>Citation</th>
+                                <th>Court Name</th>
+                                <th>Judge Name</th>
+                            </tr>
+                        </thead>
+                        
+                    </table>
+                </div>
             </div>
         </div>      
     </div>
@@ -114,56 +138,6 @@
     
     <script type="text/javascript">
 
-        $(document).on('click','.searchBuilder',function(){
-
-            var errorMessage = '';
-            var temp = [];
-            var tempFields = [];
-            for(i=1;i<=si;i++)
-            {
-                var searchContent = "#searchcontent_"+i;
-                var searchField = "#conditionalSearch_"+i;
-
-                if ( $(searchContent).val() == ""  || $(searchContent).val() == null) {
-                    continue;
-                }
-                else{
-                    temp.push($(searchContent).val());    
-                }
-                
-                if ( $(searchField).val() == ""  || $(searchField).val() == null) {
-                    continue;
-                }
-                else{
-                    tempFields.push($(searchField).val());    
-                }
-            }
-
-            if(temp.length == 0)
-            {
-                errorMessage = errorMessage + 'Search string should not be empty!!\n' ;
-            }
-
-
-            if ( errorMessage != "" ) {
-                alert(errorMessage);
-                return;
-            }
-
-
-            $.ajax({
-                url : 'notation/searchAjax',
-                dataType: "json",
-                method: 'post',
-                data: {
-                   searchString: temp.join(","),
-                   searchFields: tempFields.join(",")
-                },
-                success: function( data ) {
-                    alert(data)    
-                }
-            });
-        });
         
     </script>
 </body>

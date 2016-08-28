@@ -24,6 +24,43 @@ class Searchbuilder extends CI_Controller {
 		$this->load->view('admin/searchbuilder',$data);
 	}
 	
+	public function searchAjax()
+	{
+		$this->load->model('notationmodel');
+		$searchString = $this->input->post('searchString');
+		
+		$result = $this->notationmodel->searchStringCollection($searchString);
+		
+		if($result)
+		{
+			$detailsList = array();
+			foreach($result as $r)
+			{
+				$details = array(
+					//'notation'=>$r['NOTATIONID'],
+					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					
+					'citation'=>$r['CITATION'],
+					'court_name' => $r['COURT_NAME'],
+					'judge_name' => ucfirst($r['JUDGE_NAME'])
+					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View'></span></a>"
+					
+				);
+				
+				array_push($detailsList, $details);
+			}
+			
+			$collectionDetails= array('data'=>$detailsList);
+			echo json_encode($collectionDetails);
+		}
+		else
+		{
+			$detailsList = array();
+			$collectionDetails= array('data'=>$detailsList);
+			echo json_encode($collectionDetails);		
+		}
+	}
 }
 
 /* End of file homepage.php */

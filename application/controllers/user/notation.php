@@ -67,6 +67,15 @@ class Notation extends CI_Controller {
 		echo json_encode($data);
 		
 	}
+
+	public function fetchAllJudges()
+	{
+		$type = $this->input->post('type');
+	
+		$this->load->model('configurationmodel');
+		$data = $this->configurationmodel->fetchAllJudges();
+		echo json_encode($data);
+	}
 	
 	public function fetchUserStatuate()
 	{
@@ -228,7 +237,7 @@ class Notation extends CI_Controller {
 					$data['facts_of_case'] = $this->input->post('facts_of_case');	
 				}
 				
-				/*
+				
 				if($this->input->post('status') != '' && $this->input->post('notationid') != '')
 				{
 					$data['type'] = $this->input->post('status');	
@@ -236,9 +245,9 @@ class Notation extends CI_Controller {
 				else
 				{
 					$data['type'] = 'draft';	
-				}*/
+				}
 
-				$data['type'] = 'draft';	
+				//$data['type'] = 'draft';	
 				
 				$notationid = '';
 				if($this->input->post('notationid') != '' && strlen($this->input->post('notationid')) > 0)
@@ -302,16 +311,6 @@ class Notation extends CI_Controller {
 		$chkAvailable = $this->notationmodel->chkCasenameAndCitation($casename, $citation);
 
 		echo $chkAvailable;
-	}
-
-	public function searchAjax()
-	{
-		$this->load->model('notationmodel');
-		$searchString = $this->input->post('searchString');
-		$searchFields = $this->input->post('searchFields');
-
-		$result = $this->notationmodel->searchStringCollection($searchString, $searchFields);
-		echo $result;
 	}
 }
 

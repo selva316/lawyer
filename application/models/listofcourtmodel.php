@@ -78,10 +78,19 @@ class Listofcourtmodel extends CI_Model {
 
 	public function insertCourtList($courtName, $court_type){
 
+		$role = $this->session->userdata('role');
+		
 		$data = array();
 		$data['NAME'] = $courtName;
 		$data['COURT_TYPE'] = $court_type;
 		$data['DISABLE'] = 'N';		
+
+		if($role == 'Admin')
+			$data['ROLE'] = 'Admin';
+		else
+			$data['ROLE'] = 'User';
+
+		$data['USERID'] = $this->session->userdata('userid');
 
 		$this->db->insert('law_list_of_courts', $data); 
 		$autoid = $this->db->insert_id();

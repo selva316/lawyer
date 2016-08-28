@@ -1,3 +1,14 @@
+$(document).on('change', '#chkPrivate', function() {
+        if(this.checked)
+        {
+            $("#status").val('private');
+        }
+        else
+        {
+            $("#status").val('public');
+        }
+    });
+
 $(document).on('focus','.autocomplete_subsection',function(){
 		
 	var type = $(this).data('type');
@@ -83,6 +94,34 @@ $(document).on('focus','.autocomplete_concept',function(){
 });
 
 
+
+$(document).on('focus','.autocomplete_casename',function(){
+
+		$(this).autocomplete({
+			source: function( request, response ) {
+				$.ajax({
+					url : 'notation/fetchcasename',
+					dataType: "json",
+					method: 'post',
+					data: {
+					   casename: request.term
+					},
+					 success: function( data ) {
+						 response( $.map( data, function( item ) {
+							return {
+								label: item,
+								value: item,
+								data : item
+							}
+						}));
+					}
+				});
+			},
+			autoFocus: true,	      	
+			minLength: 1
+		});
+	});
+
 $(document).on('focus','.autocomplete_statuate',function(){
 	
 	var type = $(this).data('type');
@@ -127,5 +166,64 @@ $(document).on('focus','.autocomplete_statuate',function(){
 			//$('#hiddenconceptstatuate').val(names[1]);
 			//$("#hiddenconceptsubsection").val(names[3]);
 		}
+	});
+});
+
+$("#court_name").blur(function(){
+	$.ajax({
+        type: 'post',
+        dataType: "json",
+        url: '../admin/listofcourt/checkCourtNameAvailable',
+        data: {'courtname':$("#court_name").val()},
+        success:function(data){
+            $('#divcourt_name').removeClass('has-success');
+            //alert(data);
+            if(data=="true"){
+    			$.ajax({
+		            type: 'post',
+		            dataType: "json",
+		            url: '../admin/listofcourt/insertCourtList',
+		            data: {'courtname':$("#court_name").val(),'courtType':''},
+		            success:function(data){
+		                $('#divcourt_name').addClass('has-success');
+		            }
+		        });        	
+            }
+        }
+    });
+});
+
+$(document).on('focus','.autocomplete_judge',function(){
+	var type = $(this).data('type');
+	$(this).autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url : 'notation/fetchAllJudges',
+				dataType: "json",
+				method: 'post',
+				data: {
+				   name_startsWith: request.term,
+				   type: type
+				},
+				 success: function( data ) {
+				 	/*if(!data.length) {
+
+				 	}*/
+					response( $.map( data, function( item ) {
+						return {
+							label: item,
+							value: item,
+							data : item
+						}
+					}));
+				}
+			});
+		},
+		autoFocus: true,	      	
+		minLength: 0,
+		select: function( event, ui ) {
+			
+			$('#judge_name').val(ui.item.data);
+		}		      	
 	});
 });

@@ -164,7 +164,11 @@ class Notation extends CI_Controller {
 				$data['bench'] = $this->input->post('bench');
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
-				$data['type'] = $this->input->post('status');
+				
+				if($this->session->userdata('role') == 'Admin')
+					$data['type'] = 'dbversion';
+				else	
+					$data['type'] = $this->input->post('status');
 
 				$this->load->model('notationmodel');
 				$data = $this->notationmodel->createNotation($data);
@@ -186,7 +190,11 @@ class Notation extends CI_Controller {
 				$data['bench'] = $this->input->post('bench');
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
-				$data['type'] = $this->input->post('status');
+				
+				if($this->session->userdata('role') == 'Admin')
+					$data['type'] = 'dbversion';
+				else	
+					$data['type'] = $this->input->post('status');
 
 				$this->load->model('notationmodel');
 				$data = $this->notationmodel->updateNotation($data);

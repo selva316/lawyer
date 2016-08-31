@@ -144,22 +144,27 @@ function frmvalidation()
 		$('#divcasename').addClass('has-error');
 	}
 	
+	var zx = 0;
 	if(citation==''){
 		
-		if(casenumber == '')
+		if(casenumber != '')
+		{
+			zx = 1;
+		}
+		else
 		{
 			valid = false;
 			errorstr += "Enter valid Case Number!"+ "<BR/>";
 			$('#divcasenumber').addClass('has-error');
 		}
-		else
-		{
-			valid = false;
-			errorstr += "Enter valid Citation Number!"+ "<BR/>";
-			$('#divcitation').addClass('has-error');	
-		}
 		
 	}
+	/*else
+	{
+		valid = false;
+		errorstr += "Enter valid Citation Number!"+ "<BR/>";
+		$('#divcitation').addClass('has-error');	
+	}*/
 
 	if(parseInt(bench)<1 && parseInt(bench)>100)
 	{

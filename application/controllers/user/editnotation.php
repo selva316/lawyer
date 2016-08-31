@@ -121,6 +121,62 @@ class EditNotation extends CI_Controller {
 		}
 	}
 
+	public function autoEditSave()
+	{
+		$output_hashnid = '';
+		if(isset($_POST))
+		{
+			$data = array();
+			if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
+
+				$data['casename'] = $this->input->post('casename');
+				$data['citation'] = $this->input->post('citation');
+				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+
+				if($this->input->post('judge_name') != ''){
+					$data['judge_name'] = $this->input->post('judge_name');
+				}
+
+				if($this->input->post('court_name') != ''){
+					$data['court_name'] = $this->input->post('court_name');
+				}
+				
+				if($this->input->post('casenumber') != ''){
+					$data['casenumber'] = $this->input->post('casenumber');	
+				}
+				
+				if($this->input->post('year')){
+					$data['year'] = $this->input->post('year');	
+				}
+				
+				if($this->input->post('bench')){
+					$data['bench'] = $this->input->post('bench');	
+				}
+				
+				if($this->input->post('facts_of_case') != '')
+				{
+					$data['facts_of_case'] = $this->input->post('facts_of_case');	
+				}
+				
+				
+				$notationid = '';
+				if($this->input->post('notationid') != '' && strlen($this->input->post('notationid')) > 0)
+				{
+					$notationid = $this->input->post('notationid');
+					//$notationid = $this->notationmodel->fetchNotationID($hashnotationid);
+				}
+
+				$this->load->model('notationmodel');
+				$output_hashnid = $this->notationmodel->autoSaveNotation($data, $notationid);
+			}
+			echo $output_hashnid;
+		}
+	}
+
+	public function _clean($string) {
+   		$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
+  	 	return preg_replace('/[^A-Za-z0-9\s\(\)\-\,]/', '', $string); // Removes special chars.
+	}
 }
 
 /* End of file homepage.php */

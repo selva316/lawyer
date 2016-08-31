@@ -38,7 +38,7 @@ class Homepage extends CI_Controller {
 			foreach($result as $r)
 			{
 				$details = array(
-					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' target='_self' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
 					'court_name' => $r['COURT_NAME'],
@@ -73,7 +73,7 @@ class Homepage extends CI_Controller {
 			foreach($result as $r)
 			{
 				$details = array(
-					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' target='_self' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
 					'court_name' => $r['COURT_NAME'],

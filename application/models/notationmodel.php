@@ -66,6 +66,9 @@ class Notationmodel extends CI_Model {
 		$this->db->set('CREATED_BY', $this->session->userdata('userid'));
 		$this->db->set('CREATED_ON', time());
 
+		if($this->session->userdata('role') == 'Admin')
+			$this->db->set('TYPE', 'dbversion');
+
 		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
 		$this->db->set('UPDATED_ON', time());
 
@@ -171,7 +174,7 @@ class Notationmodel extends CI_Model {
 				$itemlist['CITATION'] = $lcitation;
 				$itemlist['NOTATIONID'] = $nid;
 				$this->db->insert('law_citation', $itemlist);
-				print_r($itemlist); 
+				//print_r($itemlist); 
 			}
 		}
 		else
@@ -180,7 +183,7 @@ class Notationmodel extends CI_Model {
 			$itemlist['CITATION'] = $this->input->post('citation');
 			$itemlist['NOTATIONID'] = $nid;
 			$this->db->insert('law_citation', $itemlist); 
-			print_r($itemlist);
+			//print_r($itemlist);
 		}
 		
 		return true;
@@ -684,7 +687,11 @@ class Notationmodel extends CI_Model {
 		$this->db->set('YEAR', $this->input->post('year'));
 		$this->db->set('BENCH', $this->input->post('bench'));
 		$this->db->set('FACTS_OF_CASE', $this->input->post('facts_of_case'));
-		$this->db->set('TYPE', $this->input->post('status'));
+
+		if($this->session->userdata('role') == 'Admin')
+			$this->db->set('TYPE', 'dbversion');
+		else
+			$this->db->set('TYPE', $this->input->post('status'));
 
 		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
 		$this->db->set('UPDATED_ON', time());
@@ -921,9 +928,15 @@ class Notationmodel extends CI_Model {
 
 	function fetchNewUserNotation()
 	{
+
+		$str = "select * from law_notation where (type='public' or type='dbversion')";
+		$query = $this->db->query($str);
+		return $query->result_array();
+		/*
 		$this->db->select('*');
 		$this->db->from('law_notation');
-		$this->db->where('type', 'public');
+		$this->db->where("('type'='public' or 'type'='dbversion')");
+		//$this->db->orWhere('type', 'dbversion');
 		
 		$itemdata = array();
 		$itemquery = $this->db->get();
@@ -931,6 +944,7 @@ class Notationmodel extends CI_Model {
 		{
 			return $itemquery->result_array();
 		}
+		*/
 	}
 
 	function fetchAllNotation()

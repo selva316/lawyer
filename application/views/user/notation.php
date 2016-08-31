@@ -592,7 +592,7 @@
 
 	function viewCitation(notationid)
 	{
-		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_blank')
+		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_self')
 	}
 	</script>
 </body>

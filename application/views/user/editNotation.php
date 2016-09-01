@@ -116,7 +116,7 @@
 						<div class="span3">
 							<div id="divbench" class="form-group">
 								<label class="control-label">Number of Judges</label>
-								<input  class="form-control" tabindex="1" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
+								<input  class="form-control" type="text" id="bench" name="bench" maxlength="3" value="<?php echo $bench; ?>"/>
 							</div>
 						</div>
 						<!--

@@ -109,7 +109,7 @@ class Notationmodel extends CI_Model {
 
 		if($numberOfCitationEntries > 0)
 		{
-			for ($i=1; $i <$numberOfCitationEntries ; $i++) { 
+			for ($i=0; $i <$numberOfCitationEntries ; $i++) { 
 				
 				$itemlist = array();
 

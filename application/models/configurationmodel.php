@@ -45,7 +45,7 @@ class Configurationmodel extends CI_Model {
 
 	public function fetchYear($year)
 	{
-		$query = $this->db->query("select year from law_year where (UPPER(year) LIKE '%".strtoupper($year)."%')");
+		$query = $this->db->query("select year from law_year where (UPPER(year) LIKE '".strtoupper($year)."%')");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{

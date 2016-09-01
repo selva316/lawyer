@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Transfer Notation</title>
+    <title>Edit Notation</title>
     <!-- jQuery UI CSS -->
 	<link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
 	<!-- Bootstrap Core CSS -->
@@ -61,7 +61,7 @@
 
 		<div class="panel panel-success">
 			<div class="panel-heading">
-				<center><label><b>Transfer Notation</b></label></center>
+				<center><label><b>Edit Notation</b></label></center>
 			</div>
 		</div>		
 		<div id="page-wrapper" style="margin: auto 20px;">
@@ -550,6 +550,27 @@
 		});
 	});
 
+	$(document).on('click', '#saveAsDraft', function() {
+		$.ajax({
+			url : 'transfernotation/saveAsDraft',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $("#hashid").val()
+			},
+			success : function(data) {
+				if(data == "Admin"){
+					window.location.href="<?php echo site_url('admin/homepage')?>";
+					//window.location.href="http://localhost/lawyer/admin/homepage";
+				}
+				else{
+					window.location.href="<?php echo site_url('user/homepage')?>";
+					//window.location.href="http://localhost/lawyer/user/homepage";
+				}
+			}
+		});
+	});
+	
 	$(document).on('change', '#chkPrivate', function() {
         if(this.checked)
         {

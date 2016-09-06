@@ -1,6 +1,12 @@
 var interval = null;
 
 $(document).ready(function() {
+	
+
+	//toastr.success('Auto Saved');
+	//$("#toaster").html('');
+	//$.toaster({ priority : 'success', title : '<span class="glyphicon glyphicon-ok"></span>', message : 'Command copied to clipboard' });
+
 	$('#example').DataTable( {
 		columnDefs: [ {
 			targets: [ 0 ],
@@ -34,11 +40,11 @@ $(document).ready(function() {
 $(document).on('change', '#chkPrivate', function() {
     if(this.checked)
     {
-        $("#status").val('private');
+        $("#status").val('public');
     }
     else
     {
-        $("#status").val('public');
+        $("#status").val('private');
     }
 });
 
@@ -95,13 +101,16 @@ $(document).on('blur','#citation',function(){
 			method: 'post',
 			data: {
 			   casename: $("#casename").val(),
-			   citation: $("#citation").val()
+			   citation: $("#citation").val(),
+			   ntype: $("#ntype").val()
 			},
 			success: function( data ) {
 				if(data != ''){
-					clearInterval(interval); 
+					//clearInterval(interval); 
 					$("#divhref").html(data);	
 				}
+				else
+					$("#divhref").html('');	
 				
 			}
 		});
@@ -407,9 +416,6 @@ $(document).on('focus','.autocomplete_judge',function(){
 				   type: type
 				},
 				 success: function( data ) {
-				 	/*if(!data.length) {
-
-				 	}*/
 					response( $.map( data, function( item ) {
 						return {
 							label: item,
@@ -428,6 +434,51 @@ $(document).on('focus','.autocomplete_judge',function(){
 		}		      	
 	});
 });
+/*
+$(document).on("keyup.autocomplete",".autocomplete_judge",function(e){
+
+       var term =  $(this ).val();
+       $( this ).autocomplete({
+	   source : function( request, response ) {
+        $.ajax({
+            url: 'notation/fetchAllJudges',
+            dataType: "json",
+            method: 'post',
+            data: {term: extractLast(term)},
+            success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.judge_name,
+                             //email: item.email
+                            };
+                    }));
+                }
+            });
+        },
+		focus : function() {
+			// prevent value inserted on focus
+			return true;
+		},
+		select : function(event, ui) {
+			var terms = split( this.value );
+		      // remove the current input
+		      terms.pop();
+		      // add the selected item
+		      terms.push( ui.item.value );
+		      // add placeholder to get the comma-and-space at the end
+		      terms.push( "" );
+		      this.value = terms.join( ", " );
+		     
+		      //setSubject(this.value);
+		      return false;
+
+		},
+      minLength: 1
+
+    });
+
+});*/
+
 
 /*
 $(document).on('change','#casename',function(){
@@ -478,8 +529,52 @@ $(document).on('keyup.autocomplete','#casename',function(){
 			});
 		},
 		autoFocus: true,	      	
-		minLength: 2
+		minLength: 1
 	});
+});
+
+$(document).on("keyup.autocomplete","#citation",function(e){
+
+       var term =  $(this ).val();
+       $( this ).autocomplete({
+	   source : function( request, response ) {
+        $.ajax({
+            url: 'notation/fetchAllCitation',
+            dataType: "json",
+            method: 'post',
+            data: {term: extractLast(term)},
+            success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.citation,
+                             //email: item.email
+                            };
+                    }));
+                }
+            });
+        },
+		focus : function() {
+			// prevent value inserted on focus
+			return true;
+		},
+		select : function(event, ui) {
+			var terms = split( this.value );
+		      // remove the current input
+		      terms.pop();
+		      // add the selected item
+		      terms.push( ui.item.value );
+		      // add placeholder to get the comma-and-space at the end
+		      terms.push( "" );
+		      this.value = terms.join( ", " );
+		     
+		      //setSubject(this.value);
+		      return false;
+
+		},
+      minLength: 1
+
+    });
+
 });
 
 $(document).on('keyup.autocomplete','#year',function(){
@@ -786,6 +881,7 @@ function saveAsDraft()
 
 		var bench = $("#bench").val();
 		var facts_of_case = tinymce.get('facts_of_case').getContent();
+		var case_note = tinymce.get('case_note').getContent();
 		var status = $("#status").val();
 
 		$.ajax({
@@ -802,6 +898,7 @@ function saveAsDraft()
 			   year:year, 
 			   bench:bench, 
 			   facts_of_case:facts_of_case, 
+			   case_note:case_note,
 			   status:status
 			},
 			success : function(data) {

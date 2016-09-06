@@ -1,49 +1,5 @@
-	
-	
 
 	
-	$(document).on("keyup.autocomplete","#citation",function(e){
-
-	       var term =  $(this ).val();
-	       $( this ).autocomplete({
-    	   source : function( request, response ) {
-            $.ajax({
-                url: 'notation/fetchAllCitation',
-                dataType: "json",
-                data: {term: extractLast(term)},
-                success: function(data) {
-                        response($.map(data, function(item) {
-                            return {
-                                label: item.citation,
-                                 //email: item.email
-                                };
-                        }));
-                    }
-                });
-            },
-			focus : function() {
-				// prevent value inserted on focus
-				return true;
-			},
-			select : function(event, ui) {
-				var terms = split( this.value );
-			      // remove the current input
-			      terms.pop();
-			      // add the selected item
-			      terms.push( ui.item.value );
-			      // add placeholder to get the comma-and-space at the end
-			      terms.push( "" );
-			      this.value = terms.join( ", " );
-			     
-			      //setSubject(this.value);
-			      return false;
-
-			},
-	      minLength: 2
-
-	    });
-
-	});
 
 	/*
 	$(document).on('blur','#citation',function(){
@@ -179,7 +135,8 @@ function ajaxCreateCitation(){
 	
 	var citation = $("#citation").val();
 	var casename = $("#casename").val();
-	if(citation != '' && casename !='')
+	var casenumber = $('#casenumber').val();
+	if((citation != '' || casenumber != '') && casename !='')
 	{
 		casename  = $("#casename").val();
 		citation = $("#citation").val();
@@ -190,6 +147,7 @@ function ajaxCreateCitation(){
 
 		var bench = $("#bench").val();
 		var facts_of_case = tinymce.get('facts_of_case').getContent(); //$("#facts_of_case").val();
+		var case_note = tinymce.get('case_note').getContent();
 		var status = $("#status").val();
 		var notationid = $("#ntype").val();
 
@@ -209,6 +167,7 @@ function ajaxCreateCitation(){
 			   year:year, 
 			   bench:bench, 
 			   facts_of_case:facts_of_case, 
+			   case_note:case_note,
 			   listOfStatuate:listOfStatuate, 
 			   notationid:notationid
 			},
@@ -216,6 +175,26 @@ function ajaxCreateCitation(){
 				//alert(msg);
 				$("#ntype").val(msg);
 				//clearInterval(interval);
+
+
+				Command: toastr["success"]("Auto Saved");
+
+				toastr.options = {
+				  "closeButton": false,
+				  "debug": false,
+				  "newestOnTop": false,
+				  "progressBar": false,
+				  "positionClass": "toast-top-right",
+				  "preventDuplicates": false,
+				  "showDuration": "300",
+				  "hideDuration": "1000",
+				  "timeOut": "1000",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "fadeIn",
+				  "hideMethod": "fadeOut"
+				}
 			}
 		});
 		$(".blockUIOverlay").hide();

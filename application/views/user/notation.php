@@ -37,14 +37,17 @@
 	<link rel="stylesheet" href="<?php echo base_url();?>dist/css/timeline.css" />
     <!-- Custom Fonts -->
     <link rel="stylesheet"  href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
-	
+	<link rel="stylesheet"  href="<?php echo base_url();?>assets/toaster/toastr.min.css" />
 	<style>
 		.ui-autocomplete {
 			z-index: 9999;
 		}
 
-		#mceu_29-0{
+		#mceu_29{
 			display: none;
+		}
+		#mceu_60{
+			display: none;	
 		}
 	</style>
 </head>
@@ -155,104 +158,115 @@
 							</div>
 						</div>-->
 					</div> 
+					<div class="clear-both" style="margin-top:20px;"></div>
+
+					<div class="panel panel-info">
+		                <div class="panel-heading">Statute and Concepts</div>
+		                <div class="panel-body">
+		                	<div class='row-fluid'>
+					      		<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+					      			<table class="table table-bordered table-hover tableStatuate">
+										<thead>
+											<tr>
+												<th width="2%"></th>
+												<th width="15%">Statute <!--<span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
+												<th width="5%">Section & Subsection <!--<span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
+												<th width="25%">Concept <!--<span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td>
+												<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
+												<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
+												</td>
+												<td><input type="text" data-type="1" name="subsection[]" id="subsection_1" class="form-control autocomplete_subsection" autocomplete="off" ondrop="return false;" onpaste="return false;">
+												<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_1" class="form-control" autocomplete="off">
+												</td>
+												<td><input type="text" data-type="1" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
+							  			<button class="btn btn-danger delete" type="button">- Delete</button>
+							  			<button class="btn btn-success addmore" type="button">+ Add More</button>
+							  		</div>
+					      		</div>
+				      		</div>
+		                </div>
+		            </div>
+
+		            <div class="clear-both" style="margin-top:20px;"></div>
+
+		            <div class="panel panel-danger">
+		                <div class="panel-heading">List of Citation</div>
+		                <div class="panel-body">
+		                	<div class="row-fluid">
+								<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+									<input type="hidden" id="numberOfCitationEntries" name="numberOfCitationEntries" value="1"> </input>
+									<table class="table table-bordered table-hover tableCitation">
+										<thead>
+											<tr>
+												<th></th>
+												<th>Type of Citation</th>
+												<th>Citation</th>
+												<th>Case Name</th>
+												<th>Note</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><input class="case_citation" type="checkbox"/></td>
+												<td>
+												<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
+													<option value="">Select</option>
+													<?php 
+														foreach ($typeOfCitation as $row) {
+															echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
+														}
+													?>
+												</select>
+												</td>
+												<td><input type="text" data-type="1" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"/></td>
+												<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
+												<td><textarea  name="note[]" id="note_1" class="form-control"></textarea> </td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="clear-both" style="margin-top:20px;"></div>
+									<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
+							  			<button class="btn btn-danger typeDelete" type="button">- Delete</button>
+							  			<button class="btn btn-success typeAddmore" type="button">+ Add More</button>
+							  		</div>	
+								</div>
+							</div>
+		            	</div>
+		            </div>
+
+
+		            <div class="clear-both" style="margin-top:20px;"></div>
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span12">
+							<label class="control-label">Facts of Case</label>
 							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"></textarea>				
 						</div>
 					</div>
 
-            	</div>
-            </div>
-			
-			<div class="clear-both" style="margin-top:20px;"></div>
-
-			<div class="panel panel-info">
-                <div class="panel-heading">Statute and Concepts</div>
-                <div class="panel-body">
-                	<div class='row-fluid'>
-			      		<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-			      			<table class="table table-bordered table-hover tableStatuate">
-								<thead>
-									<tr>
-										<th width="2%"></th>
-										<th width="15%">Statute <!--<span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
-										<th width="15%">Section & Subsection <!--<span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
-										<th width="15%">Concept <!--<span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span>--></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td></td>
-										<td>
-										<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
-										<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
-										</td>
-										<td><input type="text" data-type="1" name="subsection[]" id="subsection_1" class="form-control autocomplete_subsection" autocomplete="off" ondrop="return false;" onpaste="return false;">
-										<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_1" class="form-control" autocomplete="off">
-										</td>
-										<td><input type="text" data-type="1" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
-									</tr>
-								</tbody>
-							</table>
-							<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
-					  			<button class="btn btn-danger delete" type="button">- Delete</button>
-					  			<button class="btn btn-success addmore" type="button">+ Add More</button>
-					  		</div>
-			      		</div>
-		      		</div>
-                </div>
-            </div>
-
-            <div class="clear-both" style="margin-top:20px;"></div>
-
-			<div class="panel panel-danger">
-                <div class="panel-heading">List of Citation</div>
-                <div class="panel-body">
-                	<div class="row-fluid">
-						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-							<input type="hidden" id="numberOfCitationEntries" name="numberOfCitationEntries" value="1"> </input>
-							<table class="table table-bordered table-hover tableCitation">
-								<thead>
-									<tr>
-										<th></th>
-										<th>Type of Citation</th>
-										<th>Citation</th>
-										<th>Case Name</th>
-										<th>Note</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td><input class="case_citation" type="checkbox"/></td>
-										<td>
-										<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
-											<option value="">Select</option>
-											<?php 
-												foreach ($typeOfCitation as $row) {
-													echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
-												}
-											?>
-										</select>
-										</td>
-										<td><input type="text" data-type="1" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"/></td>
-										<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
-										<td><textarea  name="note[]" id="note_1" class="form-control"></textarea> </td>
-									</tr>
-								</tbody>
-							</table>
-							<div class="clear-both" style="margin-top:20px;"></div>
-							<div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
-					  			<button class="btn btn-danger typeDelete" type="button">- Delete</button>
-					  			<button class="btn btn-success typeAddmore" type="button">+ Add More</button>
-					  		</div>	
+					<div class="row-fluid" style="margin-top:20px;">
+						<div class="span12">
+							<label class="control-label">Notes</label>
+							<textarea id="case_note" class="form-control myTextEditor"  placeholder="Notes" name="case_note" rows="4" cols="45"></textarea>				
 						</div>
 					</div>
             	</div>
             </div>
+			
+			
 
-
-            <div class="clear-both" style="margin-top:20px;"></div>
+			
+			
             <!--
 			<div class="panel panel-warning">
                 <div class="panel-heading">Phrase and Legal Definitions</div>
@@ -303,8 +317,8 @@
 		  		<div class="row-fluid">
 		  			<div class="span10" style="text-align:center;">
 		  				<label  style="margin-right: 15px;">
-                         <input type="checkbox" name="chkPrivate" id="chkPrivate" value="Private"><span style="font-weight:bold;"> Save it as Private</span></label>
-                         <input type="hidden" name="status" id="status" value="public" />
+                         <input type="checkbox" name="chkPrivate" id="chkPrivate" value="public"><span style="font-weight:bold;"> save it as Public</span></label>
+                         <input type="hidden" name="status" id="status" value="private" />
 		  			</div>
 		  		</div>
 		  		<div class="row-fluid">
@@ -582,6 +596,7 @@
 	
 	<!-- Metis Menu Plugin JavaScript -->
     <script src="<?php echo base_url();?>assets/metisMenu/dist/metisMenu.min.js"></script>
+    <script src="<?php echo base_url();?>assets/toaster/toastr.min.js"></script>
 	
 	<script>
 	tinymce.init({  

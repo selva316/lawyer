@@ -143,7 +143,28 @@ class Notation extends CI_Controller {
 	{
 
 	}
+
+	public function changeDbVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->changeDbVersion();
+		return $this->session->userdata('role');
+	}
+
+	public function changePublicVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->changePublicVersion();
+		return $this->session->userdata('role');
+	}
 	
+	public function changePrivateVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->changePrivateVersion();
+		return $this->session->userdata('role');
+	}
+
 	public function save(){
 		
 		if(isset($_POST))
@@ -164,7 +185,12 @@ class Notation extends CI_Controller {
 				$data['bench'] = $this->input->post('bench');
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
-				
+
+				if($this->input->post('case_note') != '')
+				{
+					$data['case_note'] = $this->input->post('case_note');	
+				}
+
 				if($this->session->userdata('role') == 'Admin')
 					$data['type'] = 'dbversion';
 				else	
@@ -191,6 +217,11 @@ class Notation extends CI_Controller {
 
 				$data['facts_of_case'] = $this->input->post('facts_of_case');
 				
+				if($this->input->post('case_note') != '')
+				{
+					$data['case_note'] = $this->input->post('case_note');	
+				}
+
 				if($this->session->userdata('role') == 'Admin')
 					$data['type'] = 'dbversion';
 				else	
@@ -214,8 +245,12 @@ class Notation extends CI_Controller {
 		if(isset($_POST))
 		{
 			$data = array();
-			if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
-
+			$casename = $this->input->post('casename');
+			$citation = $this->input->post('citation');
+			$casenumber = $this->input->post('casenumber');
+			//if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
+			if(($casename != '') && ($citation != '' || $casenumber !=''))
+			{
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
 				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
@@ -245,6 +280,10 @@ class Notation extends CI_Controller {
 					$data['facts_of_case'] = $this->input->post('facts_of_case');	
 				}
 				
+				if($this->input->post('case_note') != '')
+				{
+					$data['case_note'] = $this->input->post('case_note');	
+				}
 				
 				if($this->input->post('status') != '' && $this->input->post('notationid') != '')
 				{
@@ -287,6 +326,12 @@ class Notation extends CI_Controller {
 		$data['bench'] = $this->input->post('bench');
 
 		$data['facts_of_case'] = $this->input->post('facts_of_case');
+		
+		if($this->input->post('case_note') != '')
+		{
+			$data['case_note'] = $this->input->post('case_note');	
+		}
+		
 		$data['type'] = $this->input->post('status');
 
 		$this->load->model('notationmodel');
@@ -303,9 +348,9 @@ class Notation extends CI_Controller {
 
 	public function fetchAllCitation()
 	{
-		$topicname = $this->input->post('topicname');
+		$topicname = $this->input->post('term');
 		$this->load->model('configurationmodel');
-		$data = $this->configurationmodel->fetchAllCitation();
+		$data = $this->configurationmodel->fetchAllCitation($topicname);
 		echo json_encode($data);
 	}
 
@@ -316,7 +361,8 @@ class Notation extends CI_Controller {
 
 		$casename = $this->input->post('casename');
 		$citation = $this->input->post('citation');
-		$chkAvailable = $this->notationmodel->chkCasenameAndCitation($casename, $citation);
+		$ntype = $this->input->post('ntype');
+		$chkAvailable = $this->notationmodel->chkCasenameAndCitation($casename, $citation, $ntype);
 
 		echo $chkAvailable;
 	}

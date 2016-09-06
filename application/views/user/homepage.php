@@ -83,9 +83,9 @@
 											<table id="example" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="10%">Case Name</th>
+														<th width="25%">Case Name</th>
 														<th>Citation</th>
-														<th>Court Name</th>
+														<th>Case Number</th>
 														<th>Type</th>
 														<th>Action</th>
 													</tr>
@@ -102,9 +102,9 @@
 											<table id="notationlist" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="10%">Case Name</th>
+														<th width="25%">Case Name</th>
 														<th>Citation</th>
-														<th>Court Name</th>
+														<th>Case Number</th>
 														<th>Type</th>
 														<th>Action</th>
 													</tr>
@@ -162,6 +162,9 @@
     <!-- Custom Theme JavaScript -->
     <script src="<?php echo base_url();?>dist/js/sb-admin-2.js"></script>
 	<script>
+	var table;
+	var notationlist;
+	
 	$(document).ready(function() {
 		$('#rootwizard').bootstrapWizard({'tabClass': 'nav nav-pills'});	
 		window.prettyPrint && prettyPrint();
@@ -171,9 +174,66 @@
 		//$(".nav-pills>li.active").removeClass("active");
 		//$(tabSelection).addClass('active');
 	
+		fnDraftNotationList();
+		fnNotationList();
 
-		var table;
-		var notationlist;
+	});
+
+	$(document).on('click', '.btnPublic', function(e) {
+		//alert($(this).val());
+		$.ajax({
+			url : 'notation/changePublicVersion',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $(this).val()
+			},
+			success : function(data) {
+				fnNotationList();
+			}
+		});
+	});
+
+	$(document).on('click', '.btnPrivate', function(e) {
+		//alert($(this).val());
+		$.ajax({
+			url : 'notation/changePrivateVersion',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $(this).val()
+			},
+			success : function(data) {
+				fnNotationList();
+			}
+		});
+	});
+
+	function fnNotationList()
+	{
+		$('#notationlist').dataTable().fnDestroy();
+        notationlist = $('#notationlist').DataTable({
+            "ajax": "homepage/fetchNotation",
+            "columnDefs": [
+                        { 
+                            "visible": false
+                        }
+                    ],
+            "columns": [
+               //{ "data": "notation" },  
+               { "data": "casename" },  
+               { "data": "citation" },  
+               //{ "data": "date_of_creation" },
+               { "data": "case_number" },
+               { "data": "type" },
+               { "data": "action" }
+            ]
+        });
+
+	}
+
+	function fnDraftNotationList()
+	{
 		$('#example').dataTable().fnDestroy();
         table = $('#example').DataTable({
             "ajax": "homepage/fetchDraftNotation",
@@ -183,32 +243,16 @@
                         }
                     ],
             "columns": [
+               //{ "data": "notation" },  
                { "data": "casename" },  
                { "data": "citation" },  
-               { "data": "court_name" },
+               { "data": "case_number" },
                { "data": "type" },
                { "data": "action" }
             ]
         });
 
-        $('#notationlist').dataTable().fnDestroy();
-        notationlist = $('#notationlist').DataTable({
-            "ajax": "homepage/fetchNotation",
-            "columnDefs": [
-                        { 
-                            "visible": false
-                        }
-                    ],
-            "columns": [
-               { "data": "casename" },  
-               { "data": "citation" },  
-               { "data": "court_name" },
-               { "data": "type" },
-               { "data": "action" }
-            ]
-        });
-
-	});
+	}
 	</script>
 </body>
 

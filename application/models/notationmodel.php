@@ -185,7 +185,27 @@ class Notationmodel extends CI_Model {
 			$this->db->insert('law_citation', $itemlist); 
 			//print_r($itemlist);
 		}
-		
+
+		$listofjudge = $this->input->post('judge_name');
+		if (strpos($listofjudge, ',') !== false) {
+			$judge_arr = explode(",",$listofjudge);
+			foreach($judge_arr as $ljudge)
+			{
+				$itemlist = array();
+				$itemlist['JUDGE_NAME'] = $ljudge;
+				$itemlist['NOTATIONID'] = $nid;
+				$this->db->insert('law_judgename', $itemlist);
+				//print_r($itemlist); 
+			}
+		}
+		else
+		{
+			$itemlist = array();
+			$itemlist['JUDGE_NAME'] = $this->input->post('judge_name');
+			$itemlist['NOTATIONID'] = $nid;
+			$this->db->insert('law_judgename', $itemlist); 
+			//print_r($itemlist);
+		}		
 		return true;
 	}
 
@@ -350,6 +370,54 @@ class Notationmodel extends CI_Model {
 					$itemlist['NOTATIONID'] = $notationid;
 
 					$this->db->insert('law_notation_statuate', $itemlist); 
+				}
+			}
+
+			$listcitation = $this->input->post('citation');
+
+			if (strpos($listcitation, ',') !== false) {
+				$citation_arr = explode(",",$listcitation);
+				foreach($citation_arr as $lcitation)
+				{
+					$itemlist = array();
+					$itemlist['CITATION'] = $lcitation;
+					$itemlist['NOTATIONID'] = $notationid;
+					$this->db->insert('law_citation', $itemlist);
+					//print_r($itemlist); 
+				}
+			}
+			else
+			{
+				$itemlist = array();
+				$itemlist['CITATION'] = $this->input->post('citation');
+				$itemlist['NOTATIONID'] = $notationid;
+				$this->db->insert('law_citation', $itemlist); 
+				//print_r($itemlist);
+			}
+
+			$listofjudge = $this->input->post('judge_name');
+			if (strpos($listofjudge, ',') !== false) {
+				$judge_arr = explode(",",$listofjudge);
+				foreach($judge_arr as $ljudge)
+				{
+					if($this->fnJudgeAvailable($ljudge) > 0)
+					{
+						$itemlist = array();
+						$itemlist['JUDGE_NAME'] = $ljudge;
+						$itemlist['NOTATIONID'] = $notationid;
+						$this->db->insert('law_judgename', $itemlist);	
+					}
+				}
+			}
+			else
+			{
+				$judgeName = $this->input->post('judge_name');
+				if($this->fnJudgeAvailable($judgeName) > 0)
+				{
+					$itemlist = array();
+					$itemlist['JUDGE_NAME'] = $judgeName;
+					$itemlist['NOTATIONID'] = $notationid;
+					$this->db->insert('law_judgename', $itemlist);	
 				}
 			}
 
@@ -548,6 +616,7 @@ class Notationmodel extends CI_Model {
 		$this->db->set('YEAR', $this->input->post('year'));
 		$this->db->set('BENCH', $this->input->post('bench'));
 		$this->db->set('FACTS_OF_CASE', $this->input->post('facts_of_case'));
+		$this->db->set('CASE_NOTE', $this->input->post('case_note'));
 		$this->db->set('TYPE', $this->input->post('status'));
 
 		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
@@ -687,6 +756,7 @@ class Notationmodel extends CI_Model {
 		$this->db->set('YEAR', $this->input->post('year'));
 		$this->db->set('BENCH', $this->input->post('bench'));
 		$this->db->set('FACTS_OF_CASE', $this->input->post('facts_of_case'));
+		$this->db->set('CASE_NOTE', $this->input->post('case_note'));
 
 		if($this->session->userdata('role') == 'Admin')
 			$this->db->set('TYPE', 'dbversion');
@@ -807,6 +877,28 @@ class Notationmodel extends CI_Model {
 			$this->db->insert('law_citation', $itemlist); 
 			print_r($itemlist);
 		}
+
+
+		$listofjudge = $this->input->post('judge_name');
+		if (strpos($listofjudge, ',') !== false) {
+			$judge_arr = explode(",",$listofjudge);
+			foreach($judge_arr as $ljudge)
+			{
+				$itemlist = array();
+				$itemlist['JUDGE_NAME'] = $ljudge;
+				$itemlist['NOTATIONID'] = $nid;
+				$this->db->insert('law_judgename', $itemlist);
+				//print_r($itemlist); 
+			}
+		}
+		else
+		{
+			$itemlist = array();
+			$itemlist['JUDGE_NAME'] = $this->input->post('judge_name');
+			$itemlist['NOTATIONID'] = $nid;
+			$this->db->insert('law_judgename', $itemlist); 
+			//print_r($itemlist);
+		}
 		return true;
 	}
 
@@ -835,6 +927,7 @@ class Notationmodel extends CI_Model {
 				$itemdata['YEAR'] = $itemrow['YEAR'];
 				$itemdata['BENCH'] = $itemrow['BENCH'];
 				$itemdata['FACTS_OF_CASE'] = $itemrow['FACTS_OF_CASE'];
+				$itemdata['CASE_NOTE'] = $itemrow['CASE_NOTE'];
 				$itemdata['TYPE'] = $itemrow['TYPE'];
 
 				$itemdata['CREATED_BY'] = $itemrow['CREATED_BY'];
@@ -929,7 +1022,7 @@ class Notationmodel extends CI_Model {
 	function fetchNewUserNotation()
 	{
 
-		$str = "select * from law_notation where (type='public' or type='dbversion')";
+		$str = "select * from law_notation where (type='public' or type='dbversion'  or type='private')";
 		$query = $this->db->query($str);
 		return $query->result_array();
 		/*
@@ -1006,6 +1099,7 @@ class Notationmodel extends CI_Model {
 				$data['year'] = $row['YEAR'];
 				$data['bench'] = $row['BENCH'];
 				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
 				
 				$data['created_by'] = $row['CREATED_BY'];
 				$data['created_on'] = $row['CREATED_ON'];
@@ -1137,6 +1231,7 @@ class Notationmodel extends CI_Model {
 				$data['year'] = $row['YEAR'];
 				$data['bench'] = $row['BENCH'];
 				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
 				
 				$data['created_by'] = $row['CREATED_BY'];
 				$data['created_on'] = $row['CREATED_ON'];
@@ -1257,6 +1352,7 @@ class Notationmodel extends CI_Model {
 				$data['year'] = $row['YEAR'];
 				$data['bench'] = $row['BENCH'];
 				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
 				
 				$data['created_by'] = $row['CREATED_BY'];
 				$data['created_on'] = $row['CREATED_ON'];
@@ -1352,6 +1448,49 @@ class Notationmodel extends CI_Model {
 		}	
 	}
 
+	public function changeDbVersion()
+	{
+		$hashid = $this->input->post('hashid');
+		$this->db->where('HASHNOTATIONID', $hashid);
+		
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+		$this->db->set('TYPE', 'dbversion');
+
+		$this->db->update('law_notation');
+
+		return true;
+	}
+	
+	public function changePublicVersion()
+	{
+		$hashid = $this->input->post('hashid');
+		$this->db->where('HASHNOTATIONID', $hashid);
+		
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+		$this->db->set('TYPE', 'public');
+
+		$this->db->update('law_notation');
+
+		return true;
+	}
+
+
+	public function changePrivateVersion()
+	{
+		$hashid = $this->input->post('hashid');
+		$this->db->where('HASHNOTATIONID', $hashid);
+		
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+		$this->db->set('TYPE', 'private');
+
+		$this->db->update('law_notation');
+
+		return true;
+	}
+	
 	public function dbVersion()
 	{
 
@@ -1380,6 +1519,7 @@ class Notationmodel extends CI_Model {
 				$data['year'] = $row['YEAR'];
 				$data['bench'] = $row['BENCH'];
 				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
 				
 				$data['created_by'] = $row['CREATED_BY'];
 				$data['created_on'] = $row['CREATED_ON'];
@@ -1474,8 +1614,9 @@ class Notationmodel extends CI_Model {
 		
 	}
 
-	public function chkCasenameAndCitation($casename, $citation)
+	public function chkCasenameAndCitation($casename, $citation, $ntype)
 	{
+		$userid =  $this->session->userdata('userid');
 		//ED23883, RD233
 		# casename CA99821
 		# citation	ED23883, RD23232
@@ -1484,7 +1625,15 @@ class Notationmodel extends CI_Model {
 		$chkAvailable = 0;
 		foreach($citation_arr as $lcitation)
 		{
-			$query = $this->db->query("select notationid, hashnotationid, count(notationid) as cntname  from law_notation where (type='dbversion' OR type='public') AND (UPPER(CASENAME) = '".$casename."') AND ((UPPER(CITATION) LIKE '%".strtoupper(trim($lcitation))."%') OR (UPPER(DUP_CITATION) LIKE '%".strtoupper(trim($lcitation))."%')) group by notationid");
+			if($ntype != ''){
+
+				$query = $this->db->query("select casename, notationid, hashnotationid, count(notationid) as cntname  from law_notation where notationid<>'$ntype' and (created_by='$userid' or UPDATED_BY='userid' ) AND  (type='dbversion' OR type='public') AND (UPPER(CASENAME) = '".$casename."') AND ((UPPER(CITATION) LIKE '%".strtoupper(trim($lcitation))."%') OR (UPPER(DUP_CITATION) LIKE '%".strtoupper(trim($lcitation))."%')) group by notationid");	
+			}
+			else
+			{
+				$query = $this->db->query("select casename, notationid, hashnotationid, count(notationid) as cntname  from law_notation where (created_by='$userid' or UPDATED_BY='userid' ) AND  (type='dbversion' OR type='public') AND (UPPER(CASENAME) = '".$casename."') AND ((UPPER(CITATION) LIKE '%".strtoupper(trim($lcitation))."%') OR (UPPER(DUP_CITATION) LIKE '%".strtoupper(trim($lcitation))."%')) group by notationid");
+			}
+
 			$count = 0;
 			$result = $query->result_array();
 			$details = '';
@@ -1495,7 +1644,7 @@ class Notationmodel extends CI_Model {
 				{
 					$uniqueid = "'".$row['hashnotationid']."'";
 					//'action' => "<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
-					$details .= '<a  style="margin-right:5px;" class="btn btn-success" href="javascript:viewCitation('.$uniqueid.')">'.$row['notationid'].' <span class="glyphicon glyphicon-eye-open"></span></a>';
+					$details .= '<a  style="margin-right:5px;" class="btn btn-success" href="javascript:viewCitation('.$uniqueid.')">'.$row['casename'].' <span class="glyphicon glyphicon-eye-open"></span></a>';
 				}
 			}
 
@@ -1594,6 +1743,23 @@ class Notationmodel extends CI_Model {
 	public function fnStatuateAvailable($statuateName, $userid)
 	{
 		$query = $this->db->query("select count(name) as cntname from law_statuate  where (UPPER(name) = '".strtoupper($statuateName)."') and (userid='".$userid."' or role='Admin')");
+		
+		$data = array();
+		
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+		
+		return $count;
+	}
+
+	public function fnJudgeAvailable($judgeName)
+	{
+
+		$query = $this->db->query("select count(judge_name) as cntname from law_judgename  where (UPPER(judge_name) = '".strtoupper(trim($judgeName))."') ");
 		
 		$data = array();
 		

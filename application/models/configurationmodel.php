@@ -60,8 +60,10 @@ class Configurationmodel extends CI_Model {
 		
 	}
 
-	public function fetchAllCitation(){
-		$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where type='public' or type='dbversion'";
+	public function fetchAllCitation($name){
+		$userid = $this->session->userdata('userid');
+		$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')";
+		
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -203,9 +205,12 @@ class Configurationmodel extends CI_Model {
 
 	public function fetchAllJudges()
 	{
-		$userid = $this->session->userdata('userid');	
+		$userid = $this->session->userdata('userid');
 		$name = $this->input->post('name_startsWith');
+		//$str = "select distinct lj.judge_name from law_judgename lj inner join law_notation ln on lj.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.judge_name) LIKE '%".strtoupper($name)."%')";
 		
+
+		//$str = "select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name";
 		$query = $this->db->query("select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name");
 		$data = array();
 		if ($query->num_rows() > 0)
@@ -217,6 +222,9 @@ class Configurationmodel extends CI_Model {
 				array_push($data, $name);
 			}
 		}
+		//$query = $this->db->query($str);
+		//return $query->result_array();
+
 		return $data;
 	}
 

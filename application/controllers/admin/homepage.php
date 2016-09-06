@@ -40,12 +40,14 @@ class Homepage extends CI_Controller {
 				$details = array(
 					//'notation'=>$r['NOTATIONID'],
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
-					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					
 					'citation'=>$r['CITATION'],
-					'court_name' => $r['COURT_NAME'],
+					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
+					
 					'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View'></span></a>"
+	
 					//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 				);
 				
@@ -77,20 +79,46 @@ class Homepage extends CI_Controller {
 			foreach($result as $r)
 			{
 				$actionStr = '';
-				if($r['CREATED_BY'] == $this->session->userdata('userid'))
+				if(($r['CREATED_BY'] == $this->session->userdata('userid') || $r['UPDATED_BY'] ==$this->session->userdata('userid')) && $r['TYPE'] != 'dbversion')
 				{
+
 					$actionStr .= "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"; 
 				}
-				$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
-				$actionStr .= "<a style='margin-left:10px;' target='_blank' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
+				/*
+				if($r['TYPE'] == 'dbversion')
+				{
+					$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Draft' > Make Draft</span></a>";	
+				}*/
+
+
+				if($r['TYPE'] == 'private')
+				{
+					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-danger btnPublic' value=".$r['HASHNOTATIONID']."> Make Public</button>";
+
+					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnDbVersion' value=".$r['HASHNOTATIONID']."> Make DB Version</button>";
+					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Public' > Make Public</span></a>";	
+
+					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Db version' > Make DB Version</span></a>";
+				}
+
+				if($r['TYPE'] == 'public')
+				{
+					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnDbVersion' value=".$r['HASHNOTATIONID']."> Make DB Version</button>";
+
+					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as DB Version' > Make DB Version</span></a>";	
+				}
+				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
+				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
+
+
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
-					'casename'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
+					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					//'casename'=>$r['CASENAME'],
 					'citation'=>$r['CITATION'],
-					//'court_name' => $r['COURT_NAME'],
-					'date_of_creation' => date('d-m-Y',$r['CREATED_ON']),
-					'created_by' => $this->configurationmodel->fetchUserName($r['CREATED_BY']),
+					'case_number' => $r['CASENUMBER'],
+					//'date_of_creation' => date('d-m-Y',$r['CREATED_ON']),
+					//'created_by' => $this->configurationmodel->fetchUserName($r['CREATED_BY']),
 					'type' => ucfirst($r['TYPE']),
 					'action' => $actionStr
 				);

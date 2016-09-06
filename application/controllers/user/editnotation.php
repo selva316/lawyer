@@ -108,6 +108,12 @@ class EditNotation extends CI_Controller {
 			$data['bench'] = $this->input->post('bench');
 
 			$data['facts_of_case'] = $this->input->post('facts_of_case');
+
+			if($this->input->post('case_note') != '')
+			{
+				$data['case_note'] = $this->input->post('case_note');	
+			}
+				
 			$data['type'] = $this->input->post('status');
 
 			$this->load->model('notationmodel');
@@ -127,7 +133,13 @@ class EditNotation extends CI_Controller {
 		if(isset($_POST))
 		{
 			$data = array();
-			if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
+			$data = array();
+			$casename = $this->input->post('casename');
+			$citation = $this->input->post('citation');
+			$casenumber = $this->input->post('casenumber');
+			//if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
+			if(($casename != '') && ($citation != '' || $casenumber !=''))
+			{
 
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
@@ -158,7 +170,11 @@ class EditNotation extends CI_Controller {
 					$data['facts_of_case'] = $this->input->post('facts_of_case');	
 				}
 				
-				
+				if($this->input->post('case_note') != '')
+				{
+					$data['case_note'] = $this->input->post('case_note');	
+				}
+
 				$notationid = '';
 				if($this->input->post('notationid') != '' && strlen($this->input->post('notationid')) > 0)
 				{

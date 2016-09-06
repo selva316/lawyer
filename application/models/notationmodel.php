@@ -52,6 +52,58 @@ class Notationmodel extends CI_Model {
 		
 	}
 
+	public function createWebNotation($casename, $citation, $casenumber, $userid, $role)
+	{
+		$data = array();
+		$data['CASENAME'] = $casename;
+		$data['CITATION'] = $citation;
+		$data['CASENUMBER'] = $casenumber;
+
+		$this->db->insert('law_notation', $data); 
+		$autoid = $this->db->insert_id();
+		
+		$this->db->where('id', $autoid);
+		$nid = 'NT'.$autoid;
+		$hashnid = md5($nid.time());
+		$this->db->set('NOTATIONID', $nid);
+		$this->db->set('HASHNOTATIONID', $hashnid);
+		
+		$this->db->set('CREATED_BY', $userid);
+		$this->db->set('CREATED_ON', time());
+
+		$this->db->set('TYPE', 'draft');
+
+		$this->db->set('UPDATED_BY', $userid);
+		$this->db->set('UPDATED_ON', time());
+
+		$this->db->update('law_notation');
+
+		return $nid;
+	}
+
+	public function updateWebNotation($notationid, $casename, $citation, $casenumber, $userid, $role)
+	{
+
+		$data = array();
+		$data['CASENAME'] = $casename;
+		$data['CITATION'] = $citation;
+		$data['CASENUMBER'] = $casenumber;
+		
+		$this->db->where('NOTATIONID', $notationid);
+		
+		$this->db->set('TYPE', 'draft');
+		$this->db->set('CASENAME', $casename);
+		$this->db->set('CITATION', $citation);		
+		$this->db->set('CASENUMBER', $casenumber);
+
+		$this->db->set('UPDATED_BY', $userid);
+		$this->db->set('UPDATED_ON', time());
+
+		$this->db->update('law_notation');
+
+		return $notationid;
+	}
+
 	function createNotation($data)
 	{
 		$this->db->insert('law_notation', $data); 

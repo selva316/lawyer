@@ -47,8 +47,8 @@ class Homepage extends CI_Controller {
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
 
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
-					
-					'citation'=>$r['CITATION'],
+					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
+					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
 					
@@ -125,8 +125,8 @@ class Homepage extends CI_Controller {
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
-					//'casename'=>$r['CASENAME'],
-					'citation'=>$r['CITATION'],
+					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
+					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					//'date_of_creation' => date('d-m-Y',$r['CREATED_ON']),
 					//'created_by' => $this->configurationmodel->fetchUserName($r['CREATED_BY']),

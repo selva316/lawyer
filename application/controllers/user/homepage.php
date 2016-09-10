@@ -43,8 +43,8 @@ class Homepage extends CI_Controller {
 				
 				$details = array(
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
-					//'casename'=>$r['CASENAME'],
-					'citation'=>$r['CITATION'],
+					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
+					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
 					'action' => $actionStr
@@ -108,8 +108,8 @@ class Homepage extends CI_Controller {
 
 				$details = array(
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
-					//'casename'=>$r['CASENAME'],
-					'citation'=>$r['CITATION'],
+					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
+					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
 					'action' => $actionStr

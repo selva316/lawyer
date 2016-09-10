@@ -10,7 +10,7 @@ $(".addmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><select name="logical[]" id="logicalops_1"  class="form-control"><option value="and">AND</option><option value="or">OR</option><option value="not">NOT</option></select></td>';
 	html += '<td><select name="fields[]" data-type="'+i+'" id="conditionalSearch_'+i+'" class="form-control"><option value="">All Fields</option><option value="casename">Case Name</option><option value="citation">Citation</option><option value="judge_name">Judge Name</option><option value="court_name">Court Name</option><option value="year">Year</option></select></td>';
-	html += '<td><input type="text" data-type="'+i+'" name="searchContent[]" id="searchcontent_'+i+'" class="form-control autocomplete_searchcontent" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>';
+	html += '<td><input type="text" data-type="'+i+'" name="searchContent[]" id="searchcontent_'+i+'" class="form-control autocomplete_searchcontent" autocomplete="off" ondrop="return false;" ></td>';
 	html += '<td><input class="searchCase" type="checkbox"/></td>'
 	html += '</tr>';
 	$('.tableSearchBuilder').append(html);

@@ -598,6 +598,7 @@
                     $("#saveAction").css("display","block");
                     $("#username").css("border","1px solid #ccc");
                     $("#username").css("box-shadow","0 1px 1px rgba(0, 0, 0, 0.075) inset");
+                    $("#password").focus();
                 }
                 else{
                     $("#username").css("border","1px solid #c7254e");

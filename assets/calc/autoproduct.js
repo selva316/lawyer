@@ -9,7 +9,7 @@ $(".addmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><input class="case" type="checkbox"/></td>';
 	html += '<td><input type="text" data-type="description" name="itemName[]" id="itemName_'+i+'" class="form-control autocomplete_txt" autocomplete="off"></td>';
-	html += '<td><input type="text" name="price[]" id="price_'+i+'" class="form-control changesNo" autocomplete="off"  ondrop="return false;" onpaste="return false;"></td>';
+	html += '<td><input type="text" name="price[]" id="price_'+i+'" class="form-control changesNo" autocomplete="off"  ondrop="return false;" ></td>';
 	html += '<td><input type="text" name="taxP[]" id="taxP_'+i+'" class="form-control changesNo autocomplete_txt" value="0" autocomplete="off"></td>';
 	html += '</tr>';
 	$('table').append(html);

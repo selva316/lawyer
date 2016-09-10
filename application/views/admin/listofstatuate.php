@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>List of Statuate</title>
+    <title>List of Statute</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -47,13 +47,13 @@
         <?php $this->load->view('includes/defaultconfiguration');?>
         <div class="panel panel-success">
         <div class="panel-heading">
-            <center><label><b>List of Statuate</b></label></center></div>
+            <center><label><b>List of Statute</b></label></center></div>
         </div>      
         <div id="page-wrapper">
                 <div class="row">
                     <div class="col-lg-12">
                         <div style="margin-left:30px;margin-bottom:10px;">
-                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#modalValidate" > Add Statuate <i class="fa fa-close"></i> </button>
+                            <button type="button" class="btn btn-large btn-success" id="finalize" data-toggle="modal" data-target="#modalValidate" > Add Statute <i class="fa fa-close"></i> </button>
                         </div>
 
                     </div>
@@ -61,12 +61,12 @@
                 </div>
                 <!-- /.row -->
                 <div class="panel panel-default">
-                    <div class="panel-heading">List of Statuate</div>
+                    <div class="panel-heading">List of Statute</div>
                     <div class="panel-body">
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Statuate ID</th>
+                                    <th>Statute ID</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Created By</th>
@@ -86,7 +86,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">New Statuate</h4>
+                <h4 class="modal-title">New Statute</h4>
               </div>
               <div class="modal-body">
                 
@@ -120,7 +120,7 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Edit Statuate</h4>
+                <h4 class="modal-title">Edit Statute</h4>
               </div>
               <div class="modal-body">
                 

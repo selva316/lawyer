@@ -167,7 +167,7 @@
 								<thead>
 									<tr>
 										<th width="2%"></th>
-										<th width="15%">Statute <span title="Add New Statuate" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
+										<th width="15%">Statute <span title="Add New Statute" class="insertButton"  data-toggle="modal" data-target="#todoModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
 										<th width="25%">Section & Subsection <span  title="Add New Subsection" class="insertSubsectionButton"  data-toggle="modal" data-target="#modalValidate" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
 										<th width="5%">Concept<span  title="Add New Concept" class="insertConceptButton"  data-toggle="modal" data-target="#conceptModal" style="cursor:pointer;color: #ed6a43;margin-left:5%;"><i class="fa fa-plus"></i></span></th>
 									</tr>
@@ -316,7 +316,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title"  style="font-weight:bold;">Add Statuate</h4>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Statute</h4>
 					</div><!-- /.modal-header -->
 					<div class="modal-body">
 						<div class="row" style="margin:2%">
@@ -362,7 +362,7 @@
               <div class="modal-body">
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Statuate</label>
+                        <label class="control-label">Statute</label>
                         <select class="form-control" id="statuatename" name="statuatename" >
                             <option value="">Select</option>
                             <?php

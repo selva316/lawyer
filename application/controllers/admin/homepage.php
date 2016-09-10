@@ -37,16 +37,23 @@ class Homepage extends CI_Controller {
 			$detailsList = array();
 			foreach($result as $r)
 			{
+				$actionStr = '';
+				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-info btnDraft' value=".$r['HASHNOTATIONID']."> Accept Draft</button>";
+				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+
 				$details = array(
+					
 					//'notation'=>$r['NOTATIONID'],
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
+
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					
 					'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
 					
-					'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View'></span></a>"
+					'action' => $actionStr
+					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View'></span></a>"
 	
 					//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 				);
@@ -82,7 +89,7 @@ class Homepage extends CI_Controller {
 				if(($r['CREATED_BY'] == $this->session->userdata('userid') || $r['UPDATED_BY'] ==$this->session->userdata('userid')) && $r['TYPE'] != 'dbversion')
 				{
 
-					$actionStr .= "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"; 
+					//$actionStr .= "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"; 
 				}
 				/*
 				if($r['TYPE'] == 'dbversion')
@@ -96,6 +103,9 @@ class Homepage extends CI_Controller {
 					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-danger btnPublic' value=".$r['HASHNOTATIONID']."> Make Public</button>";
 
 					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnDbVersion' value=".$r['HASHNOTATIONID']."> Make DB Version</button>";
+					
+					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+
 					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Public' > Make Public</span></a>";	
 
 					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Db version' > Make DB Version</span></a>";
@@ -110,7 +120,7 @@ class Homepage extends CI_Controller {
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 
-				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+				
 				
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",

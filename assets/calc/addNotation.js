@@ -348,6 +348,7 @@ function ajaxCreateCitation(){
 		var judge_name = $("#judge_name").val();
 		var court_name = $("#court_name").val();
 		var casenumber = $("#casenumber").val();
+		var dubcitation = $("#dubcitation").val();
 		var year = $("#year").val();
 
 		var bench = $("#bench").val();
@@ -365,7 +366,8 @@ function ajaxCreateCitation(){
 			method: 'post',
 			data: {
 			   casename: casename, 
-			   citation:citation, 
+			   citation:citation,
+			   dubcitation:dubcitation,
 			   judge_name: judge_name, 
 			   court_name:court_name, 
 			   casenumber:casenumber, 

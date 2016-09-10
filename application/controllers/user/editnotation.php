@@ -141,7 +141,7 @@ class EditNotation extends CI_Controller {
 			{
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
-				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+				$data['dup_citation'] = $this->input->post('dubcitation');
 
 				if($this->input->post('judge_name') != ''){
 					$data['judge_name'] = $this->input->post('judge_name');

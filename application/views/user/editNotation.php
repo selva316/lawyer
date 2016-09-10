@@ -80,12 +80,14 @@
 								<label class="control-label">Case Name</label>
 								<input  class="form-control" type="text" id="casename" name="casename" value="<?php echo $casename; ?>"/>
 								<input type="hidden" name="ntype" id="ntype" value="<?php echo $notationid; ?>"/>
+								<input type="hidden" name="statusType" id="statusType" value="<?php echo $type; ?>"/>
 							</div>
 						</div>
 						<div class="span3">
 							<div id="divcitation" class="form-group">
 								<label class="control-label">Citation</label>
 								<input  class="form-control" type="text" id="citation" name="citation" value="<?php echo $citation; ?>"/>
+								<input  class="form-control" type="hidden" id="dubcitation" name="dubcitation" value="<?php echo $dup_citation; ?>"/>
 							</div>
 							<div class="form-group" id="divhref">
 								
@@ -176,14 +178,16 @@
 												foreach( $statuatedetails as $statuaterow ){
 											?>
 											<tr>
-												<td><input class="case" type="checkbox"/></td>
+												<?php if($k!=1) { ?><td><input class="case" type="checkbox"/></td><?php } else { ?>
+												<td></td>
+												<?php } ?>
 												<td><input type="text" data-type="<?php echo $k; ?>" name="statuate[]" id="statuate_<?php echo $k; ?>" class="form-control autocomplete_statuate" autocomplete="off" value="<?php echo $statuaterow['statuate']; ?>">
 												<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_<?php echo $k; ?>" class="form-control" autocomplete="off" value="<?php echo $statuaterow['hiddenstatuate']; ?>"></td>
 												<td>
-												<input type="text" data-type="<?php echo $k; ?>" name="subsection[]" id="subsection_<?php echo $k; ?>" class="form-control autocomplete_subsection" autocomplete="off" value="<?php echo $statuaterow['sub_section']; ?>" ondrop="return false;" onpaste="return false;">
+												<input type="text" data-type="<?php echo $k; ?>" name="subsection[]" id="subsection_<?php echo $k; ?>" class="form-control autocomplete_subsection" autocomplete="off" value="<?php echo $statuaterow['sub_section']; ?>" ondrop="return false;" >
 												<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_<?php echo $k; ?>" class="form-control" autocomplete="off" value="<?php echo $statuaterow['hiddensubsection']; ?>">
 												</td>
-												<td><input type="text" data-type="<?php echo $k; ?>" name="concept[]" id="concept_<?php echo $k; ?>" class="form-control autocomplete_concept" autocomplete="off"  value="<?php echo $statuaterow['concept']; ?>" ondrop="return false;" onpaste="return false;"></td>
+												<td><input type="text" data-type="<?php echo $k; ?>" name="concept[]" id="concept_<?php echo $k; ?>" class="form-control autocomplete_concept" autocomplete="off"  value="<?php echo $statuaterow['concept']; ?>" ondrop="return false;" ></td>
 											</tr>
 											<?php
 												$k++;
@@ -193,10 +197,11 @@
 												{
 											?>
 													<tr>
-														<td><input class="case" type="checkbox"/></td>
+														<!--<td><input class="case" type="checkbox"/></td>-->
+														<td></td>
 														<td><input type="text" data-type="statuate" name="statuate[]" id="statuate_1" class="form-control autocomplete_process" autocomplete="off"></td>
-														<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_1" class="form-control autocomplete_process" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
-														<td><input type="text" data-type="concept" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
+														<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_1" class="form-control autocomplete_process" autocomplete="off" ondrop="return false;" ></td>
+														<td><input type="text" data-type="concept" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" ></td>
 													</tr>
 											<?php
 												}
@@ -226,19 +231,37 @@
 											<tr>
 												<th></th>
 												<th>Type of Citation</th>
-												<th>Citation</th>
 												<th>Case Name</th>
+												<th>Citation</th>
+												
 												<th>Note</th>
 											</tr>
 										</thead>
 										<tbody>
-											
 											<?php 
-												$k = 0;
+												foreach ($linkdetails as $linkrow) {
+											?>
+												<tr>
+												<td></td>
+												<td><?php echo $linkrow['type_of_citation']; ?></td>
+												<td><?php echo $linkrow['casenumber']; ?></td>
+												<td><?php echo $linkrow['actual_citation']; ?></td>
+												<td></td>
+												</tr>
+											<?php		
+												}
+											?>
+
+
+
+											<?php 
+												$k = 1;
 												foreach( $citationdetails as $citationrow ){
 											?>
 											<tr>
-												<td><input class="case_citation" type="checkbox"/></td>
+												<?php if($k!=1){ ?><td><input class="case_citation" type="checkbox"/></td><?php } else {?>
+												<td></td>
+												<?php } ?>
 												<td>
 												<select  class="form-control"  data-type="typeCitation" id="typeCitation_<?php echo $k; ?>" name="typeCitation[]">
 													<option value="">Select</option>
@@ -252,18 +275,21 @@
 													?>
 												</select>
 												</td>
-												<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_<?php echo $k; ?>"  value="<?php echo $citationrow['actual_citation']; ?>" class="form-control autocomplete_citation" autocomplete="off"></td>
 												<td><input type="text" data-type="<?php echo $k; ?>" name="listCaseName[]" id="listCaseName_<?php echo $k; ?>" class="form-control autocomplete_casename" autocomplete="off" value="<?php echo $citationrow['casenumber'];?>"/></td>
-												<td><textarea  name="note[]" id="note_<?php echo $k; ?>" class="form-control"><?php echo $citationrow['description']?></textarea> </td>
+
+												<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_<?php echo $k; ?>"  value="<?php echo $citationrow['actual_citation']; ?>" class="form-control autocomplete_citation" autocomplete="off"></td>
+												
+												<td><textarea  name="note[]" id="note_<?php echo $k; ?>" class="form-control"  style="height: 35px;"><?php echo $citationrow['description']?></textarea> </td>
 											</tr>
 											<?php 
 												$k++;
 											}
-												if($k == 0)
+												if($k == 1)
 												{
 											?>
 												<tr>
-													<td><input class="case_citation" type="checkbox"/></td>
+													<!--<td><input class="case_citation" type="checkbox"/></td>-->
+													<td></td>
 													<td>
 													<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
 														<option value="">Select</option>
@@ -274,9 +300,9 @@
 														?>
 													</select>
 													</td>
-													<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"></td>
 													<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
-													<td><textarea  name="note[]" id="note_1" class="form-control"></textarea> </td>
+													<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"></td>
+													<td><textarea  name="note[]" id="note_1" class="form-control"  style="height: 35px;"></textarea> </td>
 												</tr>
 											<?php
 												}
@@ -327,6 +353,10 @@
 				</div>
 			</div>-->
 			<div class="clear-both" style="margin-top:20px;"></div>
+		  		<?php 
+		  			if($type != 'dbversion')
+		  			{
+		  		?>
 		  		<div class="row-fluid">
 		  			<div class="span10" style="text-align:center;">
 		  				<label  style="margin-right: 15px;">
@@ -334,6 +364,7 @@
                          <input type="hidden" name="status" id="status" value="private" />
 		  			</div>
 		  		</div>
+		  		
 		  		<div class="row-fluid">
 					<div class="span10" style="text-align:center;">
 						<button type="submit" class="btn btn-primary" id="save"  >
@@ -342,6 +373,9 @@
 			            
 					</div>
 				</div>
+				<?php
+					}
+				?>
 			</div>
 			<!-- /#page-wrapper -->
 		</div>
@@ -351,7 +385,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title"  style="font-weight:bold;">Add Statuate</h4>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Statute</h4>
 					</div><!-- /.modal-header -->
 					<div class="modal-body">
 						<div class="row" style="margin:2%">
@@ -397,7 +431,7 @@
               <div class="modal-body">
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Statuate</label>
+                        <label class="control-label">Statute</label>
                         <select class="form-control" id="statuatename" name="statuatename" >
                             <option value="">Select</option>
                             <?php

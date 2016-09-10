@@ -131,7 +131,7 @@
                     <div class="modal-body">
                         <div class="row-fluid">
                             <div class="span12">
-                                <label for="constatuate">Statuate</label>
+                                <label for="constatuate">Statute</label>
                                 <input id="constatuate" type="text" class="form-control autocomplete_clonestatuate" name="constatuate" value="">
                                 <input type="hidden" name="hiddenconceptstatuate" id="hiddenconceptstatuate" class="form-control" value="">
                                 
@@ -439,7 +439,7 @@
         var errorMessage = '';
 
         if ( $("#constatuate").val() == ""  || $("#constatuate").val() == null) {
-            errorMessage = errorMessage + 'Statuate cannot be empty!!\n' ;
+            errorMessage = errorMessage + 'Statute cannot be empty!!\n' ;
         }
 
         /*

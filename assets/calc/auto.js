@@ -10,7 +10,7 @@ $(".addmore").on('click',function(){
 	html += '<td><input class="case" type="checkbox"/></td>';
 	html += '<td><input type="text" data-type="'+i+'" name="statuate[]" id="statuate_'+i+'" class="form-control autocomplete_statuate" autocomplete="off"><input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_'+i+'" class="form-control" autocomplete="off"></td>';
 	html += '<td><input type="text" data-type="'+i+'" name="subsection[]" id="subsection_'+i+'" class="form-control autocomplete_subsection" autocomplete="off"><input type="hidden" name="hiddensubsection[]" id="hiddensubsection_'+i+'" class="form-control" autocomplete="off"></td>';
-	html += '<td><input type="text" data-type="'+i+'" name="concept[]" id="concept_'+i+'" class="form-control autocomplete_concept" autocomplete="off"  ondrop="return false;" onpaste="return false;"></td>';
+	html += '<td><input type="text" data-type="'+i+'" name="concept[]" id="concept_'+i+'" class="form-control autocomplete_concept" autocomplete="off"  ondrop="return false;" ></td>';
 	html += '</tr>';
 	$('.tableStatuate').append(html);
 	i++;
@@ -34,9 +34,9 @@ $(".typeAddmore").on('click',function(){
 	html = '<tr>';
 	html += '<td><input class="case_citation" type="checkbox"/></td>';
 	html += '<td><select  class="form-control"  data-type="typeCitation" id="typeCitation_'+j+'" name="typeCitation[]"><option value="">Select</option><option value="CIID12345">Approved</option><option value="CIID12346">Followed</option><option value="CIID12347">Distinguished</option><option value="CIID12348">Modified</option><option value="CIID12349">Overruled</option><option value="CIID12350">Appealed from</option><option value="CIID12351">Other</option></select></td>';
-	html += '<td><input type="text" data-type="'+j+'" name="citationNumber[]" id="citationNumber_'+j+'" class="form-control autocomplete_citation" autocomplete="off"></td>';
 	html += '<td><input type="text" data-type="'+j+'" name="listCaseName[]" id="listCaseName_'+j+'" class="form-control autocomplete_casename" autocomplete="off"></td>';
-	html += '<td><textarea  name="note[]" id="note_'+j+'" class="form-control"></textarea> </td>';
+	html += '<td><input type="text" data-type="'+j+'" name="citationNumber[]" id="citationNumber_'+j+'" class="form-control autocomplete_citation" autocomplete="off"></td>';
+	html += '<td><textarea  name="note[]" id="note_'+j+'" class="form-control"  style="height: 35px;"></textarea> </td>';
 	html += '</tr>';
 	$('.tableCitation').append(html);
 	$("#numberOfCitationEntries").val(j);
@@ -140,7 +140,7 @@ function frmvalidation()
 	
 	if(casename==''){
 		valid = false;
-		errorstr += "Enter valid Case Name!"+ "<BR/>";
+		errorstr += "Enter valid Case Name!"+ "\n";
 		$('#divcasename').addClass('has-error');
 	}
 	
@@ -154,7 +154,7 @@ function frmvalidation()
 		else
 		{
 			valid = false;
-			errorstr += "Enter valid Case Number!"+ "<BR/>";
+			errorstr += "Enter valid Case Number!"+ "\n";
 			$('#divcasenumber').addClass('has-error');
 		}
 		
@@ -162,51 +162,51 @@ function frmvalidation()
 	/*else
 	{
 		valid = false;
-		errorstr += "Enter valid Citation Number!"+ "<BR/>";
+		errorstr += "Enter valid Citation Number!"+ "\n";
 		$('#divcitation').addClass('has-error');	
 	}*/
 
 	if(parseInt(bench)<1 && parseInt(bench)>100)
 	{
 		valid = false;
-		errorstr += "Enter valid bench!"+ "<BR/>";
+		errorstr += "Enter valid bench!"+ "\n";
 		$('#divbench').addClass('has-error');
 	}
 
 	/*
 	if(casenumber==''){
 		valid = false;
-		errorstr += "Enter valid Case Number!"+ "<BR/>";
+		errorstr += "Enter valid Case Number!"+ "\n";
 		$('#divcasenumber').addClass('has-error');
 	}
 	
 	if(court_name==''){
 		valid = false;
-		errorstr += "Enter valid Court Name!"+ "<BR/>";
+		errorstr += "Enter valid Court Name!"+ "\n";
 		$('#divcourt_name').addClass('has-error');
 	}
 	
 	if(judge_name==''){
 		valid = false;
-		errorstr += "Enter valid Judge Name!"+ "<BR/>";
+		errorstr += "Enter valid Judge Name!"+ "\n";
 		$('#divjudge_name').addClass('has-error');
 	}
 	
 	if(year==''){
 		valid = false;
-		errorstr += "Enter valid Year!"+ "<BR/>";
+		errorstr += "Enter valid Year!"+ "\n";
 		$('#divyear').addClass('has-error');
 	}
 	
 	if(bench==''){
 		valid = false;
-		errorstr += "Enter valid bench!"+ "<BR/>";
+		errorstr += "Enter valid bench!"+ "\n";
 		$('#divbench').addClass('has-error');
 	}
 	
 	if(status==''){
 		valid = false;
-		errorstr += "Enter valid status!"+ "<BR/>";
+		errorstr += "Enter valid status!"+ "\n";
 		$('#divstatus').addClass('has-error');
 	}*/
 	

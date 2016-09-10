@@ -105,7 +105,6 @@
 
 function ajaxCreateCitation(){
 	
-
 	var statuateTableSize = $('.tableStatuate tr').length;
 	var listOfStatuate = '';
 	if(statuateTableSize > 0)
@@ -140,6 +139,7 @@ function ajaxCreateCitation(){
 	{
 		casename  = $("#casename").val();
 		citation = $("#citation").val();
+		var dubcitation = $("#dubcitation").val();
 		var judge_name = $("#judge_name").val();
 		var court_name = $("#court_name").val();
 		var casenumber = $("#casenumber").val();
@@ -160,7 +160,8 @@ function ajaxCreateCitation(){
 			method: 'post',
 			data: {
 			   casename: casename, 
-			   citation:citation, 
+			   citation:citation,
+			   dubcitation:dubcitation,
 			   judge_name: judge_name, 
 			   court_name:court_name, 
 			   casenumber:casenumber, 

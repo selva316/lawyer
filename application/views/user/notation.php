@@ -78,12 +78,14 @@
 								<label class="control-label">Case Name</label>
 								<input  class="form-control" type="text" id="casename" name="casename" value=""/>
 								<input type="hidden" name="ntype" id="ntype" value=""/>
+								<input type="hidden" name="statusType" id="statusType" value=""/>
 							</div>
 						</div>
 						<div class="span3">
 							<div id="divcitation" class="form-group">
 								<label class="control-label">Citation</label>
 								<input  class="form-control" type="text" id="citation" name="citation" value=""/>
+								<input  class="form-control" type="hidden" id="dubcitation" name="dubcitation" value=""/>
 							</div>
 							<div class="form-group" id="divhref">
 								
@@ -181,10 +183,10 @@
 												<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
 												<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
 												</td>
-												<td><input type="text" data-type="1" name="subsection[]" id="subsection_1" class="form-control autocomplete_subsection" autocomplete="off" ondrop="return false;" onpaste="return false;">
+												<td><input type="text" data-type="1" name="subsection[]" id="subsection_1" class="form-control autocomplete_subsection" autocomplete="off" ondrop="return false;" >
 												<input type="hidden" name="hiddensubsection[]" id="hiddensubsection_1" class="form-control" autocomplete="off">
 												</td>
-												<td><input type="text" data-type="1" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" onpaste="return false;"></td>
+												<td><input type="text" data-type="1" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" ></td>
 											</tr>
 										</tbody>
 									</table>
@@ -210,14 +212,15 @@
 											<tr>
 												<th></th>
 												<th>Type of Citation</th>
-												<th>Citation</th>
 												<th>Case Name</th>
+												<th>Citation</th>
 												<th>Note</th>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-												<td><input class="case_citation" type="checkbox"/></td>
+												<!--<td><input class="case_citation" type="checkbox"/></td>-->
+												<td></td>
 												<td>
 												<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
 													<option value="">Select</option>
@@ -228,9 +231,9 @@
 													?>
 												</select>
 												</td>
-												<td><input type="text" data-type="1" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"/></td>
 												<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
-												<td><textarea  name="note[]" id="note_1" class="form-control"></textarea> </td>
+												<td><input type="text" data-type="1" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"/></td>
+												<td><textarea  name="note[]" id="note_1" class="form-control" style="height: 35px;"></textarea> </td>
 											</tr>
 										</tbody>
 									</table>
@@ -250,14 +253,14 @@
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span12">
 							<label class="control-label">Facts of Case</label>
-							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" rows="4" cols="45"></textarea>				
+							<textarea id="facts_of_case" class="form-control myTextEditor"  placeholder="Facts of Case" name="facts_of_case" ></textarea>				
 						</div>
 					</div>
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span12">
 							<label class="control-label">Notes</label>
-							<textarea id="case_note" class="form-control myTextEditor"  placeholder="Notes" name="case_note" rows="4" cols="45"></textarea>				
+							<textarea id="case_note" class="form-control myTextEditor"  placeholder="Notes" name="case_note" ></textarea>				
 						</div>
 					</div>
             	</div>
@@ -338,7 +341,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title"  style="font-weight:bold;">Add Statuate</h4>
+						<h4 class="modal-title"  style="font-weight:bold;">Add Statute</h4>
 					</div><!-- /.modal-header -->
 					<div class="modal-body">
 						<div class="row" style="margin:2%">
@@ -384,7 +387,7 @@
               <div class="modal-body">
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Statuate</label>
+                        <label class="control-label">Statute</label>
                         <select class="form-control" id="statuatename" name="statuatename" >
                             <option value="">Select</option>
                             <?php
@@ -455,7 +458,7 @@
 					<div class="modal-body">
 			            <div class="row-fluid">
 		                    <div class="span12">
-		                        <label for="constatuate">Statuate</label>
+		                        <label for="constatuate">Statute</label>
 		                        <input id="constatuate" type="text" class="form-control autocomplete_clonestatuate" name="constatuate" value="">
 		                        <input type="hidden" name="hiddenconceptstatuate" id="hiddenconceptstatuate" class="form-control" value="">
 		                        

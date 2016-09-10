@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>List of Concept & Statuate Link</title>
+    <title>List of Concept & Statute Link</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -124,12 +124,12 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"  style="font-weight:bold;">Statuate, Concept Link</h4>
+                        <h4 class="modal-title"  style="font-weight:bold;">Statute, Concept Link</h4>
                     </div><!-- /.modal-header -->
                     <div class="modal-body">
                         <div class="row-fluid">
                             <div class="span12">
-                                <label for="constatuate">Statuate</label>
+                                <label for="constatuate">Statute</label>
                                 <input id="constatuate" type="text" class="form-control autocomplete_clonestatuate" name="constatuate" value="">
                                 <input type="hidden" name="hiddenconceptstatuate" id="hiddenconceptstatuate" class="form-control" value="">
                                 

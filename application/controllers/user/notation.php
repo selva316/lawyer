@@ -19,8 +19,8 @@ class Notation extends CI_Controller {
 	}
 	
 	public function _clean($string) {
-   		$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
-  	 	return preg_replace('/[^A-Za-z0-9\s\(\)\-\,]/', '', $string); // Removes special chars.
+   		//$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
+  	 	return preg_replace('/[^a-zA-Z0-9]/', '', $string); // Removes special chars.
 	}
 
 	public function index()
@@ -165,13 +165,27 @@ class Notation extends CI_Controller {
 		return $this->session->userdata('role');
 	}
 
+	public function changeDraftVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->changeDraftVersion();
+		return $this->session->userdata('role');
+	}
+	
+	public function changeEditCopyVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->changeEditCopyVersion();
+		return $this->session->userdata('role');
+	}
+	
 	public function deleteNotation()
 	{
 		$this->load->model('notationmodel');
 		$data = $this->notationmodel->deleteNotation();
 		return $this->session->userdata('role');
 	}
-	
+
 	public function save(){
 		
 		if(isset($_POST))
@@ -182,7 +196,7 @@ class Notation extends CI_Controller {
 				echo "if";	
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
-				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+				$data['dup_citation'] = $this->input->post('dubcitation');
 
 				$data['judge_name'] = $this->input->post('judge_name');
 				$data['court_name'] = $this->input->post('court_name');
@@ -213,7 +227,7 @@ class Notation extends CI_Controller {
 				$data['ntype'] = $this->input->post('ntype');
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
-				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+				$data['dup_citation'] = $this->input->post('dubcitation');
 
 				$data['judge_name'] = $this->input->post('judge_name');
 				$data['court_name'] = $this->input->post('court_name');
@@ -260,7 +274,7 @@ class Notation extends CI_Controller {
 			{
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
-				$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+				$data['dup_citation'] = $this->input->post('dubcitation');
 
 				if($this->input->post('judge_name') != ''){
 					$data['judge_name'] = $this->input->post('judge_name');
@@ -323,7 +337,7 @@ class Notation extends CI_Controller {
 		$data['ntype'] = $this->input->post('ntype');
 		$data['casename'] = $this->input->post('casename');
 		$data['citation'] = $this->input->post('citation');
-		$data['dup_citation'] = $this->_clean($this->input->post('citation'));
+		$data['dup_citation'] = $this->input->post('dubcitation');
 
 		$data['judge_name'] = $this->input->post('judge_name');
 		$data['court_name'] = $this->input->post('court_name');

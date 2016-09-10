@@ -1129,11 +1129,16 @@ class Notationmodel extends CI_Model {
 
 	function fetchUserNotation()
 	{
+		
+
 		$userid = $this->session->userdata('userid');
+
+		$where_au = "(type != 'draft' and (created_by = '$userid' or updated_by='$userid')) or (type = 'dbversion')";
 		$this->db->select('*');
 		$this->db->from('law_notation');
-		$this->db->where('type !=', 'draft');
-		$this->db->where('created_by =', $userid);
+		//$this->db->where('type !=', 'draft');
+		$this->db->where($where_au);
+		//$this->db->where('created_by =', $userid);
 		$this->db->where('disable =', 'N');
 		
 		$itemdata = array();
@@ -1159,6 +1164,7 @@ class Notationmodel extends CI_Model {
 			$result = $query->result_array();
 			//print_r($result);
 			$data = array();
+			$citationval = '';
 			foreach($result as $row)
 			{
 				$notationid = $row['NOTATIONID'];
@@ -1166,6 +1172,9 @@ class Notationmodel extends CI_Model {
 				$data['hashnotationid'] = $row['HASHNOTATIONID'];
 				$data['casename'] = $row['CASENAME'];
 				$data['citation'] = $row['CITATION'];
+				$data['dup_citation'] = $row['DUP_CITATION'];
+				$citationval = $row['DUP_CITATION'];
+
 				$data['casenumber'] = $row['CASENUMBER'];
 				$data['judge_name'] = $row['JUDGE_NAME'];
 				$data['court_name'] = $row['COURT_NAME'];
@@ -1229,6 +1238,29 @@ class Notationmodel extends CI_Model {
 					}
 				}
 				$data['citationdetails'] = $notationdata;
+				
+				$this->db->select('*');
+				$this->db->from('law_citation_notation_link');
+				$this->db->where('CITATION', $citationval);
+
+				$datalink = array();
+				$datalinkquery = $this->db->get();
+				if($datalinkquery->num_rows() > 0)
+				{
+					$notationlink = $datalinkquery->result_array();
+					$i = 0;
+					foreach($notationlink as $notationrow)
+					{
+						$datalink[$i]['citation'] = $this->findDupCitation($notationrow['NOTATIONID']);
+						$datalink[$i]['actual_citation'] = $this->findCitation($notationrow['NOTATIONID']);
+						$datalink[$i]['type_of_citation'] = $this->findCitationType($notationrow['TYPE_OF_CITATION']).' in ';//$notationrow['TYPE_OF_CITATION'];
+						$datalink[$i]['casenumber'] = $this->findCaseName($notationrow['NOTATIONID']);
+						$datalink[$i]['description'] = $notationrow['DESCRIPTION'];
+						$i++;
+					}
+				}
+				$data['linkdetails'] = $datalink;
+
 				return $data;
 			}
 			
@@ -1564,6 +1596,20 @@ class Notationmodel extends CI_Model {
 		return true;
 	}
 
+	public function changeDraftVersion()
+	{
+		$hashid = $this->input->post('hashid');
+		$this->db->where('HASHNOTATIONID', $hashid);
+		
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+		$this->db->set('TYPE', 'private');
+
+		$this->db->update('law_notation');
+
+		return true;
+	}
+
 	public function deleteNotation()
 	{
 		$hashid = $this->input->post('hashid');
@@ -1576,6 +1622,129 @@ class Notationmodel extends CI_Model {
 		$this->db->update('law_notation');
 
 		return true;
+	}
+
+	public function changeEditCopyVersion()
+	{
+		$hashid = $this->input->post('hashid');
+		//echo "Notation Id: ".$nid;
+		$this->db->select('*');
+		$this->db->from('law_notation');
+		$this->db->where('HASHNOTATIONID', $hashid);		
+		
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			//print_r($result);
+			$data = array();
+			foreach($result as $row)
+			{
+				$notationid = $row['NOTATIONID'];
+				//$data['notationid'] = $row['NOTATIONID'];
+				//$data['hashnotationid'] = $row['HASHNOTATIONID'];
+				$data['casename'] = $row['CASENAME'];
+				$data['citation'] = $row['CITATION'];
+				$data['dup_citation'] = $row['DUP_CITATION'];
+				$data['casenumber'] = $row['CASENUMBER'];
+				$data['judge_name'] = $row['JUDGE_NAME'];
+				$data['court_name'] = $row['COURT_NAME'];
+				$data['year'] = $row['YEAR'];
+				$data['bench'] = $row['BENCH'];
+				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
+				
+				//$data['created_by'] = $row['CREATED_BY'];
+				//$data['created_on'] = $row['CREATED_ON'];
+				$data['type'] = 'draft';
+				
+				
+				$this->db->insert('law_notation', $data); 
+				$autoid = $this->db->insert_id();
+				
+				$this->db->where('id', $autoid);
+				$nid = 'NT'.$autoid;
+				$hashnid = md5($nid.time());
+				$this->db->set('NOTATIONID', $nid);
+				$this->db->set('HASHNOTATIONID', $hashnid);
+				
+				$this->db->set('CREATED_BY', $this->session->userdata('userid'));
+				$this->db->set('CREATED_ON', time());
+
+				$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+				$this->db->set('UPDATED_ON', time());
+
+				$this->db->update('law_notation');
+
+				/*
+				$casedata = array();
+				print "select * from ips_case where ordertrackingid='".$row['ordertrackingid']."'";
+				$casequery = $this->db->query("select * from ips_case where ordertrackingid='".$row['ordertrackingid']."'");
+				*/
+				$this->db->select('*');
+				$this->db->from('law_notation_statuate');
+				$this->db->where('notationid', $notationid);
+				$statuateData = array();
+				$statuatequery = $this->db->get();
+				
+				if($statuatequery->num_rows() > 0)
+				{
+					$statuateresult = $statuatequery->result_array();
+					foreach($statuateresult as $statuaterow)
+					{
+
+						$itemlist = array();
+
+						if(($statuaterow['STATUATE'] == "") && ($statuaterow['CONCEPT'] == "") && ($nid == ""))
+							continue;
+
+						$itemlist['STATUATE'] = $statuaterow['STATUATE'];
+						$itemlist['SUB_SECTION'] = $statuaterow['SUB_SECTION'];
+						$itemlist['CONCEPT'] = $statuaterow['CONCEPT'];
+						$itemlist['NOTATIONID'] = $nid;
+
+						$this->db->insert('law_notation_statuate', $itemlist); 
+					}
+				}
+				$data['statuatedetails'] = $statuateData;
+							
+				
+				$this->db->select('*');
+				$this->db->from('law_citation_notation_link');
+				$this->db->where('notationid', $notationid);
+				$notationdata = array();
+				$notationquery = $this->db->get();
+				
+				if($notationquery->num_rows() > 0)
+				{
+					$notationresult = $notationquery->result_array();
+					foreach($notationresult as $notationrow)
+					{
+
+						$itemlist = array();
+
+						if(($notationrow['CITATION'] == "")  && ($nid == ""))
+							continue;
+
+						$itemlist['CITATION'] = $notationrow['CITATION'];
+						$itemlist['ACTUAL_CITATION'] = $notationrow['ACTUAL_CITATION'];
+						$itemlist['TYPE_OF_CITATION'] = $notationrow['TYPE_OF_CITATION'];
+						$itemlist['DESCRIPTION'] = $notationrow['DESCRIPTION'];
+						$itemlist['NOTATIONID'] = $nid;
+
+						$this->db->insert('law_citation_notation_link', $itemlist);
+					}
+				}
+				
+				$this->db->where('HASHNOTATIONID', $hashid);
+				$this->db->set('ACTION', 'Y');
+				$this->db->update('law_notation');
+								
+				return true;
+			}
+			
+		}	
 	}
 
 	public function dbVersion()
@@ -1742,8 +1911,8 @@ class Notationmodel extends CI_Model {
 	}
 
 	public function _clean($string) {
-   		$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
-  	 	return preg_replace('/[^A-Za-z0-9\s\(\)\-\,]/', '', $string); // Removes special chars.
+   		//$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
+  	 	return preg_replace('/[^a-zA-Z0-9]/', '', $string); // Removes special chars.
 	}
 
 	public function _checkCitationAvailable($citation)
@@ -1768,6 +1937,7 @@ class Notationmodel extends CI_Model {
 	{
 		$data['casename'] = $l_caseName;
 		$data['citation'] = $citation;
+		$data['dup_citation'] = $this->_clean($citation);
 
 		$this->db->insert('law_notation', $data); 
 		$autoid = $this->db->insert_id();
@@ -1921,6 +2091,59 @@ class Notationmodel extends CI_Model {
 			$count = $row['CID'];//i am not want item code i,eeeeeeeeeeee
 		}
 		return $count;		
+	}
+
+	public function findCitationType($citation)
+	{
+		//echo "select * from law_login where name  = '".$username."'";
+		$query = $this->db->query("select * from law_type_of_citation where CIID  = '".$citation."'");
+		$result = $query->result_array();
+		$name = '';
+		foreach($result as $r)
+		{
+			$name = $r['NAME'];
+		}
+
+		return $name;
+	}
+
+	public function findDupCitation($notationid)
+	{
+		$query = $this->db->query("select dup_citation from law_notation where notationid  = '".$notationid."'");
+		$result = $query->result_array();
+		$name = '';
+		foreach($result as $r)
+		{
+			$name = $r['dup_citation'];
+		}
+
+		return $name;	
+	}
+
+	public function findCitation($notationid)
+	{
+		$query = $this->db->query("select citation from law_notation where notationid  = '".$notationid."'");
+		$result = $query->result_array();
+		$name = '';
+		foreach($result as $r)
+		{
+			$name = $r['citation'];
+		}
+
+		return $name;	
+	}
+
+	public function findCaseName($notationid)
+	{
+		$query = $this->db->query("select casename from law_notation where notationid  = '".$notationid."'");
+		$result = $query->result_array();
+		$name = '';
+		foreach($result as $r)
+		{
+			$name = $r['casename'];
+		}
+
+		return $name;	
 	}
 
 }

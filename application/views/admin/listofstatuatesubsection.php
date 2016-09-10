@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>List of Statuate Subsection</title>
+    <title>List of Statute Subsection</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -61,12 +61,12 @@
                 </div>
                 <!-- /.row -->
                 <div class="panel panel-default">
-                    <div class="panel-heading">List of Statuate Subsection</div>
+                    <div class="panel-heading">List of Statute Subsection</div>
                     <div class="panel-body">
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Statuate ID</th>
+                                    <th>Statute ID</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Created By</th>
@@ -91,7 +91,7 @@
               <div class="modal-body">
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Statuate</label>
+                        <label class="control-label">Statute</label>
                         <select class="form-control" id="statuatename" name="statuatename" >
                             <option value="">Select</option>
                             <?php
@@ -138,7 +138,7 @@
               <div class="modal-body">
                 <div class="row-fluid">
                     <div class="span12">
-                        <label class="control-label">Statuate</label>
+                        <label class="control-label">Statute</label>
                         <select class="form-control" id="editStatuatename" name="editStatuatename" >
                             <option value="">Select</option>
                             <?php

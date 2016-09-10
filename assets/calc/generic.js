@@ -2,7 +2,6 @@ var interval = null;
 
 $(document).ready(function() {
 	
-
 	//toastr.success('Auto Saved');
 	//$("#toaster").html('');
 	//$.toaster({ priority : 'success', title : '<span class="glyphicon glyphicon-ok"></span>', message : 'Command copied to clipboard' });
@@ -33,7 +32,12 @@ $(document).ready(function() {
 	    minView: "year"
 	});
 
-	interval = setInterval(ajaxCreateCitation, 10000);
+	
+	if($("#statusType").val() != "dbversion")
+	{
+		interval = setInterval(ajaxCreateCitation, 10000);	
+	}
+	
 	//$("#court_name")
 });
 
@@ -92,6 +96,9 @@ $(document).on('focus','.autocomplete_txt',function(){
 });
 
 $(document).on('blur','#citation',function(){
+	var str = $("#citation").val();
+	var dub = str.replace(/[^a-zA-Z0-9]/g, "");
+	$("#dubcitation").val(dub);
 	if($("#casename").val() != '' && $("#citation").val() != '')
 	{
 		

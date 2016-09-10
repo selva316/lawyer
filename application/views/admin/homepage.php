@@ -225,6 +225,21 @@
 		});
 	});
 	
+	$(document).on('click', '.btnDraft', function(e) {
+		//alert($(this).val());
+		$.ajax({
+			url : '../user/notation/changeDraftVersion',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $(this).val()
+			},
+			success : function(data) {
+				fnNotationList();
+			}
+		});
+	});
+
 	$(document).on('click', '.btnDelete', function(e) {
 		var x = confirm("Are you sure you want to delete?");
 		if (x)

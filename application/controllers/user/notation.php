@@ -165,6 +165,13 @@ class Notation extends CI_Controller {
 		return $this->session->userdata('role');
 	}
 
+	public function deleteNotation()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->deleteNotation();
+		return $this->session->userdata('role');
+	}
+	
 	public function save(){
 		
 		if(isset($_POST))

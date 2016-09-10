@@ -56,8 +56,16 @@ class Notationmodel extends CI_Model {
 	{
 		$data = array();
 		$data['CASENAME'] = $casename;
-		$data['CITATION'] = $citation;
-		$data['CASENUMBER'] = $casenumber;
+		
+		if(strlen($citation) > 1)
+			$data['CITATION'] = $citation;
+		else
+			$data['CITATION'] = '';
+
+		if(strlen($casenumber) > 1)
+			$data['CASENUMBER'] = $casenumber;
+		else
+			$data['CASENUMBER'] = '';
 
 		$this->db->insert('law_notation', $data); 
 		$autoid = $this->db->insert_id();
@@ -125,6 +133,9 @@ class Notationmodel extends CI_Model {
 		$this->db->set('UPDATED_ON', time());
 
 		$this->db->update('law_notation');
+
+		$this->db->where('NOTATIONID', $nid);
+		$this->db->delete('law_notation_statuate');
 
 		/* Statuate , Sub Section and Concept */
 		$number_of_entries = count($this->input->post('statuate'));
@@ -268,6 +279,9 @@ class Notationmodel extends CI_Model {
 
 		if(strlen($notationid)>0 && $notationid != '')
 		{
+			$this->db->where('NOTATIONID', $notationid);
+			$this->db->delete('law_notation_statuate');
+
 			$listOfStatuate = $this->input->post('listOfStatuate');
 			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
 			foreach ($listOfStatuate_arr as $los_arr) {
@@ -626,7 +640,6 @@ class Notationmodel extends CI_Model {
 
 			$this->db->update('law_notation');
 	
-
 			$listOfStatuate = $this->input->post('listOfStatuate');
 			$listOfStatuate_arr = explode("--^--",$listOfStatuate);
 			foreach ($listOfStatuate_arr as $los_arr) {
@@ -655,6 +668,10 @@ class Notationmodel extends CI_Model {
 
 	function updateDraftNotation($data)
 	{
+
+		$this->db->where('NOTATIONID', $this->input->post('ntype'));
+		$this->db->delete('law_notation_statuate');
+
 		$nid = $this->input->post('ntype');
 		$this->db->where('NOTATIONID', $this->input->post('ntype'));
 		
@@ -796,6 +813,9 @@ class Notationmodel extends CI_Model {
 		$this->auditNotationCitation($nid);
 		$this->auditNotation($nid);
 
+		$this->db->where('NOTATIONID', $nid);
+		$this->db->delete('law_notation_statuate');
+		
 		$this->db->where('NOTATIONID', $this->input->post('ntype'));
 		
 		$this->db->set('CASENAME', $this->input->post('casename'));
@@ -1074,7 +1094,7 @@ class Notationmodel extends CI_Model {
 	function fetchNewUserNotation()
 	{
 
-		$str = "select * from law_notation where (type='public' or type='dbversion'  or type='private')";
+		$str = "select * from law_notation where (type='public' or type='dbversion'  or type='private') and disable='N'";
 		$query = $this->db->query($str);
 		return $query->result_array();
 		/*
@@ -1114,6 +1134,7 @@ class Notationmodel extends CI_Model {
 		$this->db->from('law_notation');
 		$this->db->where('type !=', 'draft');
 		$this->db->where('created_by =', $userid);
+		$this->db->where('disable =', 'N');
 		
 		$itemdata = array();
 		$itemquery = $this->db->get();
@@ -1542,7 +1563,21 @@ class Notationmodel extends CI_Model {
 
 		return true;
 	}
-	
+
+	public function deleteNotation()
+	{
+		$hashid = $this->input->post('hashid');
+		$this->db->where('HASHNOTATIONID', $hashid);
+		
+		$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+		$this->db->set('UPDATED_ON', time());
+		$this->db->set('DISABLE', 'Y');
+
+		$this->db->update('law_notation');
+
+		return true;
+	}
+
 	public function dbVersion()
 	{
 

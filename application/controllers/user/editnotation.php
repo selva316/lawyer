@@ -133,14 +133,12 @@ class EditNotation extends CI_Controller {
 		if(isset($_POST))
 		{
 			$data = array();
-			$data = array();
 			$casename = $this->input->post('casename');
 			$citation = $this->input->post('citation');
 			$casenumber = $this->input->post('casenumber');
 			//if($this->input->post('casename') != '' && $this->input->post('citation') != ''){
 			if(($casename != '') && ($citation != '' || $casenumber !=''))
 			{
-
 				$data['casename'] = $this->input->post('casename');
 				$data['citation'] = $this->input->post('citation');
 				$data['dup_citation'] = $this->_clean($this->input->post('citation'));

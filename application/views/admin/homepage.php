@@ -225,6 +225,28 @@
 		});
 	});
 	
+	$(document).on('click', '.btnDelete', function(e) {
+		var x = confirm("Are you sure you want to delete?");
+		if (x)
+		{
+		    $.ajax({
+				url : '../user/notation/deleteNotation',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   hashid: $(this).val()
+				},
+				success : function(data) {
+					fnNotationList();
+				}
+			});
+		}
+		else
+		{
+		    return false;
+		}
+	});
+
 	function fnNotationList()
 	{
 		$('#notationlist').dataTable().fnDestroy();

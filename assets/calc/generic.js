@@ -33,7 +33,7 @@ $(document).ready(function() {
 	    minView: "year"
 	});
 
-	interval = setInterval(ajaxCreateCitation, 6000);
+	interval = setInterval(ajaxCreateCitation, 10000);
 	//$("#court_name")
 });
 

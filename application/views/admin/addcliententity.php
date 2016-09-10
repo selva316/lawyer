@@ -46,6 +46,18 @@
         .ui-autocomplete {
             z-index: 9999;
         }
+        /*
+        #mceu_28{
+            display: none;
+        }
+
+        #mceu_59{
+            display: none;
+        }*/
+        .mce-path
+        {
+            display: none !important;    
+        }
     </style>
 </head>
 
@@ -75,68 +87,90 @@
                             <input  class="form-control" type="text" id="email" name="email" value=""/>
                         </div>
                     </div>
-                    <div class="row-fluid">
-                        <div class="span6"  id="divsupernote">
+                    <div class="row-fluid" style="margin-top:20px;">
+                        <div class="span12"  id="divsupernote">
                             <label class="control-label">Super note</label>
                             <!--<input  class="form-control" type="text" disabled="true" id="supernote" name="supernote" value=""/>-->
                             <textarea id="supernote" class="form-control myTextEditor"  placeholder="Super Notes" name="supernote" rows="4" cols="45"></textarea> 
                         </div>
                     </div>
-                </div>
-            </div>       
-            <!-- Entity Begins Here -->
-            <table class="tblClientEntity"  style="width:100%;">
+
+                    <!-- Entity Begins Here -->
+            <table class="tblClientEntity"  style="width:100%;margin-top: 10px;">
                 <tr>
                     <td>
-                        
-            <div class="panel panel-info">
-                <div class="panel-heading">Entities</div>
-                <div class="panel-body">
-                    <div class="row-fluid">
-                        <div class="span6" id="divEntity">
-                            <label class="control-label">Entity Name</label>
-                            <input  class="form-control" type="text" id="clientname_1" name="entityname[]" value=""/>
-                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Entities <span style="margin-left:90%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Entity" class="addEntity"><i class="fa fa-plus"></i></span></div>
+                            <div class="panel-body">
+                                <input type="hidden" id="numberofClientEntity" name="numberofClientEntity" value="1" />
+                                <div class="row-fluid">
+                                    <div class="span6" id="divEntity">
+                                        <label class="control-label">Entity Name</label>
+                                        <input  class="form-control" type="text" id="clientname_1" name="entityname[]" value=""/>
+                                    </div>
 
-                        <div class="span6">
-                            <label class="control-label">Entity Email Id</label>
-                            <input  class="form-control" type="text" id="email_1" name="entityemail[]" value=""/>
-                        </div>
-                    </div>
+                                    <div class="span6">
+                                        <label class="control-label">Entity Email Id</label>
+                                        <input  class="form-control" type="text" id="email_1" name="entityemail[]" value=""/>
+                                    </div>
+                                </div>
 
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <label class="control-label">Super note</label>
-                            <textarea id="entitiessupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="entitysupernote[]" rows="4" cols="45"></textarea> 
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-danger">
-                    <div class="panel-heading">Case Number for this Entity</div>
-                        <div class="panel-body">
-                        <div class="row-fluid">
-                            <div class="span6">
-                                <label class="control-label">Case Number</label>
-                                <input  class="autocasenumber form-control" type="text" id="casenumber_1" name="casenumber[]" value=""/>
+                                <div class="row-fluid"  style="margin-top:20px;">
+                                    <div class="span12">
+                                        <label class="control-label">Super note</label>
+                                        <textarea id="entitiessupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="entitysupernote[]" rows="4" cols="45"></textarea> 
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="span6">
-                                <label class="control-label">Case Super note</label>
-                                <textarea id="casesupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"></textarea> 
-                            </div>
+                            
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Entity Ends here-->
-
                     </td>
                 </tr>
             </table>
-            <div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
-                <button class="btn btn-success addEntity" type="button" >+ Add More</button>
-            </div>
+            <!-- Entity Ends here-->
 
+            <!-- Case Begins Here -->
+            <table class="tblClientCase"  style="width:100%;">
+                <tr>
+                    <td>
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">Case Details <span style="margin-left:85%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Case" class="addCase"><i class="fa fa-plus"></i></span></div>
+                            <div class="panel-body">
+                                <input type="hidden" id="numberofClientCase" name="numberofClientCase" value="1" />
+                                <div class="row-fluid">
+                                    <div class="span6">
+                                        <label class="control-label">Entity</label>
+                                        <input  class="autoEntity form-control" type="text" id="caseEntity_1" name="caseEntity[]" value=""/>
+                                    </div>
+
+                                    <div class="span6">
+                                        <label class="control-label">Case Number</label>
+                                        <input  class="autocasenumber form-control" type="text" id="casenumber_1" name="casenumber[]" value=""/>
+                                    </div>
+                                </div>
+                                <div class="row-fluid"  style="margin-top:20px;">
+                                    <div class="span12">
+                                        <label class="control-label">Case Super note</label>
+                                        <textarea id="casesupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"></textarea> 
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- Case Ends here-->
+
+                </div>
+            </div>       
+            
+            <div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
+                <button class="btn btn-success addEntity" type="button" >+ Add Entity</button>
+            </div>
+            <div class='col-xs-12 col-sm-3 col-md-3 col-lg-3'>
+                <button class="btn btn-success addCase" type="button" >+ Add Case</button>
+            </div>
                     <div class="clearfix"><br></div>
                     <div class="center"  style="text-align:center;">
                       <button type="submit" class="btn btn-primary">Save</button>
@@ -170,6 +204,7 @@
     <script>
     tinymce.init({  
         mode : "specific_textareas",
+        plugins: "autoresize",
         editor_selector : "myTextEditor"
     });
     </script>

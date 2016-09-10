@@ -168,6 +168,7 @@ function ajaxCreateCitation(){
 			   bench:bench, 
 			   facts_of_case:facts_of_case, 
 			   case_note:case_note,
+			   status:'draft',
 			   listOfStatuate:listOfStatuate, 
 			   notationid:notationid
 			},

@@ -110,7 +110,8 @@ class Homepage extends CI_Controller {
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 
-
+				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+				
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",

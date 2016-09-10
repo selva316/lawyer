@@ -2,50 +2,59 @@
  * Site : http:www.smarttutorials.net
  * @author muni
  */
+//Add Case number
+var l=$('.tblClientCase tr').length;
+$(document).on('click','.addCase', function(){
+	l++;
+	htmlcase = '<tr><td>';
+	htmlcase += '<div class="panel panel-danger">';
+		htmlcase += '<div class="panel-heading">Case Details <span style="margin-left:85%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Case" class="addCase"><i class="fa fa-plus"></i></span> <span style="margin-left:3%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Case" class="removeCaseButton"><i class="fa fa-trash-o fa-fw"></i></span></div>';
+			htmlcase += '<div class="panel-body">';
+				htmlcase += '<div class="row-fluid">';
+					htmlcase += '<div class="span6"><label class="control-label">Entity</label><input  class="autoEntity form-control" type="text" id="caseEntity_'+l+'" name="caseEntity[]" value=""/></div>';
+					htmlcase += '<div class="span6"><label class="control-label">Case Number</label><input  class="autocasenumber form-control" type="text" id="casenumber_'+l+'" name="casenumber[]" value=""/></div>';
+				htmlcase += '</div>';
+				htmlcase += '<div class="row-fluid"  style="margin-top:20px;">';
+					htmlcase += '<div class="span12"><label class="control-label">Case Super note</label><textarea id="casesupernote_'+l+'" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"></textarea>';
+				htmlcase += '</div>';
+			htmlcase += '</div>';
+		htmlcase += '</div>';
+	htmlcase += '</div>';	
+	htmlcase += '</td></tr>';
+
+	$('.tblClientCase').append(htmlcase);
+	$("#numberofClientCase").val(l);
+	tinymce.EditorManager.execCommand('mceAddEditor', true, "casesupernote_"+l);
+});
 
 //adds extra table rows
 var i=$('.tblClientEntity tr').length;
-$(".addEntity").on('click',function(){
+$(document).on('click', '.addEntity', function(){
 	var entityName = $("#clientname_1").val();
 	var entityEmail = $("#email_1").val();
 	var casenumber = $("casenumber_1").val();
-
-	if(entityName !='' && entityEmail !='' && casenumber != '')
-	{
 		i++;
 		html = '<tr><td>';
 		html += '<div class="panel panel-info">';
-			html += '<div class="panel-heading">Entities <span style="margin-left:90%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Entity" class="removeButton"><i class="fa fa-trash-o fa-fw"></i></span> </div>';
+			html += '<div class="panel-heading">Entities  <span style="margin-left:90%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Entity" class="addEntity"><i class="fa fa-plus"></i></span> <span style="margin-left:3%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Entity" class="removeButton"><i class="fa fa-trash-o fa-fw"></i></span> </div>';
 				html += '<div class="panel-body">';
 					html += '<div class="row-fluid">';
 						html += '<div class="span6"><label class="control-label">Entity Name</label><input class="form-control" type="text" id="clientname_'+i+'" name="clientname[]" value=""/></div>';
 						html += '<div class="span6"><label class="control-label">Entity Email Id</label><input class="form-control" type="text" id="email_'+i+'" name="email[]" value=""/></div>';
 					html += '</div>';
-					html += '<div class="row-fluid">';
-						html += '<div class="span6"><label class="control-label">Super note</label><textarea id="entitiessupernote_'+i+'" class="form-control myTextEditor"  placeholder="Super Notes" name="entitiessupernote[]" rows="4" cols="45"></textarea></div>';
+					html += '<div class="row-fluid"   style="margin-top:20px;">';
+						html += '<div class="span12"><label class="control-label">Super note</label><textarea id="entitiessupernote_'+i+'" class="form-control myTextEditor"  placeholder="Super Notes" name="entitiessupernote[]" rows="4" cols="45"></textarea></div>';
 					html += '</div>';
 				html += '</div>';
 		
-				html += '<div class="panel panel-danger">';
-					html += '<div class="panel-heading">Case Number for this Entity</div>';
-						html += '<div class="panel-body">';
-							html += '<div class="row-fluid">';
-								html += '<div class="span6"><label class="control-label">Case Number</label><input  class="autocasenumber form-control" type="text" id="casenumber_'+i+'" name="casenumber[]" value=""/></div>';
-								html += '<div class="span6"><label class="control-label">Case Super note</label><textarea id="casesupernote_'+i+'" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"></textarea>';
-							html += '</div>';
-						html += '</div>';
-					html += '</div>';
-				html += '</div>';
+
 			html += '</div>';
 		
 		html += '</td></tr>';
+		
 		$('.tblClientEntity').append(html);
-			
-	}
-	else
-	{
-		alert("Entity and Case Number should not be empty!!!");
-	}
+		$("#numberofClientEntity").val(i);
+		tinymce.EditorManager.execCommand('mceAddEditor', true, "entitiessupernote_"+i);		
 	
 });
 
@@ -57,6 +66,11 @@ $(document).on('change','#check_all',function(){
 
 //deletes the selected table rows
 $(document).on('click', '.removeButton', function(e) {
+	$(this).parents("tr").remove();
+});
+
+
+$(document).on('click', '.removeCaseButton', function(e) {
 	$(this).parents("tr").remove();
 });
 

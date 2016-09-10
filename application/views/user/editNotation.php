@@ -160,6 +160,7 @@
 		                <div class="panel-body">
 		                	<div class='row-fluid'>
 					      		<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
+					      			<input type="hidden" id="numberOfStatuateEntries" name="numberOfStatuateEntries" value="<?php echo count($statuatedetails); ?>"> </input>
 					      			<table class="table table-bordered table-hover tableStatuate">
 										<thead>
 											<tr>
@@ -171,7 +172,7 @@
 										</thead>
 										<tbody>
 											<?php 
-												$k = 0;
+												$k = 1;
 												foreach( $statuatedetails as $statuaterow ){
 											?>
 											<tr>
@@ -188,7 +189,7 @@
 												$k++;
 												}
 
-												if($k ==0)
+												if($k ==1)
 												{
 											?>
 													<tr>

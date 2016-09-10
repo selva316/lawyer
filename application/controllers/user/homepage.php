@@ -97,6 +97,8 @@ class Homepage extends CI_Controller {
 					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnPrivate' value=".$r['HASHNOTATIONID']."> Make Private</button>";
 				}
 
+				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+
 				$details = array(
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					//'casename'=>$r['CASENAME'],

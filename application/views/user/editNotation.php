@@ -178,9 +178,7 @@
 												foreach( $statuatedetails as $statuaterow ){
 											?>
 											<tr>
-												<?php if($k!=1) { ?><td><input class="case" type="checkbox"/></td><?php } else { ?>
-												<td></td>
-												<?php } ?>
+												<td><input class="case" type="checkbox"/></td>
 												<td><input type="text" data-type="<?php echo $k; ?>" name="statuate[]" id="statuate_<?php echo $k; ?>" class="form-control autocomplete_statuate" autocomplete="off" value="<?php echo $statuaterow['statuate']; ?>">
 												<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_<?php echo $k; ?>" class="form-control" autocomplete="off" value="<?php echo $statuaterow['hiddenstatuate']; ?>"></td>
 												<td>
@@ -197,8 +195,8 @@
 												{
 											?>
 													<tr>
-														<!--<td><input class="case" type="checkbox"/></td>-->
-														<td></td>
+														<td><input class="case" type="checkbox"/></td>
+														
 														<td><input type="text" data-type="statuate" name="statuate[]" id="statuate_1" class="form-control autocomplete_process" autocomplete="off"></td>
 														<td><input type="text" data-type="subsection" name="subsection[]" id="subsection_1" class="form-control autocomplete_process" autocomplete="off" ondrop="return false;" ></td>
 														<td><input type="text" data-type="concept" name="concept[]" id="concept_1" class="form-control autocomplete_concept" autocomplete="off" ondrop="return false;" ></td>
@@ -225,12 +223,13 @@
 		                <div class="panel-body">
 		                	<div class="row-fluid">
 								<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
-									<input type="hidden" id="numberOfCitationEntries" name="numberOfCitationEntries" value="<?php echo count($citationdetails); ?>"> </input>
+									<input type="hidden" id="numberOfCitationEntries" name="numberOfCitationEntries" value="<?php echo (count($citationdetails) != 0) ? count($citationdetails) : 1 ?>"> </input>
 									<table class="table table-bordered table-hover tableCitation">
 										<thead>
 											<tr>
 												<th></th>
 												<th>Type of Citation</th>
+												<th>Treatment</th>
 												<th>Case Name</th>
 												<th>Citation</th>
 												
@@ -244,9 +243,10 @@
 												<tr>
 												<td></td>
 												<td><?php echo $linkrow['type_of_citation']; ?></td>
+												<td><?php echo ucfirst($linkrow['treatment']); ?></td>
 												<td><?php echo $linkrow['casenumber']; ?></td>
 												<td><?php echo $linkrow['actual_citation']; ?></td>
-												<td></td>
+												<td><?php echo $linkrow['description']; ?></td>
 												</tr>
 											<?php		
 												}
@@ -259,10 +259,9 @@
 												foreach( $citationdetails as $citationrow ){
 											?>
 											<tr>
-												<?php if($k!=1){ ?><td><input class="case_citation" type="checkbox"/></td><?php } else {?>
-												<td></td>
-												<?php } ?>
+												<td><input class="case_citation" type="checkbox"/></td>
 												<td>
+												<!--
 												<select  class="form-control"  data-type="typeCitation" id="typeCitation_<?php echo $k; ?>" name="typeCitation[]">
 													<option value="">Select</option>
 													<?php 
@@ -273,7 +272,25 @@
 																echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
 														}
 													?>
-												</select>
+												</select>-->
+												<input type="text" data-type="<?php echo $k; ?>" name="typeCitation[]" id="typeCitation_<?php echo $k; ?>" class="form-control autocomplete_citationType" autocomplete="off" value="<?php echo $citationrow['type_of_citation']; ?>"/>
+												</td>
+												<td>
+													<select  class="form-control"  data-type="<?php echo $k; ?>" id="treatment_<?php echo $k; ?>" name="treatment[]">
+													<?php
+														$treat = array('positive', 'negative', 'equal');
+														foreach ($treat as $row) {
+															if($row == $citationrow['treatment'])
+															{
+																echo "<option selected value='".$row."'>".ucfirst($row)."</option>";
+															}
+															else
+															{
+																echo "<option value='".$row."'>".ucfirst($row)."</option>";
+															}
+														}
+													?>
+													</select>
 												</td>
 												<td><input type="text" data-type="<?php echo $k; ?>" name="listCaseName[]" id="listCaseName_<?php echo $k; ?>" class="form-control autocomplete_casename" autocomplete="off" value="<?php echo $citationrow['casenumber'];?>"/></td>
 
@@ -288,9 +305,11 @@
 												{
 											?>
 												<tr>
-													<!--<td><input class="case_citation" type="checkbox"/></td>-->
-													<td></td>
+													<td><input class="case_citation" type="checkbox"/></td>
+													
 													<td>
+													<input type="text" data-type="1" name="typeCitation[]" id="typeCitation_1" class="form-control autocomplete_citationType" autocomplete="off" value="" />
+													<!--
 													<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
 														<option value="">Select</option>
 														<?php 
@@ -298,8 +317,18 @@
 																echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
 															}
 														?>
-													</select>
+													</select>-->
 													</td>
+													<td>
+													<select  class="form-control"  data-type="<?php echo $k; ?>" id="treatment_<?php echo $k; ?>" name="treatment[]">
+													<?php
+														$treat = array('positive', 'negative', 'equal');
+														foreach ($treat as $row) {
+															echo "<option value='".$row."'>".ucfirst($row)."</option>";
+														}
+													?>
+													</select>
+												</td>
 													<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
 													<td><input type="text" data-type="citationNumber" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"></td>
 													<td><textarea  name="note[]" id="note_1" class="form-control"  style="height: 35px;"></textarea> </td>
@@ -354,9 +383,13 @@
 			</div>-->
 			<div class="clear-both" style="margin-top:20px;"></div>
 		  		<?php 
+		  			//if(($type != 'dbversion') || ($this->session->userdata('role') == 'Admin'))
 		  			if($type != 'dbversion')
 		  			{
+		  		
+		  				if($type != 'dbversion') {
 		  		?>
+		  		
 		  		<div class="row-fluid">
 		  			<div class="span10" style="text-align:center;">
 		  				<label  style="margin-right: 15px;">
@@ -364,6 +397,10 @@
                          <input type="hidden" name="status" id="status" value="private" />
 		  			</div>
 		  		</div>
+
+		  			<?php
+		  				}
+		  			?>
 		  		
 		  		<div class="row-fluid">
 					<div class="span10" style="text-align:center;">

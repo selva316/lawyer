@@ -70,6 +70,16 @@ class Configurationmodel extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function fetchAllCasenumber($name){
+		$userid = $this->session->userdata('userid');
+		$str = "select distinct lc.casenumber from law_casenumber lc inner join law_notation ln on lc.notationid = ln.notationid where ln.casenumber is not null and (created_by='$userid' or updated_by='$userid') and (UPPER(ln.casenumber) LIKE '%".strtoupper($name)."%')";
+
+		//$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')";
+		
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
+
 	public function courtNameAvailable($courtName){
 				
 		$query = $this->db->query("select count(name) as cntname from law_courttype  where (UPPER(name) = '".strtoupper($courtName)."')");
@@ -209,11 +219,12 @@ class Configurationmodel extends CI_Model {
 	{
 		$userid = $this->session->userdata('userid');
 		$name = $this->input->post('name_startsWith');
+		$str = "select distinct judge_name from law_judgename where (UPPER(judge_name) LIKE '%".strtoupper($name)."%')order by judge_name";
 		//$str = "select distinct lj.judge_name from law_judgename lj inner join law_notation ln on lj.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.judge_name) LIKE '%".strtoupper($name)."%')";
 		
 
 		//$str = "select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name";
-		$query = $this->db->query("select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name");
+		/*$query = $this->db->query("select distinct judge_name from law_notation where (( CREATED_BY='$userid' or  	UPDATED_BY='$userid') or (type='public' or type='dbversion')) and (UPPER(judge_name) LIKE '%".strtoupper($name)."%') order by judge_name");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{
@@ -223,9 +234,9 @@ class Configurationmodel extends CI_Model {
 				$name = $row['judge_name'];//i am not want item code i,eeeeeeeeeeee
 				array_push($data, $name);
 			}
-		}
-		//$query = $this->db->query($str);
-		//return $query->result_array();
+		}*/
+		$query = $this->db->query($str);
+		return $query->result_array();
 
 		return $data;
 	}

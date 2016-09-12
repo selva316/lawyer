@@ -178,7 +178,7 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td></td>
+												<td><input class="case" type="checkbox"/></td>
 												<td>
 												<input type="text" data-type="1" name="statuate[]" id="statuate_1" class="form-control autocomplete_statuate" autocomplete="off">
 												<input type="hidden" name="hiddenstatuate[]" id="hiddenstatuate_1" class="form-control" autocomplete="off">
@@ -212,6 +212,7 @@
 											<tr>
 												<th></th>
 												<th>Type of Citation</th>
+												<th>Treatment</th>
 												<th>Case Name</th>
 												<th>Citation</th>
 												<th>Note</th>
@@ -219,9 +220,11 @@
 										</thead>
 										<tbody>
 											<tr>
-												<!--<td><input class="case_citation" type="checkbox"/></td>-->
-												<td></td>
+												<td><input class="case_citation" type="checkbox"/></td>
+												
 												<td>
+												<input type="text" data-type="1" name="typeCitation[]" id="typeCitation_1" class="form-control autocomplete_citationType" autocomplete="off"/>
+												<!--
 												<select  class="form-control"  data-type="typeCitation" id="typeCitation_1" name="typeCitation[]">
 													<option value="">Select</option>
 													<?php 
@@ -229,7 +232,15 @@
 															echo "<option value='".$row['CIID']."'>". $row['NAME'] ."</option>";
 														}
 													?>
-												</select>
+												</select>-->
+												</td>
+												<td>
+													<select  class="form-control"  data-type="1" id="treatment_1" name="treatment[]">
+														<option value="positive">Positive</option>
+														<option value="negative">Negative</option>
+														<option value="equal">Equal</option>
+													</select>
+
 												</td>
 												<td><input type="text" data-type="1" name="listCaseName[]" id="listCaseName_1" class="form-control autocomplete_casename" autocomplete="off"/></td>
 												<td><input type="text" data-type="1" name="citationNumber[]" id="citationNumber_1" class="form-control autocomplete_citation" autocomplete="off"/></td>

@@ -207,6 +207,19 @@ class Userdetailsmodel extends CI_Model {
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
+
+	public function findUsername($userid)
+	{
+		$query = $this->db->query("select username from law_login  where (lower(userid) = '".strtolower($userid)."')");
+		
+		$username = '';
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$username = $row['username'];//i am not want item code i,eeeeeeeeeeee
+		}
+		return $username;	
+	}
 }
 
 /* End of file Configurationmodel.php */

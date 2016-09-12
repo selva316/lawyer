@@ -42,12 +42,14 @@ class Homepage extends CI_Controller {
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
 				
 				$details = array(
+					'notation'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['HASHNOTATIONID'].'"/></label></div> </div>',
+
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
 					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
-					'type' => ucfirst($r['TYPE']),
-					'action' => $actionStr
+					'type' => ucfirst($r['TYPE'])
+					//'action' => $actionStr
 
 					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
 					//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
@@ -71,6 +73,8 @@ class Homepage extends CI_Controller {
 	public function fetchNotation()
 	{
 		$this->load->model('notationmodel');
+		$this->load->model('userdetailsmodel');
+
 		$result = $this->notationmodel->fetchUserNotation();
 		
 		if($result)
@@ -88,14 +92,14 @@ class Homepage extends CI_Controller {
 				if($r['TYPE'] == 'dbversion')
 				{
 					//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span rel='tooltip' title='Mark it as Draft' > Make Draft</span></a>";	
-					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnSaveAsDraft' value=".$r['HASHNOTATIONID']."> Mark Edit Copy</button>";
+					//$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnSaveAsDraft' value=".$r['HASHNOTATIONID']."> Mark Edit Copy</button>";
 				}
 
 
 				if($r['TYPE'] == 'private')
 				{
-					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-danger btnPublic' value=".$r['HASHNOTATIONID']."> Make Public</button>";
-					$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
+					//$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-danger btnPublic' value=".$r['HASHNOTATIONID']."> Make Public</button>";
+					//$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
 					//$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnDbVersion' value=".$r['HASHNOTATIONID']."> Make DB Version</button>";
 				}
 
@@ -107,12 +111,14 @@ class Homepage extends CI_Controller {
 				
 
 				$details = array(
+					'notation'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkNotationbox" type="checkbox" name="selectchk[]" value="'.$r['HASHNOTATIONID'].'"/></label></div> </div>',
 					'casename'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CASENAME']."</a>",
 					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
 					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
-					'action' => $actionStr
+					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))
+					//'action' => $actionStr
 					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
 					//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 				);

@@ -58,6 +58,16 @@ class Notation extends CI_Controller {
 		
 	}
 
+	public function fetchCitationType()
+	{
+		$citationType = $this->input->post('citationType');
+	
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->fetchCitationType($citationType);
+		echo json_encode($data);
+		
+	}
+
 	public function ajax()
 	{
 		$type = $this->input->post('type');
@@ -175,7 +185,8 @@ class Notation extends CI_Controller {
 	public function changeEditCopyVersion()
 	{
 		$this->load->model('notationmodel');
-		$data = $this->notationmodel->changeEditCopyVersion();
+		//$data = $this->notationmodel->changeEditCopyVersion();
+		$data = $this->notationmodel->changeEditNotation();
 		return $this->session->userdata('role');
 	}
 	
@@ -217,6 +228,7 @@ class Notation extends CI_Controller {
 				else	
 					$data['type'] = $this->input->post('status');
 
+				$data['role'] = $this->session->userdata('role');
 				$this->load->model('notationmodel');
 				$data = $this->notationmodel->createNotation($data);
 					
@@ -247,6 +259,8 @@ class Notation extends CI_Controller {
 					$data['type'] = 'dbversion';
 				else	
 					$data['type'] = $this->input->post('status');
+
+				$data['role'] = $this->session->userdata('role');
 
 				$this->load->model('notationmodel');
 				$data = $this->notationmodel->updateNotation($data);
@@ -316,7 +330,8 @@ class Notation extends CI_Controller {
 				}
 
 				//$data['type'] = 'draft';	
-				
+				$data['role'] = $this->session->userdata('role');
+
 				$notationid = '';
 				if($this->input->post('notationid') != '' && strlen($this->input->post('notationid')) > 0)
 				{
@@ -354,6 +369,7 @@ class Notation extends CI_Controller {
 		}
 		
 		$data['type'] = $this->input->post('status');
+		$data['role'] = $this->session->userdata('role');
 
 		$this->load->model('notationmodel');
 		$data = $this->notationmodel->updateDraftNotation($data);
@@ -375,6 +391,14 @@ class Notation extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function fetchAllCasenumber()
+	{
+		$topicname = $this->input->post('term');
+		$this->load->model('configurationmodel');
+		$data = $this->configurationmodel->fetchAllCasenumber($topicname);
+		echo json_encode($data);
+	}
+
 	public function caseame_and_citation_avilabilty()
 	{
 		$this->load->model('notationmodel');
@@ -386,6 +410,20 @@ class Notation extends CI_Controller {
 		$chkAvailable = $this->notationmodel->chkCasenameAndCitation($casename, $citation, $ntype);
 
 		echo $chkAvailable;
+	}
+
+	public function checkCitationTypeAvailable()
+	{
+		$this->load->model('notationmodel');
+		$data =  $this->notationmodel->checkCitationTypeAvailable($this->input->post('citationType'));
+		echo json_encode($data);
+	}
+
+	public function insertCitationType()
+	{
+		$this->load->model('notationmodel');
+		$data =  $this->notationmodel->insertCitationType($this->input->post('citationType'));
+		echo json_encode($data);
 	}
 }
 

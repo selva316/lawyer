@@ -83,15 +83,23 @@
 											<table id="example" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="25%">Case Name</th>
+														<th width="5%">
+														<input id="checkAllDraft" checked value="1" type="checkbox"></th>
+														<th>Case Name</th>
 														<th>Citation</th>
 														<th>Case Number</th>
 														<th>Type</th>
-														<th>Action</th>
+														<!--<th>Action</th>-->
 													</tr>
 												</thead>
 												
 											</table>
+										</div>
+										<div class="panel-footer" id="divDraftFooter">
+											<button style='margin-left:10px;' type='button' class='btn btn-info btnDraft'> Accept Draft</button>
+
+											<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete'> Delete</button>
+
 										</div>
 									</div>
 								</div>
@@ -102,15 +110,25 @@
 											<table id="notationlist" class="display" cellspacing="0" width="100%">
 												<thead>
 													<tr>
-														<th width="25%">Case Name</th>
+														<th width="5%">
+														<input id="checkAllNotation" checked value="1" type="checkbox"></th>
+														<th>Case Name</th>
 														<th>Citation</th>
 														<th>Case Number</th>
 														<th>Type</th>
-														<th>Action</th>
+														<th>Owner</th>
 													</tr>
 												</thead>
 												
 											</table>
+										</div>
+										<div class="panel-footer" id="divNotationFooter">
+											<button style='margin-left:10px;' type='button' class='btn btn-info btnSaveAsDraft'> Mark Edit Copy</button>
+
+											<button style='margin-left:10px;' type='button' class='btn btn-danger btnPublic' > Make Public</button>
+
+											<button style='margin-left:10px;' type='button' class='btn btn-warning btnNotationDelete'> Delete</button>
+
 										</div>
 									</div>
 								</div>
@@ -179,6 +197,7 @@
 
 	});
 
+	/*
 	$(document).on('click', '.btnPublic', function(e) {
 		//alert($(this).val());
 		$.ajax({
@@ -193,7 +212,7 @@
 			}
 		});
 	});
-
+	*/
 	$(document).on('click', '.btnPrivate', function(e) {
 		//alert($(this).val());
 		$.ajax({
@@ -208,7 +227,7 @@
 			}
 		});
 	});
-
+/*
 	$(document).on('click', '.btnDraft', function(e) {
 		//alert($(this).val());
 		$.ajax({
@@ -219,7 +238,7 @@
 			   hashid: $(this).val()
 			},
 			success : function(data) {
-				fnNotationList();
+				fnDraftNotationList();
 			}
 		});
 	});
@@ -261,6 +280,142 @@
 		    return false;
 		}
 	});
+*/
+
+	$(document).on('click', '.btnPublic', function(e) {
+		var temp = [];
+        $.each($("input[class='chkNotationbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+			$.ajax({
+				url : 'notation/changePublicVersion',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   hashid: temp.join(",")
+				},
+				success : function(data) {
+					fnNotationList();
+				}
+			});
+		}
+        else
+        	alert("No notation is selected");
+	});
+
+	$(document).on('click', '.btnDraft', function(e) {
+		var temp = [];
+        $.each($("input[class='chkNotationbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+        	$.ajax({
+				url : 'notation/changeDraftVersion',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   hashid: temp.join(",")
+				},
+				success : function(data) {
+					fnDraftNotationList();
+					fnNotationList();
+				}
+			});
+        }
+        else
+        	alert("No notation is selected!!!")
+	});
+
+	$(document).on('click', '.btnSaveAsDraft', function(e) {
+		var temp = [];
+        $.each($("input[class='chkNotationbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+			$.ajax({
+				url : 'notation/changeEditCopyVersion',
+				dataType: "text",
+				method: 'post',
+				data: {
+				   hashid: temp.join(",")
+				},
+				success : function(data) {
+					fnDraftNotationList();
+				}
+			});
+		}
+		else
+        	alert("No notation is selected!!!")
+	});
+
+	$(document).on('click', '.btnDelete', function(e) {
+		var x = confirm("Are you sure you want to delete?");
+		if (x)
+		{
+			var temp = [];
+	        $.each($("input[class='chkbox']:checked"), function(){            
+	            temp.push($(this).val());
+	        });
+
+	        if(temp.length > 0){
+			    $.ajax({
+					url : 'notation/deleteNotation',
+					dataType: "text",
+					method: 'post',
+					data: {
+					   hashid: temp.join(",")
+					},
+					success : function(data) {
+						fnDraftNotationList();
+						fnNotationList();
+					}
+				});
+			}
+	        else
+	        	alert("No notation is selected!!!")
+		}
+		else
+		{
+		    return false;
+		}
+	});
+
+	
+	$(document).on('click', '.btnNotationDelete', function(e) {
+		var x = confirm("Are you sure you want to delete?");
+		if (x)
+		{
+			var temp = [];
+	        $.each($("input[class='chkNotationbox']:checked"), function(){            
+	            temp.push($(this).val());
+	        });
+
+	        if(temp.length > 0){
+			    $.ajax({
+					url : 'notation/deleteNotation',
+					dataType: "text",
+					method: 'post',
+					data: {
+					   hashid: temp.join(",")
+					},
+					success : function(data) {
+						fnDraftNotationList();
+						fnNotationList();
+					}
+				});
+			}
+	        else
+	        	alert("No notation is selected!!!")
+		}
+		else
+		{
+		    return false;
+		}
+	});
 
 	function fnNotationList()
 	{
@@ -273,14 +428,33 @@
                         }
                     ],
             "columns": [
-               //{ "data": "notation" },  
+               { "data": "notation" },  
                { "data": "casename" },  
                { "data": "citation" },  
                //{ "data": "date_of_creation" },
                { "data": "case_number" },
                { "data": "type" },
-               { "data": "action" }
-            ]
+               { "data": "owner" }
+               //{ "data": "action" }
+            ],
+            "initComplete": function(settings, json) {
+            	var cntTable = $(this).DataTable();
+	            var info = cntTable.page.info()
+	            if(info.recordsTotal>0)
+	            {
+	            	$("#divNotationFooter").css("display","block");
+
+	            	$("#checkAllNotation").prop("checked",false);
+                	$("#checkAllNotation").prop("disabled",false);
+	            }
+	            else
+	            {
+	            	$("#divNotationFooter").css("display","none");
+
+	            	$("#checkAllNotation").prop("checked",false);
+                	$("#checkAllNotation").prop("disabled",true);
+	            }
+            }
         });
 
 	}
@@ -296,16 +470,56 @@
                         }
                     ],
             "columns": [
-               //{ "data": "notation" },  
+               { "data": "notation" },  
                { "data": "casename" },  
                { "data": "citation" },  
                { "data": "case_number" },
-               { "data": "type" },
-               { "data": "action" }
-            ]
-        });
+               { "data": "type" }
+               //{ "data": "action" }
+            ],
+            "initComplete": function(settings, json) {
+            	var cntTable = $(this).DataTable();
+	            var info = cntTable.page.info()
+	            if(info.recordsTotal>0)
+	            {
+	            	$("#divDraftFooter").css("display","block");
 
+	            	$("#checkAllDraft").prop("checked",false);
+                	$("#checkAllDraft").prop("disabled",false);
+	            }
+	            else
+	            {
+	            	$("#divDraftFooter").css("display","none");
+
+	            	$("#checkAllDraft").prop("checked",false);
+                	$("#checkAllDraft").prop("disabled",true);
+	            }
+            }
+        });
 	}
+
+	$(document).on('change', '#checkAllDraft', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+
+    $(document).on('change', '#checkAllNotation', function() {
+        if(this.checked)
+        {
+            $("input[class='chkNotationbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkNotationbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+    
 	</script>
 </body>
 

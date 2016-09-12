@@ -53,7 +53,7 @@ $(document).on('change', '#chkPrivate', function() {
 });
 
 function split(val) {
-	return val.split(/,\s*/);
+	return val.split(/;\s*/);
 }
 
 function extractLast(term) {
@@ -410,6 +410,36 @@ $("#court_name").blur(function(){
     });
 });
 
+$(".autocomplete_citationType").blur(function(){
+	var citationType = $(this).val();
+	var type = $(this).data('type');
+	var idv = "typeCitation_"+type;
+	if($(this).val() != '')
+	{
+		$.ajax({
+	        type: 'post',
+	        dataType: "json",
+	        url: 'notation/checkCitationTypeAvailable',
+	        data: {'citationType':$(this).val()},
+	        success:function(data){
+	            //alert(data)
+	            if(data=="true"){
+	    			$.ajax({
+			            type: 'post',
+			            dataType: "json",
+			            url: 'notation/insertCitationType',
+			            data: {'citationType':citationType},
+			            success:function(data){
+			               $(idv).css("border-color","#3c763d");
+			            }
+			        });        	
+	            }
+	        }
+	    });
+	}
+});
+
+/*
 $(document).on('focus','.autocomplete_judge',function(){
 	var type = $(this).data('type');
 	$(this).autocomplete({
@@ -441,7 +471,7 @@ $(document).on('focus','.autocomplete_judge',function(){
 		}		      	
 	});
 });
-/*
+*/
 $(document).on("keyup.autocomplete",".autocomplete_judge",function(e){
 
        var term =  $(this ).val();
@@ -464,7 +494,7 @@ $(document).on("keyup.autocomplete",".autocomplete_judge",function(e){
         },
 		focus : function() {
 			// prevent value inserted on focus
-			return true;
+			return false;
 		},
 		select : function(event, ui) {
 			var terms = split( this.value );
@@ -474,7 +504,7 @@ $(document).on("keyup.autocomplete",".autocomplete_judge",function(e){
 		      terms.push( ui.item.value );
 		      // add placeholder to get the comma-and-space at the end
 		      terms.push( "" );
-		      this.value = terms.join( ", " );
+		      this.value = terms.join( "; " );
 		     
 		      //setSubject(this.value);
 		      return false;
@@ -484,8 +514,51 @@ $(document).on("keyup.autocomplete",".autocomplete_judge",function(e){
 
     });
 
-});*/
+});
 
+$(document).on("keyup.autocomplete","#casenumber",function(e){
+
+       var term =  $(this ).val();
+       $( this ).autocomplete({
+	   source : function( request, response ) {
+        $.ajax({
+            url: 'notation/fetchAllCasenumber',
+            dataType: "json",
+            method: 'post',
+            data: {term: extractLast(term)},
+            success: function(data) {
+                    response($.map(data, function(item) {
+                        return {
+                            label: item.casenumber,
+                             //email: item.email
+                            };
+                    }));
+                }
+            });
+        },
+		focus : function() {
+			// prevent value inserted on focus
+			return false;
+		},
+		select : function(event, ui) {
+			var terms = split( this.value );
+		      // remove the current input
+		      terms.pop();
+		      // add the selected item
+		      terms.push( ui.item.value );
+		      // add placeholder to get the comma-and-space at the end
+		      terms.push( "" );
+		      this.value = terms.join( "; " );
+		     
+		      //setSubject(this.value);
+		      return false;
+
+		},
+      minLength: 1
+
+    });
+
+});
 
 /*
 $(document).on('change','#casename',function(){
@@ -540,6 +613,33 @@ $(document).on('keyup.autocomplete','#casename',function(){
 	});
 });
 
+$(document).on('keyup.autocomplete','.autocomplete_citationType',function(){
+	var citationType = $(this).val();
+	$(this).autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url : 'notation/fetchCitationType',
+				dataType: "json",
+				method: 'post',
+				data: {
+				   citationType: citationType
+				},
+				 success: function( data ) {
+					 response( $.map( data, function( item ) {
+						return {
+							label: item,
+							value: item,
+							data : item
+						}
+					}));
+				}
+			});
+		},
+		autoFocus: true,	      	
+		minLength: 1
+	});
+});
+
 $(document).on("keyup.autocomplete","#citation",function(e){
 
        var term =  $(this ).val();
@@ -562,7 +662,7 @@ $(document).on("keyup.autocomplete","#citation",function(e){
         },
 		focus : function() {
 			// prevent value inserted on focus
-			return true;
+			return false;
 		},
 		select : function(event, ui) {
 			var terms = split( this.value );
@@ -572,7 +672,7 @@ $(document).on("keyup.autocomplete","#citation",function(e){
 		      terms.push( ui.item.value );
 		      // add placeholder to get the comma-and-space at the end
 		      terms.push( "" );
-		      this.value = terms.join( ", " );
+		      this.value = terms.join( "; " );
 		     
 		      //setSubject(this.value);
 		      return false;

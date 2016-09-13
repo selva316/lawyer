@@ -1275,6 +1275,7 @@ class Notationmodel extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('law_notation');
 		$this->db->where('type', $status);
+		$this->db->where('disable', 'N');
 		$this->db->where('CREATED_BY', $this->session->userdata('userid'));
 
 		$itemdata = array();

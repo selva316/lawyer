@@ -307,7 +307,7 @@
 
 	$(document).on('click', '.btnDraft', function(e) {
 		var temp = [];
-        $.each($("input[class='chkNotationbox']:checked"), function(){            
+        $.each($("input[class='chkbox']:checked"), function(){            
             temp.push($(this).val());
         });
 

@@ -1852,6 +1852,16 @@ class Notationmodel extends CI_Model {
 				$this->db->set('DISABLE', 'Y');
 				$this->db->update('law_notation');		
 			}
+
+			if($this->session->userdata('role') == 'Admin')
+			{
+				$this->db->where('HASHNOTATIONID', $hashval);
+				$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
+				$this->db->set('UPDATED_ON', time());
+				//$this->db->set('TYPE', 'private');
+				$this->db->set('DISABLE', 'Y');
+				$this->db->update('law_notation');			
+			}
 		}
 
 		return true;

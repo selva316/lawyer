@@ -1288,8 +1288,12 @@ class Notationmodel extends CI_Model {
 
 	function fetchNewUserNotation()
 	{
+		$userid = $this->session->userdata('userid');
 
-		$str = "select * from law_notation where (type='public' or type='dbversion'  or type='private') and disable='N'";
+		$str = "SELECT * FROM law_notation WHERE (((created_by ='$userid' OR updated_by='$userid') AND TYPE!='draft')  
+OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
+
+		//$str = "select * from law_notation where (type='public' or type='dbversion'  or type='private') and disable='N'";
 		$query = $this->db->query($str);
 		return $query->result_array();
 		/*
@@ -1328,7 +1332,7 @@ class Notationmodel extends CI_Model {
 
 		$userid = $this->session->userdata('userid');
 
-		$where_au = "(type != 'draft' and (created_by = '$userid' or updated_by='$userid')) or (type = 'dbversion')";
+		$where_au =	"((created_by = '$userid' or updated_by='$userid') and type != 'draft') or (type = 'dbversion' or type='public')";
 		$this->db->select('*');
 		$this->db->from('law_notation');
 		//$this->db->where('type !=', 'draft');

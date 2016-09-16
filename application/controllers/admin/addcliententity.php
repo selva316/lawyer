@@ -83,7 +83,6 @@ class Addcliententity extends CI_Controller {
 		{
 			$data = array();
 			$data['CLIENT_NAME'] = $this->input->post('clientname');
-			$data['CLIENT_EMAIL'] = $this->input->post('email');
 			$data['SUPERNOTE'] = $this->input->post('supernote');
 			$data['TIMESTAMP'] = time();
 			$this->cliententitymodel->insertClientEntities($data);

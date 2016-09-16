@@ -40,7 +40,7 @@ $(document).on('click', '.addEntity', function(){
 				html += '<div class="panel-body">';
 					html += '<div class="row-fluid">';
 						html += '<div class="span6"><label class="control-label">Entity Name</label><input class="form-control" type="text" id="clientname_'+i+'" name="clientname[]" value=""/></div>';
-						html += '<div class="span6"><label class="control-label">Entity Email Id</label><input class="form-control" type="text" id="email_'+i+'" name="email[]" value=""/></div>';
+						//html += '<div class="span6"><label class="control-label">Entity Email Id</label><input class="form-control" type="text" id="email_'+i+'" name="email[]" value=""/></div>';
 					html += '</div>';
 					html += '<div class="row-fluid"   style="margin-top:20px;">';
 						html += '<div class="span12"><label class="control-label">Super note</label><textarea id="entitiessupernote_'+i+'" class="form-control myTextEditor"  placeholder="Super Notes" name="entitiessupernote[]" rows="4" cols="45"></textarea></div>';
@@ -145,6 +145,14 @@ function frmValidation()
 	
 }
 
+	function split(val) {
+		return val.split(/;\s*/);
+	}
+
+	function extractLast(term) {
+		return split(term).pop();
+	}
+
 	function isEmail(email) {
 	  var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 	  return regex.test(email);
@@ -191,4 +199,48 @@ function frmValidation()
 			//$("#errmsg").html("Digits Only").show().fadeOut("slow");
 	     	return false;
 		}
+	});
+
+	$(document).on("keyup.autocomplete",".autocasenumber",function(e){
+
+       var term =  $(this ).val();
+       $( this ).autocomplete({
+		   source : function( request, response ) {
+	        $.ajax({
+	            url: '../user/notation/fetchAllCasenumber',
+	            dataType: "json",
+	            method: 'post',
+	            data: {term: extractLast(term)},
+	            success: function(data) {
+	                    response($.map(data, function(item) {
+	                        return {
+	                            label: item.casenumber,
+	                             //email: item.email
+	                            };
+	                    }));
+	                }
+	            });
+	        },
+			focus : function() {
+				// prevent value inserted on focus
+				return false;
+			},
+			select : function(event, ui) {
+				var terms = split( this.value );
+			      // remove the current input
+			      terms.pop();
+			      // add the selected item
+			      terms.push( ui.item.value );
+			      // add placeholder to get the comma-and-space at the end
+			      terms.push( "" );
+			      this.value = terms.join( "; " );
+			     
+			      //setSubject(this.value);
+			      return false;
+
+			},
+	      minLength: 1
+
+	    });
+
 	});

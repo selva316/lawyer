@@ -1331,21 +1331,23 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		
 
 		$userid = $this->session->userdata('userid');
-
-		$where_au =	"((created_by = '$userid' or updated_by='$userid') and type != 'draft') or (type = 'dbversion' or type='public')";
+		/*
+		$where_au =	"((created_by = '$userid' or updated_by='$userid') and type != 'draft') or (type = 'dbversion' or type='public') and disable='N'";
 		$this->db->select('*');
 		$this->db->from('law_notation');
-		//$this->db->where('type !=', 'draft');
 		$this->db->where($where_au);
-		//$this->db->where('created_by =', $userid);
-		$this->db->where('disable =', 'N');
+		*/
 		
+		$str = "SELECT * FROM law_notation WHERE (((created_by ='$userid' OR updated_by='$userid') AND TYPE!='draft')  OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
+		$query = $this->db->query($str);
+		return $query->result_array();
+		/*
 		$itemdata = array();
 		$itemquery = $this->db->get();
 		if($itemquery->num_rows() > 0)
 		{
 			return $itemquery->result_array();
-		}
+		}*/
 	}
 
 	public function fetchHashNotation()

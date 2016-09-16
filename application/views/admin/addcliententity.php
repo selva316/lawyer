@@ -81,11 +81,6 @@
                             <label class="control-label">Name</label>
                             <input  class="form-control" type="text" id="clientname" name="clientname" value=""/>
                         </div>
-
-                        <div class="span6" id="divemail">
-                            <label class="control-label">Email Id</label>
-                            <input  class="form-control" type="text" id="email" name="email" value=""/>
-                        </div>
                     </div>
                     <div class="row-fluid" style="margin-top:20px;">
                         <div class="span12"  id="divsupernote">
@@ -107,11 +102,6 @@
                                     <div class="span6" id="divEntity">
                                         <label class="control-label">Entity Name</label>
                                         <input  class="form-control" type="text" id="clientname_1" name="entityname[]" value=""/>
-                                    </div>
-
-                                    <div class="span6">
-                                        <label class="control-label">Entity Email Id</label>
-                                        <input  class="form-control" type="text" id="email_1" name="entityemail[]" value=""/>
                                     </div>
                                 </div>
 
@@ -248,6 +238,7 @@
                 $(".modalButton").css("display","none");
         });
 
+        /*
         $('.autocasenumber').tokenfield({
             autocomplete: {
                 //source: ['red','blue','green','yellow','violet','brown','purple','black','white','red','blue','green','yellow','violet','brown','purple','black','white'],
@@ -272,6 +263,7 @@
         showAutocompleteOnFocus: true,
         delimiter: '!'
         });
+        */
     });
 
 $('#proceedButton').click(function () {

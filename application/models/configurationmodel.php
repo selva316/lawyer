@@ -72,7 +72,7 @@ class Configurationmodel extends CI_Model {
 
 	public function fetchAllCasenumber($name){
 		$userid = $this->session->userdata('userid');
-		$str = "select distinct lc.casenumber from law_casenumber lc inner join law_notation ln on lc.notationid = ln.notationid where ln.casenumber is not null and (created_by='$userid' or updated_by='$userid') and (UPPER(ln.casenumber) LIKE '%".strtoupper($name)."%')";
+		$str = "select distinct lc.casenumber from law_casenumber lc inner join law_notation ln on lc.notationid = ln.notationid where ln.casenumber is not null and (created_by='$userid' or updated_by='$userid') and (UPPER(lc.casenumber) LIKE '%".strtoupper($name)."%')";
 
 		//$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')";
 		

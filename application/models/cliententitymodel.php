@@ -66,10 +66,10 @@ class Cliententitymodel extends CI_Model {
 		$this->db->update('law_client_master');
 
 		/* Client Entities */
-		$number_of_entries = count($this->input->post('entityname'));
+		$number_of_entries = $this->input->post('numberofClientEntity');
 
 		$entityname = $this->input->post('entityname');
-		$entityemail = $this->input->post('entityemail');
+		//$entityemail = $this->input->post('entityemail');
 		$entitysupernote = $this->input->post('entitysupernote');
 		echo "number_of_entries: ".$number_of_entries;
 		if($number_of_entries >= 0)
@@ -78,11 +78,11 @@ class Cliententitymodel extends CI_Model {
 				
 				$itemlist = array();
 
-				if(($entityname[$i] == "") && ($entityemail[$i] == "") || ($clientid == ""))
+				if(($entityname[$i] == "") || ($clientid == ""))
 					continue;
 
 				$itemlist['ENTITY_NAME'] = $entityname[$i];
-				$itemlist['ENTITY_EMAIL'] = $entityemail[$i];
+				//$itemlist['ENTITY_EMAIL'] = $entityemail[$i];
 				$itemlist['SUPERNOTE'] = $entitysupernote[$i];
 				$itemlist['CLIENTID'] = $clientid;
 
@@ -94,29 +94,37 @@ class Cliententitymodel extends CI_Model {
 				$this->db->set('ENTITYID', $entityid);
 				$this->db->update('law_client_entity');
 
-				if($entityid != '')
+			}
+		}
+
+		$number_of_case = $this->input->post('numberofClientCase');
+		$casenumber = $this->input->post('casenumber');
+		$casesupernote = $this->input->post('casesupernote');
+		$caseEntity = $this->input->post('caseEntity');
+		
+		if($number_of_case >= 0)
+		{
+			for ($j=0; $j <$number_of_case; $j++) {
+
+				if($casenumber[$j] != '')
 				{
-					$number_of_case = count($this->input->post('casenumber'));
-					$casenumber = $this->input->post('casenumber');
-					$casesupernote = $this->input->post('casesupernote');
-					for ($j=0; $j <$number_of_case; $j++) {
+					$casenumber_array = explode(';', $casenumber[$j]);
+					$caseList = array_map('trim', $casenumber_array);
 
-						$casenumber_array = explode('!', $casenumber[$j]);
-						$caseList = array_map('trim', $casenumber_array);
-
-					
-						foreach ($caseList as $singlecasenumber) {
-							$caselist = array();
-							$caselist['ENTRYID'] = $entityid;
-							$caselist['CASENUMBER'] = $singlecasenumber;
-							$caselist['SUPERNOTE'] = $casesupernote[$j];
-							$caselist['CLIENTID'] = $clientid;
-							$this->db->insert('law_client_entity_case', $caselist);
-						}
+				
+					foreach ($caseList as $singlecasenumber) {
+						$caselist = array();
+						if($caseEntity[$j] != '')
+							$caselist['ENTRYID'] = $caseEntity[$j];
+						else
+							$caselist['ENTRYID'] = $clientid;
+						
+						$caselist['CASENUMBER'] = $singlecasenumber;
+						$caselist['SUPERNOTE'] = $casesupernote[$j];
+						$caselist['CLIENTID'] = $clientid;
+						$this->db->insert('law_client_entity_case', $caselist);
 					}
-					
 				}
-
 			}
 		}
 		/* Client Entities */

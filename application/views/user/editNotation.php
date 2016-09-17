@@ -278,7 +278,7 @@
 												<td>
 													<select  class="form-control"  data-type="<?php echo $k; ?>" id="treatment_<?php echo $k; ?>" name="treatment[]">
 													<?php
-														$treat = array('positive', 'negative', 'equal');
+														$treat = array('positive', 'negative', 'neutral');
 														foreach ($treat as $row) {
 															if($row == $citationrow['treatment'])
 															{
@@ -322,7 +322,7 @@
 													<td>
 													<select  class="form-control"  data-type="<?php echo $k; ?>" id="treatment_<?php echo $k; ?>" name="treatment[]">
 													<?php
-														$treat = array('positive', 'negative', 'equal');
+														$treat = array('positive', 'negative', 'neutral');
 														foreach ($treat as $row) {
 															echo "<option value='".$row."'>".ucfirst($row)."</option>";
 														}
@@ -357,7 +357,7 @@
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span12">
-							<label class="control-label">Notes</label>
+							<label class="control-label">Decision</label>
 							<textarea id="case_note" class="form-control myTextEditor"  placeholder="Notes" name="case_note" rows="4" cols="45"><?php echo $case_note; ?></textarea>				
 						</div>
 					</div>

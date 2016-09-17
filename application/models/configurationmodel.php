@@ -199,8 +199,10 @@ class Configurationmodel extends CI_Model {
 		$userid = $this->session->userdata('userid');	
 		$name = $this->input->post('name_startsWith');
 		$court_type = $this->input->post('court_type');		
-		
-		$query = $this->db->query("select NAME from law_list_of_courts where (userid='$userid' or role='Admin') and (UPPER(name) LIKE '%".strtoupper($name)."%') and disable='N' order by name");
+
+		//$query = $this->db->query("select NAME from law_list_of_courts where (userid='$userid' or role='Admin') and (UPPER(name) LIKE '%".strtoupper($name)."%') and disable='N' order by name");
+
+		$query = $this->db->query("select NAME from law_list_of_courts where (UPPER(name) LIKE '%".strtoupper($name)."%') and disable='N' order by name");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{

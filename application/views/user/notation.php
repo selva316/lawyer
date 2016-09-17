@@ -238,7 +238,7 @@
 													<select  class="form-control"  data-type="1" id="treatment_1" name="treatment[]">
 														<option value="positive">Positive</option>
 														<option value="negative">Negative</option>
-														<option value="equal">Equal</option>
+														<option value="neutral">Neutral</option>
 													</select>
 
 												</td>
@@ -270,7 +270,7 @@
 
 					<div class="row-fluid" style="margin-top:20px;">
 						<div class="span12">
-							<label class="control-label">Notes</label>
+							<label class="control-label">Decision</label>
 							<textarea id="case_note" class="form-control myTextEditor"  placeholder="Notes" name="case_note" ></textarea>				
 						</div>
 					</div>

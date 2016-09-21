@@ -69,9 +69,8 @@
                             <tr>
                                 <th>Client ID</th>
                                 <th>Client Name</th>
-                                <th>Cleint Email ID</th>
                                 <th>Belongs To</th>
-                                <th>Action</th>
+                                <th>Created On</th>
                             </tr>
                         </thead>
                     </table>
@@ -186,11 +185,7 @@
         });
     });
 
-    $(document).on('click','.editCourtType',function(){
-
-        $("#modalCourtType").modal('show');
-        //var data = table.row(this).data();
-        $("#editButton").css("display","none");
+    $(document).on('click','.editClientEntity',function(){
 
         $.ajax({
             type: 'post',
@@ -240,9 +235,9 @@
             "columns": [
                { "data": "clientid" },  
                { "data": "name" },  
-               { "data": "description" },
-               { "data": "createdby" },  
-               { "data": "disable" }
+               { "data": "createdby" },
+               { "data": "createdon" }
+               //{ "data": "disable" }
             ]
         });
     }

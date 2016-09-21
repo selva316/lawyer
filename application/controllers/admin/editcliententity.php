@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Addcliententity extends CI_Controller {
+class Editcliententity extends CI_Controller {
 
 	public function __construct()
 	{
@@ -18,10 +18,10 @@ class Addcliententity extends CI_Controller {
 	public function index()
 	{
 		$data = array();
-		$this->load->model('configurationmodel');
-		$data['result'] = $this->configurationmodel->fetchClient();
+		$this->load->model('cliententitymodel');
+		$data = $this->cliententitymodel->fetchClientEntity();
 		
-		$this->load->view('admin/addcliententity',$data);
+		$this->load->view('admin/editcliententity',$data);
 	}
 	
 	public function fetchCaseNumber()
@@ -58,35 +58,16 @@ class Addcliententity extends CI_Controller {
 		echo json_encode($data);
 	}
 	
-	public function insertClientEntities()
+	public function editClientEntities()
 	{
 		$this->load->model('cliententitymodel');
-		/*
-		print_r($this->input->post());
-
-		$number_of_case = count($this->input->post('casenumber'));
-		$casenumber = $this->input->post('casenumber');
-		
-		for ($j=0; $j <$number_of_case; $j++) {
-
-			$casenumber_array = explode('!', $casenumber[$j]);
-			$caseList = array_map('trim', $casenumber_array);
-
-		
-			foreach ($caseList as $singlecasenumber) {
-				echo "<BR/>".$singlecasenumber;
-				
-			}
-		}
-		exit;*/
 		if(isset($_POST))
 		{
 			$data = array();
 			$data['CLIENT_NAME'] = $this->input->post('clientname');
 			$data['SUPERNOTE'] = $this->input->post('supernote');
 			$data['TIMESTAMP'] = time();
-			$data['UPDATED_ON'] = time();
-			$this->cliententitymodel->insertClientEntities($data);
+			$this->cliententitymodel->editClientEntities($data);
 
 		}
 	}

@@ -3,7 +3,8 @@
  * @author muni
  */
 //Add Case number
-var l=$('.tblClientCase tr').length;
+//var l=$('.tblClientCase tr').length;
+var l = $("#numberofClientCase").val();
 $(document).on('click','.addCase', function(){
 	l++;
 	htmlcase = '<tr><td>';
@@ -25,21 +26,21 @@ $(document).on('click','.addCase', function(){
 	$('.tblClientCase').append(htmlcase);
 	$("#numberofClientCase").val(l);
 	tinymce.EditorManager.execCommand('mceAddEditor', true, "casesupernote_"+l);
+	
 });
 
 //adds extra table rows
-var i=$('.tblClientEntity tr').length;
+//var i=$('.tblClientEntity tr').length;
+var i = $("#numberofClientEntity").val();
 $(document).on('click', '.addEntity', function(){
-	var entityName = $("#clientname_1").val();
-	var entityEmail = $("#email_1").val();
-	var casenumber = $("casenumber_1").val();
+		
 		i++;
 		html = '<tr><td>';
 		html += '<div class="panel panel-info">';
 			html += '<div class="panel-heading">Entities  <span style="margin-left:90%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Entity" class="addEntity"><i class="fa fa-plus"></i></span> <span style="margin-left:3%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Entity" class="removeButton"><i class="fa fa-trash-o fa-fw"></i></span> </div>';
 				html += '<div class="panel-body">';
 					html += '<div class="row-fluid">';
-						html += '<div class="span6"><label class="control-label">Entity Name</label><input class="form-control" type="text" id="clientname_'+i+'" name="clientname[]" value=""/></div>';
+						html += '<div class="span6"><label class="control-label">Entity Name</label><input class="form-control" type="text" id="entityname_'+i+'" name="entityname[]" value=""/></div>';
 						//html += '<div class="span6"><label class="control-label">Entity Email Id</label><input class="form-control" type="text" id="email_'+i+'" name="email[]" value=""/></div>';
 					html += '</div>';
 					html += '<div class="row-fluid"   style="margin-top:20px;">';
@@ -55,7 +56,6 @@ $(document).on('click', '.addEntity', function(){
 		$('.tblClientEntity').append(html);
 		$("#numberofClientEntity").val(i);
 		tinymce.EditorManager.execCommand('mceAddEditor', true, "entitiessupernote_"+i);		
-	
 });
 
 

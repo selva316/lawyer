@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Client Master</title>
+    <title>Edit Client Master</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -62,13 +62,13 @@
 </head>
 
 <body>
-    <form name="frmclient" action="addcliententity/insertClientEntities" method="post" onsubmit="return frmValidation()"  autocomplete="off">
+    <form name="frmclient" action="editcliententity/editClientEntities" method="post" onsubmit="return frmValidation()"  autocomplete="off">
     
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
         <div class="panel panel-success">
             <div class="panel-heading">
-                <center><label><b>Add Client Entity</b></label></center>
+                <center><label><b>Edit Client Entity</b></label></center>
             </div>
         </div>      
         <div id="page-wrapper" style="margin: auto 20px !important;">
@@ -79,38 +79,43 @@
                     <div class="row-fluid">
                         <div class="span6"  id="divclientname">
                             <label class="control-label">Name</label>
-                            <input  class="form-control" type="text" id="clientname" name="clientname" value=""/>
+                            <input  class="form-control" type="text" id="clientname" name="clientname" value="<?php echo $client_name; ?>"/>
+                            <input  class="form-control" type="hidden" id="clientid" name="clientid" value="<?php echo $clientid; ?>"/>
+                            <input  class="form-control" type="hidden" id="hashid" name="hashid" value="<?php echo $hashclientid; ?>"/>
+
                         </div>
                     </div>
                     <div class="row-fluid" style="margin-top:20px;">
                         <div class="span12"  id="divsupernote">
                             <label class="control-label">Super note</label>
                             <!--<input  class="form-control" type="text" disabled="true" id="supernote" name="supernote" value=""/>-->
-                            <textarea id="supernote" class="form-control myTextEditor"  placeholder="Super Notes" name="supernote" rows="4" cols="45"></textarea> 
+                            <textarea id="supernote" class="form-control myTextEditor"  placeholder="Super Notes" name="supernote" rows="4" cols="45"><?php echo $clientsupernote; ?></textarea> 
                         </div>
                     </div>
 
                     <!-- Entity Begins Here -->
             <table class="tblClientEntity"  style="width:100%;margin-top: 10px;">
-                <input type="hidden" id="numberofClientEntity" name="numberofClientEntity" value="1" />
-                <!--
+                <?php 
+                $k = 1;
+                foreach( $entitydetails as $entityrow ){ ?>
                 <tr>
                     <td>
                         <div class="panel panel-info">
-                            <div class="panel-heading">Entities <span style="margin-left:90%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Entity" class="addEntity"><i class="fa fa-plus"></i></span></div>
+                            <div class="panel-heading">Entities <span style="margin-left:90%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Entity" class="addEntity"><i class="fa fa-plus"></i></span><span style="margin-left:3%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Entity" class="removeButton"><i class="fa fa-trash-o fa-fw"></i></span></div>
                             <div class="panel-body">
                                 
                                 <div class="row-fluid">
                                     <div class="span6" id="divEntity">
                                         <label class="control-label">Entity Name</label>
-                                        <input  class="form-control" type="text" id="entityname_1" name="entityname[]" value=""/>
+                                        <input  class="form-control" type="text" id="entityname_<?php echo $k; ?>" name="entityname[]" value="<?php echo $entityrow['entityname']; ?>"/>
+                                        <input  class="form-control" type="hidden" id="entityid_<?php echo $k; ?>" name="entityid[]" value="<?php echo $entityrow['entityid']; ?>"/>
                                     </div>
                                 </div>
 
                                 <div class="row-fluid"  style="margin-top:20px;">
                                     <div class="span12">
                                         <label class="control-label">Super note</label>
-                                        <textarea id="entitiessupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="entitysupernote[]" rows="4" cols="45"></textarea> 
+                                        <textarea id="entitiessupernote_<?php echo $k; ?>" class="form-control myTextEditor"  placeholder="Super Notes" name="entitysupernote[]" rows="4" cols="45"><?php echo $entityrow['entitysupernote']; ?></textarea> 
                                     </div>
                                 </div>
                             </div>
@@ -118,42 +123,47 @@
                         </div>
                     </td>
                 </tr>
-                -->
+
+                <?php $k++; } ?>
+                <input type="hidden" id="numberofClientEntity" name="numberofClientEntity" value="<?php echo $k; ?>" />
             </table>
             <!-- Entity Ends here-->
 
             <!-- Case Begins Here -->
             <table class="tblClientCase"  style="width:100%;">
-                <input type="hidden" id="numberofClientCase" name="numberofClientCase" value="1" />
-                <!--
+                
+                <?php 
+                $j = 1;
+                foreach( $casedetails as $caserow ){ ?>
                 <tr>
                     <td>
                         <div class="panel panel-danger">
-                            <div class="panel-heading">Case Details <span style="margin-left:85%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Case" class="addCase"><i class="fa fa-plus"></i></span></div>
+                            <div class="panel-heading">Case Details <span style="margin-left:85%; cursor:pointer;color: #21b384; font-size:14px;" title="Add Case" class="addCase"><i class="fa fa-plus"></i></span><span style="margin-left:3%; cursor:pointer;color: #ed6a43; font-size:14px;" title="Remove Case" class="removeCaseButton"><i class="fa fa-trash-o fa-fw"></i></span></div>
                             <div class="panel-body">
                                 
                                 <div class="row-fluid">
                                     <div class="span6">
                                         <label class="control-label">Entity</label>
-                                        <input  class="autoEntity form-control" type="text" id="caseEntity_1" name="caseEntity[]" value=""/>
+                                        <input  class="autoEntity form-control" type="text" id="caseEntity_<?php echo $j; ?>" name="caseEntity[]" value="<?php echo $caserow['entityid']; ?>"/>
                                     </div>
 
                                     <div class="span6">
                                         <label class="control-label">Case Number</label>
-                                        <input  class="autocasenumber form-control" type="text" id="casenumber_1" name="casenumber[]" value=""/>
+                                        <input  class="autocasenumber form-control" type="text" id="casenumber_<?php echo $j; ?>" name="casenumber[]" value="<?php echo $caserow['casenumber']; ?>"/>
                                     </div>
                                 </div>
                                 <div class="row-fluid"  style="margin-top:20px;">
                                     <div class="span12">
                                         <label class="control-label">Case Super note</label>
-                                        <textarea id="casesupernote_1" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"></textarea> 
+                                        <textarea id="casesupernote_<?php echo $j; ?>" class="form-control myTextEditor"  placeholder="Super Notes" name="casesupernote[]" rows="4" cols="45"><?php echo $caserow['casesupernote']; ?></textarea> 
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </td>
                 </tr>
-                -->
+                <?php $j++; } ?>
+                <input type="hidden" id="numberofClientCase" name="numberofClientCase" value="<?php echo $j; ?>" />
             </table>
             <!-- Case Ends here-->
 
@@ -168,7 +178,7 @@
             </div>
                     <div class="clearfix"><br></div>
                     <div class="center"  style="text-align:center;">
-                      <button type="submit" class="btn btn-primary">Save</button>
+                      <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                     <div class="clearfix"></div>
         </div>

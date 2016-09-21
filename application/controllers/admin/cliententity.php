@@ -77,17 +77,20 @@ class Cliententity extends CI_Controller {
 		foreach($result as $r)
 		{
 			if($r['DISABLE'] == 'N')
-				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['CLIENTID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-danger disableStatuate" value="'.$r['CLIENTID'].'" >Disable</button>';
+				$statusStr = '<button type="button" class="btn btn-small btn-success editClientEntity" value="'.$r['CLIENTID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-danger disableClientEntity" value="'.$r['CLIENTID'].'" >Disable</button>';
 			else
-				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['CLIENTID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableStatuate" value="'.$r['CLIENTID'].'" >Enable</button>';
+				$statusStr = '<button type="button" class="btn btn-small btn-success editClientEntity" value="'.$r['CLIENTID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableClientEntity" value="'.$r['CLIENTID'].'" >Enable</button>';
 
 			$details = array(
-				'clientid'=>$r['CLIENTID'],
+				//'clientid'=>$r['CLIENTID'],
+				'clientid'=>"<a  style='margin-left:10px;' href=".site_url('admin/editcliententity')."?hashcid=".$r['HASHCLIENTID'].">".$r['CLIENTID']."</a>",
 				'name'=>$r['CLIENT_NAME'],
-				'description'=>$r['CLIENT_EMAIL'],
+				//'description'=>$r['CLIENT_EMAIL'],
 				'createdby'=>$this->configurationmodel->fetchUserName($r['BELONGS_TO']),
+				'createdon'=>date('d-m-Y',$r['TIMESTAMP'])
+				
 				//date('d-m-Y',$r['CREATED_ON']),
-				'disable' => $statusStr
+				//'disable' => $statusStr
 				//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 			);
 			

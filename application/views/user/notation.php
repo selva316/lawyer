@@ -62,7 +62,7 @@
              <div class="loading-message loading-message-boxed"><img style="width: 20px;" src="<?php echo base_url();?>img/spinner-big.gif"><span>&nbsp;&nbsp;Processing...</span></div>
       	</div>
 
-		<div class="panel panel-success">
+		<div class="panel panel-success titleClass">
 			<div class="panel-heading">
 				<center><label><b>Create Notation</b></label></center>
 			</div>

@@ -1,3 +1,17 @@
+<style type="text/css">
+    .clsMenuFixed
+    {
+        position: fixed;
+        z-index: 99999;
+        width: 98%;
+    }
+
+    .titleClass{
+        margin-top: 4%;
+    }
+</style>
+
+<div class="clsMenuFixed">
 <?php
     $role = $this->session->userdata('role');
     if($role == 'Admin')
@@ -44,6 +58,14 @@
                 </li>-->
             </ul>    
         </li>
+        <li class="dropdown active">
+            <a data-toggle="dropdown" class="dropdown-toggle" id="introJsAdminMenu" href="#">Notation<span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+                <li>
+                    <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
+                </li>
+            </ul>
+        </li>
         <li   class="active">
             <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
         </li>
@@ -71,6 +93,14 @@
         <li  class="active">
             <a href="<?php echo site_url('user/homepage');?>">Home</a>
         </li>
+        <li class="dropdown active">
+            <a data-toggle="dropdown" class="dropdown-toggle" id="introJsAdminMenu" href="#">Notation<span class="caret"></span></a>
+            <ul role="menu" class="dropdown-menu">
+                <li>
+                    <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
+                </li>
+            </ul>
+        </li>
         <li   class="active">
             <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
         </li>
@@ -83,3 +113,4 @@
     </ul>
 </nav>
 <?php } ?>
+</div>

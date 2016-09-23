@@ -63,7 +63,7 @@ class ListOfCourt extends CI_Controller {
 	public function disableCourtList()
 	{
 		$this->load->model('listofcourtmodel');
-		$data =  $this->listofcourtmodel->disableCourtList($this->input->post('courtId'));
+		$data =  $this->listofcourtmodel->disableCourtList();
 		$disableDetails= array('data'=>$data);
 		echo json_encode($disableDetails);
 	}
@@ -81,10 +81,10 @@ class ListOfCourt extends CI_Controller {
 				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['CNID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableCourtType" value="'.$r['CNID'].'" >Enable</button>';
 
 			$details = array(
-				'cnid'=>$r['CNID'],
-				'name'=>$r['NAME'],
-				'court_type'=>$r['COURT_TYPE'],
-				'disable' => $statusStr
+				'cnid'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['CNID'].'"/></label></div> </div>',
+				'name'=>"<a  style='margin-left:10px;' class='editCourtType' href='#' data-type='".$r['CNID']."'>".$r['NAME']."</a>",
+				'court_type'=>$this->courtTypeName($r['COURT_TYPE']),
+				//'disable' => $statusStr
 				//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 			);
 			
@@ -96,6 +96,11 @@ class ListOfCourt extends CI_Controller {
 		echo json_encode($collectionDetails);
 	}
 
+	public function courtTypeName($courtId)
+	{
+		$this->load->model('listofcourtmodel');
+		return  $this->listofcourtmodel->courtTypeName($courtId);
+	}
 
 }
 

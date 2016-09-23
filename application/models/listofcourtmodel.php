@@ -3,7 +3,7 @@ class Listofcourtmodel extends CI_Model {
 
 	public function fetchListOfCourt()
 	{
-		$str = "select * from law_list_of_courts";
+		$str = "select * from law_list_of_courts where disable='N'";
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -267,32 +267,52 @@ class Listofcourtmodel extends CI_Model {
 		return $data;
 	}
 
-	public function disableCourtList($courtID)
+	public function disableCourtList()
 	{
-		$query = $this->db->query("select disable from law_list_of_courts where (UPPER(CNID) = '".strtoupper($courtID)."')");
-		
-		$data = array();
-		
-		$disable = 'N';
-		$result = $query->result_array();
-		foreach($result as $row)
+		$courtList = $this->input->post('courtId');
+		$hashidArr = explode(',', $courtList);
+		foreach ($hashidArr as $courtID) 
 		{
-			$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
-		}
 
-		if($disable == 'N')
-			$disable = 'Y';
-		else
+			$query = $this->db->query("select disable from law_list_of_courts where (UPPER(CNID) = '".strtoupper($courtID)."')");
+			
+			$data = array();
+			
 			$disable = 'N';
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
+			}
 
-		$this->db->where('CNID', $courtID);
-		$this->db->set('DISABLE', $disable);
+			if($disable == 'N')
+				$disable = 'Y';
+			else
+				$disable = 'N';
 
-		$this->db->update('law_list_of_courts');
-
+			$this->db->where('CNID', $courtID);
+			$this->db->set('DISABLE', $disable);
+			$this->db->update('law_list_of_courts');
+		
+		}
 		$dArray = array();
 		array_push($dArray, true);
 		return $dArray;
+	}
+
+	public function courtTypeName($courtId)
+	{
+		$name = '';
+		if(strlen($courtId))
+		{
+			$query = $this->db->query("select name from law_courttype where shortname = '".$courtId."'");
+			$result = $query->result_array();
+			foreach($result as $r)
+			{
+				$name = $r['name'];
+			}	
+		}
+		return $name;	
 	}
 }
 

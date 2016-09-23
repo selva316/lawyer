@@ -51,7 +51,7 @@
 <body>
     <div class="container-fluid">
 		<?php  $this->load->view('includes/defaultconfiguration');?>
-		<div class="panel panel-success">
+		<div class="panel panel-success titleClass">
 		<div class="panel-heading">
 			<center><label><b>Notation List </b></label></center></div>
 			<input type="hidden" name="tabVal" id="tabVal" value="<?php echo $this->session->userdata('pilltabsValue') ?>"> </input>

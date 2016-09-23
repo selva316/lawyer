@@ -46,7 +46,7 @@
 <body>
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success">
+        <div class="panel panel-success titleClass">
         <div class="panel-heading">
             <center><label><b>List of Users</b></label></center></div>
         </div>      
@@ -83,7 +83,7 @@
             <!-- /#page-wrapper -->
 
             <!-- Description Modal -->
-    <div id="desModal" class="modal fade" role="dialog">
+    <div id="desModal" class="modal fade" role="dialog" style="margin-top:5%">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -163,7 +163,7 @@
     <!-- Description Modal -->
 
     <!-- Edit Modal -->
-    <div id="editModal" class="modal fade" role="dialog">
+    <div id="editModal" class="modal fade" role="dialog" style="margin-top:5%">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -249,7 +249,7 @@
         
 
         <!-- Edit Court Type Modal-->
-        <div class="modal fade" id="modalCourtType">
+        <div class="modal fade" id="modalCourtType" style="margin-top:5%">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

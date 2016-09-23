@@ -45,7 +45,7 @@
 <body>
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success">
+        <div class="panel panel-success titleClass">
         <div class="panel-heading">
             <center><label><b>List of Statute</b></label></center></div>
         </div>      
@@ -81,7 +81,7 @@
             <!-- /#page-wrapper -->
 
         </div>
-        <div class="modal fade" id="modalValidate">
+        <div class="modal fade" id="modalValidate" style="margin-top:5%">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -115,7 +115,7 @@
         </div> <!--/.modal -->
 
         <!-- Edit Court Type Modal-->
-        <div class="modal fade" id="modalCourtType">
+        <div class="modal fade" id="modalCourtType" style="margin-top:5%">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

@@ -45,7 +45,7 @@
 <body>
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success">
+        <div class="panel panel-success titleClass">
         <div class="panel-heading">
             <center><label><b>List of Courts</b></label></center></div>
         </div>      
@@ -66,22 +66,24 @@
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    
-                                    <th>Court ID</th>
+                                    <th width="5%">
+                                    <input id="checkAllCourt" checked value="1" type="checkbox"></th>
                                     <th>Name</th>
                                     <th>Court Type</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
-                </div>
+                    </div>
+                    <div class="panel-footer" id="divFooter">
+                        <button style='margin-left:10px;' type='button' class='btn btn-danger btnDelete'> Delete</button>
+                    </div>
                 </div> 
                
             </div>
             <!-- /#page-wrapper -->
 
         </div>
-        <div class="modal fade" id="modalValidate">
+        <div class="modal fade" id="modalValidate"  style="margin-top:5%">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -123,7 +125,7 @@
         </div> <!--/.modal -->
 
         <!-- Edit Court Type Modal-->
-        <div class="modal fade" id="modalCourtType">
+        <div class="modal fade" id="modalCourtType" style="margin-top:5%">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -142,7 +144,7 @@
                 <div class="row-fluid">
                     <div class="span12">
                         <label class="control-label">Court Type</label>
-                        <select class="form-control" disabled="true" type="text" id="editCourtType" name="editCourtType" >
+                        <select class="form-control" type="text" id="editCourtType" name="editCourtType" >
                             <option value="">Choose a Court Type</option>
                             <?php
                                 foreach ($result as $r) {
@@ -251,6 +253,8 @@
 
     $(document).on('click','.editCourtType',function(){
 
+        var type = $(this).data('type');
+        
         $("#modalCourtType").modal('show');
         //var data = table.row(this).data();
         $("#editButton").css("display","none");
@@ -259,7 +263,8 @@
             type: 'post',
             dataType: "json",
             url: 'listofcourt/findCourtListDetails',
-            data: {'courtId':$(this).val()},
+            //data: {'courtId':$(this).val()},
+            data: {'courtId':$(this).data('type')},
             success:function(jdata){
                 var strData = String(jdata.data);
                 var str = strData.split(",");
@@ -275,7 +280,29 @@
 
     });
 
-    
+    $(document).on('click', '.btnDelete', function(e) {
+        var temp = [];
+        $.each($("input[class='chkbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+            $.ajax({
+                url: 'listofcourt/disableCourtList',
+                dataType: "json",
+                method: 'post',
+                data: {
+                   courtId: temp.join(",")
+                },
+                success : function(data) {
+                    fnTableCalling();
+                }
+            });
+        }
+        else
+            alert("No notation is selected!!!")
+    });
+
     $(document).on('click','.disableCourtType',function(){
 
         $.ajax({
@@ -290,6 +317,17 @@
 
     });
 
+    $(document).on('change', '#checkAllCourt', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+
     function fnTableCalling()
     {
         $('#courtTypeList').dataTable().fnDestroy();
@@ -300,12 +338,29 @@
                             "visible": false
                         }
                     ],
+            "order": [[ 1, 'asc' ]],
             "columns": [
                { "data": "cnid" },  
                { "data": "name" },  
-               { "data": "court_type" },  
-               { "data": "disable" }
-            ]
+               { "data": "court_type" }
+               //{ "data": "disable" }
+            ],
+            "initComplete": function(settings, json) {
+                var cntTable = $(this).DataTable();
+                var info = cntTable.page.info()
+                if(info.recordsTotal>0)
+                {
+                    $("#divFooter").css("display","block");
+                    $("#checkAllCourt").prop("checked",false);
+                    $("#checkAllCourt").prop("disabled",false);
+                }
+                else
+                {
+                    $("#divFooter").css("display","none");
+                    $("#checkAllCourt").prop("checked",false);
+                    $("#checkAllCourt").prop("disabled",true);
+                }
+            }
         });
     }
     </script>

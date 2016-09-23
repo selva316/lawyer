@@ -66,7 +66,7 @@
     
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success">
+        <div class="panel panel-success titleClass">
             <div class="panel-heading">
                 <center><label><b>Add Client Entity</b></label></center>
             </div>

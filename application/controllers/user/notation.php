@@ -190,6 +190,13 @@ class Notation extends CI_Controller {
 		return $this->session->userdata('role');
 	}
 	
+	public function createCitationEditCopyVersion()
+	{
+		$this->load->model('notationmodel');
+		$data = $this->notationmodel->createCitationEditCopyVersion();
+		return $this->session->userdata('role');
+	}
+
 	public function deleteNotation()
 	{
 		$this->load->model('notationmodel');
@@ -425,6 +432,14 @@ class Notation extends CI_Controller {
 		$data =  $this->notationmodel->insertCitationType($this->input->post('citationType'));
 		echo json_encode($data);
 	}
+
+	public function fetchCitationAvailable()
+	{
+		$this->load->model('notationmodel');
+		$data =  $this->notationmodel->fetchCitationAvailable();
+		echo json_encode($data);
+	}
+
 }
 
 /* End of file homepage.php */

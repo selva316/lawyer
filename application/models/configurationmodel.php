@@ -62,7 +62,7 @@ class Configurationmodel extends CI_Model {
 
 	public function fetchAllCitation($name){
 		$userid = $this->session->userdata('userid');
-		$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')";
+		$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and ((created_by='$userid' or updated_by='$userid') OR (ln.type='dbversion' OR ln.type='public')) and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')  AND lc.citation <> ''";
 
 		//$str = "select distinct lc.citation from law_citation lc inner join law_notation ln on lc.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.citation) LIKE '%".strtoupper($name)."%')";
 		
@@ -220,7 +220,7 @@ class Configurationmodel extends CI_Model {
 	public function fetchAllJudges()
 	{
 		$userid = $this->session->userdata('userid');
-		$name = $this->input->post('name_startsWith');
+		$name = $this->input->post('term');
 		$str = "select distinct judge_name from law_judgename where (UPPER(judge_name) LIKE '%".strtoupper($name)."%')order by judge_name";
 		//$str = "select distinct lj.judge_name from law_judgename lj inner join law_notation ln on lj.notationid = ln.notationid where ln.citation is not null and (created_by='$userid' or updated_by='$userid') and (type='public' or type='dbversion') and (UPPER(ln.judge_name) LIKE '%".strtoupper($name)."%')";
 		

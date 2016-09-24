@@ -27,6 +27,19 @@ class Logindetailsmodel extends CI_Model {
 		return $role;
 	}
 	
+	public function username($userid)
+	{
+		$str = "select firstname, lastname from law_login where username=?";
+		$query = $this->db->query($str,array($userid));
+		// return $query->result();
+		$username='';
+		foreach($query->result() as $row)
+		{
+			$username = ucfirst($row->firstname)." ".ucfirst($row->lastname);
+		}
+		return $username;
+	}
+
 	public function userid($userid)
 	{
 		$str = "select userid from law_login where username=?";

@@ -63,26 +63,19 @@
       	<div class="blockUILoading" style="display:none; z-index: 1011; position: absolute; top: 45%; left: 50%; text-align: center; cursor: wait;">
              <div class="loading-message loading-message-boxed"><img style="width: 20px;" src="<?php echo base_url();?>img/spinner-big.gif"><span>&nbsp;&nbsp;Processing...</span></div>
       	</div>
-
+      	<!--
 		<div class="panel panel-success titleClass">
 			<div class="panel-heading">
 				<center><label><b>Edit Notation</b></label></center>
 			</div>
-		</div>		
-		<div id="page-wrapper" style="margin: auto 20px;">
+		</div>-->		
+		<div id="page-wrapper" class="titleClass">
 			<div class="panel panel-default">
                 <div class="panel-heading">Case Information</div>
                 <div class="panel-body">
 
             		<div class="row-fluid">
-						<div class="span3">
-							<div id="divcasename" class="form-group">
-								<label class="control-label">Case Name</label>
-								<input  class="form-control" type="text" id="casename" name="casename" value="<?php echo $casename; ?>"/>
-								<input type="hidden" name="ntype" id="ntype" value="<?php echo $notationid; ?>"/>
-								<input type="hidden" name="statusType" id="statusType" value="<?php echo $type; ?>"/>
-							</div>
-						</div>
+						
 						<div class="span3">
 							<div id="divcitation" class="form-group">
 								<label class="control-label">Citation</label>
@@ -91,6 +84,14 @@
 							</div>
 							<div class="form-group" id="divhref">
 								
+							</div>
+						</div>
+						<div class="span3">
+							<div id="divcasename" class="form-group">
+								<label class="control-label">Case Name</label>
+								<input  class="form-control" type="text" id="casename" name="casename" value="<?php echo $casename; ?>"/>
+								<input type="hidden" name="ntype" id="ntype" value="<?php echo $notationid; ?>"/>
+								<input type="hidden" name="statusType" id="statusType" value="<?php echo $type; ?>"/>
 							</div>
 						</div>
 						<div class="span3">

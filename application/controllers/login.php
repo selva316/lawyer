@@ -251,12 +251,14 @@ class Login extends CI_Controller {
 		{
 			$role = $this->logindetailsmodel->userrole($this->input->post('j_username'));
 			$userid = $this->logindetailsmodel->userid($this->input->post('j_username'));
+			$username = $this->logindetailsmodel->username($this->input->post('j_username'));
 			$this->session->set_userdata('userid',$userid);
 
 			if($role == 1){
 				
 				$this->session->set_userdata('username',$this->input->post('j_username'));
 				$this->session->set_userdata('role','Admin');
+				$this->session->set_userdata('loginname', $username);
 				$result = $this->logindetailsmodel->session_tracking($this->session->all_userdata());
 				
 				$session_value = array(
@@ -269,7 +271,7 @@ class Login extends CI_Controller {
 				redirect('admin/homepage');
 			}
 			else{
-				
+				$this->session->set_userdata('loginname', $username);
 				$this->session->set_userdata('username',$this->input->post('j_username'));
 				$this->session->set_userdata('role','User');
 

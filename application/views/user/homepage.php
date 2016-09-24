@@ -51,16 +51,12 @@
 <body>
     <div class="container-fluid">
 		<?php  $this->load->view('includes/defaultconfiguration');?>
-		<div class="panel panel-success titleClass">
-		<div class="panel-heading">
-			<center><label><b>Notation List </b></label></center></div>
-			<input type="hidden" name="tabVal" id="tabVal" value="<?php echo $this->session->userdata('pilltabsValue') ?>"> </input>
-		</div>		
-		<div id="page-wrapper">
+		
+		<div id="page-wrapper" class="titleClass">
 				<div class="row">
 					<div class="col-lg-12">
 						<div style="margin-left:30px;margin-bottom:10px;">
-							<a href="<?php echo site_url('user/notation');?>" class="btn btn-large btn-success">Add Notation</a>
+							<!--<a href="<?php echo site_url('user/notation');?>" class="btn btn-large btn-success">Add Notation</a>-->
 						</div>
 					</div>
 					<!-- /.col-lg-12 -->
@@ -72,8 +68,8 @@
 							<ul class="nav nav-pills">
 								<li id="draftNotation" class="active"><a href="#tab1" data-toggle="tab">Draft Notation</a></li>
 								<li id="userNotation" class=""><a href="#tab2" data-toggle="tab">Notation List</a></li>
-								<li id="editedNotation" class=""><a href="#tab3" data-toggle="tab">Notation Edited by Users</a></li>
-								<li class=""><a href="#tab4" data-toggle="tab">Reported Errors/Comments</a></li>
+								<!--<li id="editedNotation" class=""><a href="#tab3" data-toggle="tab">Notation Edited by Users</a></li>
+								<li class=""><a href="#tab4" data-toggle="tab">Reported Errors/Comments</a></li>-->
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">

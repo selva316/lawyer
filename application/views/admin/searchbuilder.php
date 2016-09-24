@@ -46,11 +46,11 @@
 <body>
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success titleClass">
+        <!--<div class="panel panel-success titleClass">
         <div class="panel-heading">
             <center><label><b>Search Builder</b></label></center></div>
-        </div>
-        <div id="page-wrapper">
+        </div>-->
+        <div id="page-wrapper" class="titleClass">
             <div class='row-fluid'>
                 <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
                     <input type="hidden" id="numberOfSearchEntries" name="numberOfSearchEntries" value="1"> </input>

@@ -1,7 +1,7 @@
 var interval = null;
 
 $(document).ready(function() {
-	
+
 	//toastr.success('Auto Saved');
 	//$("#toaster").html('');
 	//$.toaster({ priority : 'success', title : '<span class="glyphicon glyphicon-ok"></span>', message : 'Command copied to clipboard' });
@@ -595,7 +595,8 @@ $(document).on('keyup.autocomplete','#casename',function(){
 				dataType: "json",
 				method: 'post',
 				data: {
-				   casename: casename
+				   casename: casename,
+				   citation: $("#citation").val()
 				},
 				 success: function( data ) {
 					 response( $.map( data, function( item ) {
@@ -611,6 +612,41 @@ $(document).on('keyup.autocomplete','#casename',function(){
 		autoFocus: true,	      	
 		minLength: 1
 	});
+});
+
+
+$(document).on('blur','#citation',function(){
+
+	var citation = $(this).val();
+	if($(this).val() != '')
+	{
+		$.ajax({
+	        type: 'post',
+	        dataType: "json",
+	        url: 'notation/fetchCitationAvailable',
+	        data: {'citation':$(this).val()},
+	        success:function(data){
+	        	if(data[0] == 1)
+	        	{
+	        		$('#availableModal').modal({backdrop: 'static', keyboard: false});
+	        		$(".close").css ("display", "none");
+	        		$("#availCitation").html(data[1]);
+	            	/*
+	            	var x = confirm("Already the citation is available, Are you want to create a edit copy?");
+					if (x)
+					{
+						$("#availableModal").modal('show');
+					}
+					else{
+						return false;
+					}	
+		            */
+	        	}
+	            
+	        }
+	    });
+	}
+
 });
 
 $(document).on('keyup.autocomplete','.autocomplete_citationType',function(){
@@ -973,7 +1009,25 @@ $( "#conceptName" ).blur(function() {
     });
 });
 
-
+$(document).on('click', '.btnEditDraftCopy', function(e) {
+	//alert($(this).val());
+	$.ajax({
+		url : 'notation/changeEditCopyVersion',
+		dataType: "text",
+		method: 'post',
+		data: {
+		   hashid: $(this).val()
+		},
+		success : function(data) {
+			if(data == "Admin"){
+				window.location.href="<?php echo site_url('admin/homepage')?>";
+			}
+			else{
+				window.location.href="<?php echo site_url('user/homepage')?>";
+			}
+		}
+	});
+});
 
 function saveAsDraft()
 {

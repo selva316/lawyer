@@ -18,7 +18,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Add Client Master</title>
+    <title>Add Client Entity</title>
     <!-- jQuery UI CSS -->
     <link rel="stylesheet" href="<?php echo base_url();?>assets/jquery/css/jquery-ui.min.css" />
     <!-- Bootstrap Core CSS -->
@@ -66,12 +66,12 @@
     
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success titleClass">
+        <!--<div class="panel panel-success titleClass">
             <div class="panel-heading">
                 <center><label><b>Add Client Entity</b></label></center>
             </div>
-        </div>      
-        <div id="page-wrapper" style="margin: auto 20px !important;">
+        </div>-->      
+        <div id="page-wrapper" class="titleClass">
 
             <div class="panel panel-warning">
                 <div class="panel-heading">Client</div>

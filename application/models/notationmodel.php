@@ -37,7 +37,8 @@ class Notationmodel extends CI_Model {
 
 	public function fetchCaseName($casename)
 	{
-		$query = $this->db->query("select casename from law_notation where (UPPER(casename) LIKE '%".strtoupper($casename)."%')");
+
+		$query = $this->db->query("select distinct casename from law_notation where (UPPER(casename) LIKE '%".strtoupper($casename)."%')");
 		$data = array();
 		if ($query->num_rows() > 0)
 		{
@@ -1772,6 +1773,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 			if($type != "dbversion")
 			{
 				$this->db->where('HASHNOTATIONID', $hashval);
+				$this->db->set('CREATED_BY', $this->session->userdata('userid'));
 				$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
 				$this->db->set('UPDATED_ON', time());
 				$this->db->set('TYPE', 'dbversion');
@@ -1904,6 +1906,16 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		}
 
 		return true;
+	}
+
+	public function createCitationEditCopyVersion()
+	{
+		$hashid = $this->input->post('hashid');		
+		$type = $this->findTypeofNotation(trim($hashid));
+		if($type == "public" || $type == "dbversion")
+		{
+			$this->changeEditCopyVersion($hashid);	
+		}
 	}
 
 	public function changeEditCopyVersion($hashid)
@@ -2559,6 +2571,87 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		array_push($dArray, true);
 		return $dArray;
 	}
+
+	public function fetchCitationAvailable()
+	{
+		$listcitation = $this->input->post('citation');
+		$citationStr = 'AND  (';
+
+		if (strpos($listcitation, ';') !== false) {
+			$citation_arr = explode(";",$listcitation);
+			foreach($citation_arr as $lcitation)
+			{
+				$citationval = trim($this->_clean($lcitation));
+				if($citationval!='')
+				{
+					$citationStr .= "( DUP_CITATION = '".$citationval."') ";
+                	$citationStr .= " OR " ;	
+				}
+			}
+			
+			$removelast_or = strlen($citationStr) - 4;
+	        $citationStr = substr($citationStr, 0, $removelast_or);
+	        $citationStr .= " ) ";
+		}
+		else
+		{
+
+			$citationval = trim($this->_clean($this->input->post('citation')));
+			$citationStr .= "( DUP_CITATION = '".$citationval."') ";
+			$citationStr .= " ) ";
+		}
+
+		//echo $citationStr;
+		$userid =  $this->session->userdata('userid');
+		
+		//echo "select count(notationid) as cntname  from law_notation where (created_by='$userid' or UPDATED_BY='$userid' ) AND  (type='dbversion' OR type='public') ".$citationStr." ";
+
+		//$query = $this->db->query("select count(notationid) as cntname  from law_notation where (created_by='$userid' or UPDATED_BY='$userid' OR type='dbversion' OR type='public') ".$citationStr);
+		
+		//echo "select COUNT(notationid) AS cntname, hashnotationid, type, citation  FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr." GROUP BY hashnotationid, type, citation";
+
+		$query = $this->db->query("select COUNT(notationid) AS cntname, hashnotationid, type, citation  FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr." GROUP BY hashnotationid, type, citation");
+ 
+
+		$data = array();
+		$valueExist = 0;
+		$result = $query->result_array();
+		$tableDetails = '<table class="table table-bordered table-hover tableCitation">	<thead>	<tr><th>Citation</th><th>Type</th><th>Edit Copy</th></tr></thead><tbody>';
+		foreach ($result as $row) {
+			$valueExist = 1;
+			$tableDetails .= "<tr><td><a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$row['hashnotationid'].">".$row['citation']."</a></td><td>".$row['type']."</td>";
+			
+			if($row['type'] == 'dbversion' || $row['type'] == 'public')
+				$tableDetails .= "<td><button style='margin-left:10px;' type='button' class='btn btn-info btnEditDraftCopy' value=".$row['hashnotationid']."> Mark Edit Copy </button></td>";
+			else
+				$tableDetails .= "<td>--</td>";
+					
+			$tableDetails .= "</tr>";
+		}
+		$tableDetails .= "</tbody></table>" ;
+		
+		array_push($data, $valueExist);
+		array_push($data, $tableDetails);
+		/*
+		$count = 0;
+		$result = $query->result_array();
+		foreach($result as $row)
+		{
+			$count = $row['cntname'];//i am not want item code i,eeeeeeeeeeee
+		}
+
+		if ($count > 0)
+		{
+			array_push($data, true);
+		}
+		else{
+			array_push($data, false);
+		}*/
+		
+		return $data;
+
+	}
+
 
 }
 /* End of file Logindetailsmodel.php */

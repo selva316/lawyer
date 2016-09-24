@@ -47,11 +47,11 @@
 <body>
     <div class="container-fluid">
         <?php $this->load->view('includes/defaultconfiguration');?>
-        <div class="panel panel-success titleClass">
+        <!--<div class="panel panel-success titleClass">
         <div class="panel-heading">
             <center><label><b>List of Concepts</b></label></center></div>
-        </div>      
-        <div id="page-wrapper">
+        </div> -->     
+        <div id="page-wrapper" class="titleClass">
                 <div class="row">
                     <div class="col-lg-12">
                         <div style="margin-left:30px;margin-bottom:10px;">

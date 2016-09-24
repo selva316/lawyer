@@ -61,26 +61,19 @@
       	<div class="blockUILoading" style="display:none; z-index: 1011; position: absolute; top: 45%; left: 50%; text-align: center; cursor: wait;">
              <div class="loading-message loading-message-boxed"><img style="width: 20px;" src="<?php echo base_url();?>img/spinner-big.gif"><span>&nbsp;&nbsp;Processing...</span></div>
       	</div>
-
+      	<!--
 		<div class="panel panel-success titleClass">
 			<div class="panel-heading">
 				<center><label><b>Create Notation</b></label></center>
 			</div>
-		</div>		
-		<div id="page-wrapper" style="margin: auto 20px;">
+		</div>-->
+		<div id="page-wrapper" class="titleClass">
 			<div class="panel panel-default">
                 <div class="panel-heading">Case Information</div>
                 <div class="panel-body">
 
             		<div class="row-fluid">
-						<div class="span3">
-							<div id="divcasename" class="form-group">
-								<label class="control-label">Case Name</label>
-								<input  class="form-control" type="text" id="casename" name="casename" value=""/>
-								<input type="hidden" name="ntype" id="ntype" value=""/>
-								<input type="hidden" name="statusType" id="statusType" value=""/>
-							</div>
-						</div>
+						
 						<div class="span3">
 							<div id="divcitation" class="form-group">
 								<label class="control-label">Citation</label>
@@ -89,6 +82,14 @@
 							</div>
 							<div class="form-group" id="divhref">
 								
+							</div>
+						</div>
+						<div class="span3">
+							<div id="divcasename" class="form-group">
+								<label class="control-label">Case Name</label>
+								<input  class="form-control" type="text" id="casename" name="casename" value=""/>
+								<input type="hidden" name="ntype" id="ntype" value=""/>
+								<input type="hidden" name="statusType" id="statusType" value=""/>
 							</div>
 						</div>
 						<div class="span3">
@@ -527,7 +528,30 @@
 		</div><!-- /.modal -->	
 
 	<!-- Concept Modal End here-->
+
 	
+	<!-- Citation Available Modal Begin here-->
+		<div class="modal fade" id="availableModal" style="margin-top:10%;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"  style="font-weight:bold;">Already the citation is available, Are you want to create a edit copy?</h4>
+					</div><!-- /.modal-header -->
+					<div class="modal-body">
+						<div class="row" style="margin:2%">
+							<div class="col-md-12">
+
+								<div id="availCitation"></div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div><!-- /.modal-body -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	<!-- Citation Available Modal End here-->
+			
 	<!-- Concept Modal Begin here
 		<div class="modal fade" id="conceptModal">
 			<div class="modal-dialog">
@@ -626,6 +650,26 @@
 	{
 		window.open('<?php echo base_url('user/viewnotation');?>'+'?nid='+notationid, '_self')
 	}
+
+	$(document).on('click', '.btnEditDraftCopy', function(e) {
+		//alert($(this).val());
+		$.ajax({
+			url : 'notation/createCitationEditCopyVersion',
+			dataType: "text",
+			method: 'post',
+			data: {
+			   hashid: $(this).val()
+			},
+			success : function(data) {
+				if(data == "admin"){
+					window.location.href="<?php echo site_url('admin/homepage')?>";
+				}
+				else{
+					window.location.href="<?php echo site_url('user/homepage')?>";
+				}
+			}
+		});
+	});
 	</script>
 </body>
 </html>

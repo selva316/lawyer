@@ -3,7 +3,7 @@ class Listofstatuatemodel extends CI_Model {
 
 	public function fetchListOfStatuate()
 	{
-		$str = "select * from law_statuate";
+		$str = "select * from law_statuate where disable='N' order by name";
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -133,29 +133,33 @@ class Listofstatuatemodel extends CI_Model {
 
 	}
 	
-	public function disableStatuate($statuateid)
+	public function disableStatuate()
 	{
-		$query = $this->db->query("select disable from law_statuate where (UPPER(STID) = '".strtoupper($statuateid)."')");
-		
-		$data = array();
-		
-		$disable = 'N';
-		$result = $query->result_array();
-		foreach($result as $row)
+		$statuteList = $this->input->post('statuateid');
+		$hashidArr = explode(',', $statuteList);
+		foreach ($hashidArr as $statuateid) 
 		{
-			$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
-		}
-
-		if($disable == 'N')
-			$disable = 'Y';
-		else
+			$query = $this->db->query("select disable from law_statuate where (UPPER(STID) = '".strtoupper($statuateid)."')");
+			
+			$data = array();
+			
 			$disable = 'N';
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
+			}
 
-		$this->db->where('STID', $statuateid);
-		$this->db->set('DISABLE', $disable);
+			if($disable == 'N')
+				$disable = 'Y';
+			else
+				$disable = 'N';
 
-		$this->db->update('law_statuate');
+			$this->db->where('STID', $statuateid);
+			$this->db->set('DISABLE', $disable);
 
+			$this->db->update('law_statuate');
+		}
 		$dArray = array();
 		array_push($dArray, true);
 		return $dArray;

@@ -58,13 +58,9 @@
                 </li>-->
             </ul>    
         </li>
-        <li class="dropdown active">
-            <a data-toggle="dropdown" class="dropdown-toggle" id="introJsAdminMenu" href="#">Notation<span class="caret"></span></a>
-            <ul role="menu" class="dropdown-menu">
-                <li>
-                    <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
-                </li>
-            </ul>
+        
+        <li class="active">
+            <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
         </li>
         <li   class="active">
             <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
@@ -81,10 +77,14 @@
         
     </ul>
 
+    <div style="position: absolute; left: 0px; margin-left: 2%; top: 5px; width: 10%;">
+        <span style="cursor: default; color: rgb(10, 218, 222); font-weight: bold; font-size: 32px;">easyCite</span>
+    </div>
+
     <div style="position: absolute; left: 0; margin-left: 70%;  top: 15px; text-align: right; width: 28%;">
         <span style="cursor:default; color: #0adade; font-size: 14px; font-weight: bold; "><font color="#fff">Welcome </font><?php echo $this->session->userdata('loginname'); ?></span>
         <span style="cursor:pointer; color: #fff; margin-left: %;" title="Logout"><a style="color:#fff;" href="<?php echo site_url('login/logout');?>"><i aria-hidden="true" class="fa fa-sign-out"></i></a></span>
-      </div>
+    </div>
 </nav>
 
 <?php
@@ -96,13 +96,9 @@
         <li  class="active">
             <a href="<?php echo site_url('user/homepage');?>">Home</a>
         </li>
-        <li class="dropdown active">
-            <a data-toggle="dropdown" class="dropdown-toggle" id="introJsAdminMenu" href="#">Notation<span class="caret"></span></a>
-            <ul role="menu" class="dropdown-menu">
-                <li>
-                    <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
-                </li>
-            </ul>
+        
+        <li class="active">
+            <a href="<?php echo site_url('user/notation');?>">Add Notation</a>
         </li>
         <li   class="active">
             <a href="<?php echo site_url('admin/cliententity');?>">Client and Entities</a>
@@ -111,12 +107,16 @@
             <a href="<?php echo site_url('user/research');?>">Research Topic</a>
         </li>
 
+    </ul>
+        <div style="position: absolute; left: 0px; margin-left: 2%; top: 5px; width: 10%;">
+            <span style="cursor: default; color: rgb(10, 218, 222); font-weight: bold; font-size: 32px;">easyCite</span>
+        </div>
+
         <div style="position: absolute; left: 0; margin-left: 70%;  top: 15px; text-align: right; width: 28%;">
             <span style="cursor:default; color: #0adade; font-size: 14px; font-weight: bold; "><font color="#fff">Welcome </font><?php echo $this->session->userdata('loginname'); ?></span>
             <span style="cursor:pointer; color: #fff; margin-left: %;" title="Logout"><a style="color:#fff;" href="<?php echo site_url('login/logout');?>"><i aria-hidden="true" class="fa fa-sign-out"></i></a></span>
         </div>
         
-    </ul>
 </nav>
 <?php } ?>
 </div>

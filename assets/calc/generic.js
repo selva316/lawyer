@@ -1009,25 +1009,6 @@ $( "#conceptName" ).blur(function() {
     });
 });
 
-$(document).on('click', '.btnEditDraftCopy', function(e) {
-	//alert($(this).val());
-	$.ajax({
-		url : 'notation/changeEditCopyVersion',
-		dataType: "text",
-		method: 'post',
-		data: {
-		   hashid: $(this).val()
-		},
-		success : function(data) {
-			if(data == "Admin"){
-				window.location.href="<?php echo site_url('admin/homepage')?>";
-			}
-			else{
-				window.location.href="<?php echo site_url('user/homepage')?>";
-			}
-		}
-	});
-});
 
 function saveAsDraft()
 {

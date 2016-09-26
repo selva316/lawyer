@@ -2584,7 +2584,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				$citationval = trim($this->_clean($lcitation));
 				if($citationval!='')
 				{
-					$citationStr .= "( DUP_CITATION = '".$citationval."') ";
+					$citationStr .= "( ACTUAL_CITATION = '".$citationval."') ";
                 	$citationStr .= " OR " ;	
 				}
 			}
@@ -2597,7 +2597,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		{
 
 			$citationval = trim($this->_clean($this->input->post('citation')));
-			$citationStr .= "( DUP_CITATION = '".$citationval."') ";
+			$citationStr .= "( ACTUAL_CITATION = '".$citationval."') ";
 			$citationStr .= " ) ";
 		}
 
@@ -2608,9 +2608,12 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 		//$query = $this->db->query("select count(notationid) as cntname  from law_notation where (created_by='$userid' or UPDATED_BY='$userid' OR type='dbversion' OR type='public') ".$citationStr);
 		
-		//echo "select COUNT(notationid) AS cntname, hashnotationid, type, citation  FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr." GROUP BY hashnotationid, type, citation";
+		//echo "select COUNT(lan.notationid) AS cntname, hashnotationid, TYPE, lan.citation  FROM law_notation lan INNER JOIN law_citation lc ON lan.notationid=lc.notationid WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr."  GROUP BY hashnotationid, TYPE, lan.citation";
 
-		$query = $this->db->query("select COUNT(notationid) AS cntname, hashnotationid, type, citation  FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr." GROUP BY hashnotationid, type, citation");
+		$query = $this->db->query("select COUNT(lan.notationid) AS cntname, hashnotationid, type, lan.citation  FROM law_notation lan INNER JOIN law_citation lc ON lan.notationid=lc.notationid WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr."  GROUP BY hashnotationid, TYPE, lan.citation");
+
+
+		//$query = $this->db->query("select COUNT(notationid) AS cntname, hashnotationid, type, citation  FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND TYPE!='draft' ".$citationStr." GROUP BY hashnotationid, type, citation");
  
 
 		$data = array();
@@ -2622,7 +2625,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 			$tableDetails .= "<tr><td><a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$row['hashnotationid'].">".$row['citation']."</a></td><td>".$row['type']."</td>";
 			
 			if($row['type'] == 'dbversion' || $row['type'] == 'public')
-				$tableDetails .= "<td><button style='margin-left:10px;' type='button' class='btn btn-info btnEditDraftCopy' value=".$row['hashnotationid']."> Mark Edit Copy </button></td>";
+				$tableDetails .= "<td><button style='margin-left:10px;' type='button' class='btn btn-info btnEditDraftCopy' value=".$row['hashnotationid']."> Make Edit Copy </button></td>";
 			else
 				$tableDetails .= "<td>--</td>";
 					

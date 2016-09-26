@@ -66,15 +66,18 @@
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Statute ID</th>
+                                    <th width="5%">
+                                    <input id="checkAllStatuate" value="1" type="checkbox"></th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Created By</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
-                </div>
+                    </div>
+                    <div class="panel-footer" id="divFooter">
+                        <button style='margin-left:10px;' type='button' class='btn btn-danger btnDelete'> Delete</button>
+                    </div>
                 </div> 
                
             </div>
@@ -252,6 +255,7 @@
         });
     });
 
+    /*
     $(document).on('click','.editCourtType',function(){
 
         $("#modalCourtType").modal('show');
@@ -277,7 +281,7 @@
         });
 
     });
-
+    
     
     $(document).on('click','.disableStatuate',function(){
 
@@ -291,6 +295,71 @@
             }
         });
 
+    });
+    */
+
+    $(document).on('click', '.btnDelete', function(e) {
+        var temp = [];
+        $.each($("input[class='chkbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+            $.ajax({
+                url: 'listofstatuate/disableStatuate',
+                dataType: "json",
+                method: 'post',
+                data: {
+                   statuateid: temp.join(",")
+                },
+                success : function(data) {
+                    fnTableCalling();
+                }
+            });
+        }
+        else
+            alert("No notation is selected!!!")
+    });
+
+    $(document).on('click','.editStatute',function(){
+
+        var type = $(this).data('type');
+        
+        $("#modalCourtType").modal('show');
+        //var data = table.row(this).data();
+        $("#editButton").css("display","none");
+
+        $.ajax({
+            type: 'post',
+            dataType: "json",
+            url: 'listofstatuate/findStatuate',
+            //data: {'courtId':$(this).val()},
+            data: {'statuateid':$(this).data('type')},
+
+            success:function(jdata){
+                var strData = String(jdata.data);
+                var str = strData.split(",");
+                if(str[0]!=''){
+                    $("#editButton").css("display","block");
+
+                }
+                $("#editSTID").val(str[0]);
+                $("#editStatuatename").val(str[1]);
+                $("#editdescription").val(str[2]);
+            }
+        });
+
+    });
+
+    $(document).on('change', '#checkAllStatuate', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
     });
 
     function fnTableCalling()
@@ -307,9 +376,25 @@
                { "data": "stid" },  
                { "data": "name" },  
                { "data": "description" },
-               { "data": "createdby" },  
-               { "data": "disable" }
-            ]
+               { "data": "createdby" }
+               //{ "data": "disable" }
+            ],
+            "initComplete": function(settings, json) {
+                var cntTable = $(this).DataTable();
+                var info = cntTable.page.info()
+                if(info.recordsTotal>0)
+                {
+                    $("#divFooter").css("display","block");
+                    $("#checkAllStatuate").prop("checked",false);
+                    $("#checkAllStatuate").prop("disabled",false);
+                }
+                else
+                {
+                    $("#divFooter").css("display","none");
+                    $("#checkAllStatuate").prop("checked",false);
+                    $("#checkAllStatuate").prop("disabled",true);
+                }
+            }
         });
     }
     </script>

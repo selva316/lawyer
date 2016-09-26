@@ -102,7 +102,7 @@ class ListOfConcept extends CI_Controller {
 	public function disableConcept()
 	{
 		$this->load->model('listofconceptmodel');
-		$data =  $this->listofconceptmodel->disableConcept($this->input->post('cid'));
+		$data =  $this->listofconceptmodel->disableConcept();
 		$disableDetails= array('data'=>$data);
 		echo json_encode($disableDetails);
 	}
@@ -121,8 +121,8 @@ class ListOfConcept extends CI_Controller {
 				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['CID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableConcept" value="'.$r['CID'].'" >Enable</button>';
 
 			$details = array(
-				'cid'=>$r['CID'],
-				'name'=>$r['NAME'],
+				'cid'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['CID'].'"/></label></div> </div>',
+				'name'=>"<a  style='margin-left:10px;' class='editConcept' href='#' data-type='".$r['CID']."'>".$r['NAME']."</a>",
 				'description'=>$r['DESCRIPTION'],
 				'createdby'=>$this->configurationmodel->fetchUserName($r['USERID']),
 				'disable' => $statusStr

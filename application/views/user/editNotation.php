@@ -504,7 +504,30 @@
           </div><!--/.modal-content -->
           </div><!--/.modal-dialog -->
         </div> <!--/.modal -->
-	<!-- Statuate sub Section Modal End here-->        
+	<!-- Statuate sub Section Modal End here--> 
+
+	<!-- Citation Available Modal Begin here-->
+		<div class="modal fade" id="availableModal" style="margin-top:10%;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title"  style="font-weight:bold;">Already the citation is available, Are you want to create a edit copy?</h4>
+					</div><!-- /.modal-header -->
+					<div class="modal-body">
+						<div class="row" style="margin:2%">
+							<div class="col-md-12">
+
+								<div id="availCitation"></div>
+								<div class="clearfix"></div>
+							</div>
+						</div>
+					</div><!-- /.modal-body -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	<!-- Citation Available Modal End here-->
+	       
 	<!-- Concept Modal Begin here-->
 		<div class="modal fade" id="conceptModal">
 			<div class="modal-dialog">

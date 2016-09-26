@@ -63,20 +63,23 @@
                 </div>
                 <!-- /.row -->
                 <div class="panel panel-default">
-                    <div class="panel-heading">List of Concept</div>
+                    <div class="panel-heading">List of Concept & Statute Link</div>
                     <div class="panel-body">
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Concept ID</th>
+                                    <th width="5%">
+                                    <input id="checkAllConcept" value="1" type="checkbox"></th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Created By</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
-                </div>
+                    </div>
+                    <div class="panel-footer" id="divFooter">
+                        <button style='margin-left:10px;' type='button' class='btn btn-danger btnDelete'> Delete</button>
+                    </div>
                 </div> 
                
             </div>
@@ -556,6 +559,67 @@
 
     });
 
+    $(document).on('click', '.btnDelete', function(e) {
+        var temp = [];
+        $.each($("input[class='chkbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+            $.ajax({
+                url: 'listofconcept/disableConcept',
+                dataType: "json",
+                method: 'post',
+                data: {
+                   cid: temp.join(",")
+                },
+                success : function(data) {
+                    fnTableCalling();
+                }
+            });
+        }
+        else
+            alert("No notation is selected!!!")
+    });
+
+    $(document).on('click','.editConcept',function(){
+
+        var type = $(this).data('type');
+        
+        $("#modalCourtType").modal('show');
+        //var data = table.row(this).data();
+        $("#editButton").css("display","none");
+
+        $.ajax({
+            type: 'post',
+            dataType: "json",
+            url: 'listofconcept/findConcept',
+            data: {'conceptid': $(this).data('type')},
+            success:function(jdata){
+                var strData = String(jdata.data);
+                var str = strData.split(",");
+                if(str[0]!=''){
+                    $("#editButton").css("display","block");
+
+                }
+                $("#editCID").val(str[0]);
+                $("#editConceptname").val(str[1]);
+                $("#editdescription").val(str[2])
+            }
+        });
+    });
+
+    $(document).on('change', '#checkAllConcept', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+
     function fnTableCalling()
     {
         $('#courtTypeList').dataTable().fnDestroy();
@@ -570,9 +634,25 @@
                { "data": "cid" },  
                { "data": "name" },  
                { "data": "description" },
-               { "data": "createdby" },  
-               { "data": "disable" }
-            ]
+               { "data": "createdby" }
+               //{ "data": "disable" }
+            ],
+            "initComplete": function(settings, json) {
+                var cntTable = $(this).DataTable();
+                var info = cntTable.page.info()
+                if(info.recordsTotal>0)
+                {
+                    $("#divFooter").css("display","block");
+                    $("#checkAllConcept").prop("checked",false);
+                    $("#checkAllConcept").prop("disabled",false);
+                }
+                else
+                {
+                    $("#divFooter").css("display","none");
+                    $("#checkAllConcept").prop("checked",false);
+                    $("#checkAllConcept").prop("disabled",true);
+                }
+            }
         });
     }
     </script>

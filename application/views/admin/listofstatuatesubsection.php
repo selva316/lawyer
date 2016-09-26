@@ -66,15 +66,18 @@
                         <table id="courtTypeList" class="display" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
-                                    <th>Statute ID</th>
+                                    <th width="5%">
+                                    <input id="checkAllStatuteSubsection" value="1" type="checkbox"></th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Created By</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                         </table>
-                </div>
+                    </div>
+                    <div class="panel-footer" id="divFooter">
+                        <button style='margin-left:10px;' type='button' class='btn btn-danger btnDelete'> Delete</button>
+                    </div>
                 </div> 
                
             </div>
@@ -281,6 +284,7 @@
         });
     });
 
+    /*
     $(document).on('click','.editCourtType',function(){
 
         $("#modalCourtType").modal('show');
@@ -307,8 +311,36 @@
         });
 
     });
+    */
 
-    
+    $(document).on('click','.editSubsection',function(){
+
+        var type = $(this).data('type');
+        $("#modalCourtType").modal('show');
+        //var data = table.row(this).data();
+        $("#editButton").css("display","none");
+
+        $.ajax({
+            type: 'post',
+            dataType: "json",
+            url: 'listofstatuatesubsection/findSubsection',
+            data: {'ssid': $(this).data('type')},
+            success:function(jdata){
+                var strData = String(jdata.data);
+                var str = strData.split(",");
+                if(str[0]!=''){
+                    $("#editButton").css("display","block");
+
+                }
+                $("#editSSID").val(str[0]);
+                $("#editStatuatename").val(str[1]);
+                $("#editSubsectionname").val(str[2]);
+                $("#editdescription").val(str[3]);
+            }
+        });
+
+    });
+
     $(document).on('click','.disableSubSection',function(){
 
         $.ajax({
@@ -323,6 +355,40 @@
 
     });
 
+    $(document).on('click', '.btnDelete', function(e) {
+        var temp = [];
+        $.each($("input[class='chkbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+            $.ajax({
+                url: 'listofstatuatesubsection/disableSubSection',
+                dataType: "json",
+                method: 'post',
+                data: {
+                   subsectionid: temp.join(",")
+                },
+                success : function(data) {
+                    fnTableCalling();
+                }
+            });
+        }
+        else
+            alert("No notation is selected!!!")
+    });
+
+    $(document).on('change', '#checkAllStatuteSubsection', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+
     function fnTableCalling()
     {
         $('#courtTypeList').dataTable().fnDestroy();
@@ -334,12 +400,28 @@
                         }
                     ],
             "columns": [
-               { "data": "stid" },  
+               { "data": "ssid" },  
                { "data": "name" },  
                { "data": "description" },
-               { "data": "createdby" },  
-               { "data": "disable" }
-            ]
+               { "data": "createdby" }
+               //{ "data": "disable" }
+            ],
+            "initComplete": function(settings, json) {
+                var cntTable = $(this).DataTable();
+                var info = cntTable.page.info()
+                if(info.recordsTotal>0)
+                {
+                    $("#divFooter").css("display","block");
+                    $("#checkAllStatuteSubsection").prop("checked",false);
+                    $("#checkAllStatuteSubsection").prop("disabled",false);
+                }
+                else
+                {
+                    $("#divFooter").css("display","none");
+                    $("#checkAllStatuteSubsection").prop("checked",false);
+                    $("#checkAllStatuteSubsection").prop("disabled",true);
+                }
+            }
         });
     }
     </script>

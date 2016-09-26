@@ -3,7 +3,7 @@ class Listofconceptmodel extends CI_Model {
 
 	public function fetchListOfConcept()
 	{
-		$str = "select * from law_concepts";
+		$str = "select * from law_concepts where disable='N'";
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -225,29 +225,32 @@ class Listofconceptmodel extends CI_Model {
 	}
 	
 	
-	public function disableConcept($conceptid)
+	public function disableConcept()
 	{
-		$query = $this->db->query("select disable from law_concepts where (UPPER(CID) = '".strtoupper($conceptid)."')");
-		
-		$data = array();
-		
-		$disable = 'N';
-		$result = $query->result_array();
-		foreach($result as $row)
+		$conceptList = $this->input->post('cid');
+		$hashidArr = explode(',', $conceptList);
+		foreach ($hashidArr as $conceptid) 
 		{
-			$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
-		}
-
-		if($disable == 'N')
-			$disable = 'Y';
-		else
+			$query = $this->db->query("select disable from law_concepts where (UPPER(CID) = '".strtoupper($conceptid)."')");
+			$data = array();
+			
 			$disable = 'N';
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
+			}
 
-		$this->db->where('CID', $conceptid);
-		$this->db->set('DISABLE', $disable);
+			if($disable == 'N')
+				$disable = 'Y';
+			else
+				$disable = 'N';
 
-		$this->db->update('law_concepts');
+			$this->db->where('CID', $conceptid);
+			$this->db->set('DISABLE', $disable);
 
+			$this->db->update('law_concepts');
+		}
 		$dArray = array();
 		array_push($dArray, true);
 		return $dArray;

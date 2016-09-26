@@ -63,7 +63,7 @@ class ListOfStatuate extends CI_Controller {
 	public function disableStatuate()
 	{
 		$this->load->model('listofstatuatemodel');
-		$data =  $this->listofstatuatemodel->disableStatuate($this->input->post('statuateid'));
+		$data =  $this->listofstatuatemodel->disableStatuate();
 		$disableDetails= array('data'=>$data);
 		echo json_encode($disableDetails);
 	}
@@ -82,11 +82,11 @@ class ListOfStatuate extends CI_Controller {
 				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['STID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableStatuate" value="'.$r['STID'].'" >Enable</button>';
 
 			$details = array(
-				'stid'=>$r['STID'],
-				'name'=>$r['NAME'],
+				'stid'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['STID'].'"/></label></div> </div>',
+				'name'=>"<a  style='margin-left:10px;' class='editStatute' href='#' data-type='".$r['STID']."'>".$r['NAME']."</a>",
 				'description'=>$r['DESCRIPTION'],
 				'createdby'=>$this->configurationmodel->fetchUserName($r['USERID']),
-				'disable' => $statusStr
+				//'disable' => $statusStr
 				//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'
 			);
 			

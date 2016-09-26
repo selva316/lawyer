@@ -79,7 +79,7 @@ class ListOfStatuateSubsection extends CI_Controller {
 	public function disableSubSection()
 	{
 		$this->load->model('listofstatuatesubsectionmodel');
-		$data =  $this->listofstatuatesubsectionmodel->disableSubSection($this->input->post('subsectionid'));
+		$data =  $this->listofstatuatesubsectionmodel->disableSubSection();
 		$disableDetails= array('data'=>$data);
 		echo json_encode($disableDetails);
 	}
@@ -98,8 +98,10 @@ class ListOfStatuateSubsection extends CI_Controller {
 				$statusStr = '<button type="button" class="btn btn-small btn-success editCourtType" value="'.$r['SSID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableSubSection" value="'.$r['SSID'].'" >Enable</button>';
 
 			$details = array(
-				'stid'=> $this->listofstatuatesubsectionmodel->fetchStatuateName($r['STID']),
-				'name'=>$r['NAME'],
+				//'stid'=> $this->listofstatuatesubsectionmodel->fetchStatuateName($r['STID']),
+				'ssid'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['SSID'].'"/></label></div> </div>',
+				'name'=>"<a  style='margin-left:10px;' class='editSubsection' href='#' data-type='".$r['SSID']."'>".$r['NAME']."</a>",
+				//'name'=>$r['NAME'],
 				'description'=>$r['DESCRIPTION'],
 				'createdby'=>$this->configurationmodel->fetchUserName($r['USERID']),
 				'disable' => $statusStr

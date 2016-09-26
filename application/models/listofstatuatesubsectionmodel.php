@@ -3,7 +3,7 @@ class Listofstatuatesubsectionmodel extends CI_Model {
 
 	public function fetchListOfStatuateSubSection()
 	{
-		$str = "select * from law_statuate_sub_section";
+		$str = "select * from law_statuate_sub_section where disable='N'";
 		$query = $this->db->query($str);
 		return $query->result_array();
 	}
@@ -133,28 +133,33 @@ class Listofstatuatesubsectionmodel extends CI_Model {
 
 	}
 
-	public function disableSubSection($subsectionid)
+	public function disableSubSection()
 	{
-		$query = $this->db->query("select disable from law_statuate_sub_section where (UPPER(SSID) = '".strtoupper($subsectionid)."')");
-		
-		$data = array();
-		
-		$disable = 'N';
-		$result = $query->result_array();
-		foreach($result as $row)
+		$subsectionList = $this->input->post('subsectionid');
+		$hashidArr = explode(',', $subsectionList);
+		foreach ($hashidArr as $subsectionid) 
 		{
-			$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
-		}
-
-		if($disable == 'N')
-			$disable = 'Y';
-		else
+			$query = $this->db->query("select disable from law_statuate_sub_section where (UPPER(SSID) = '".strtoupper($subsectionid)."')");
+			
+			$data = array();
+			
 			$disable = 'N';
+			$result = $query->result_array();
+			foreach($result as $row)
+			{
+				$disable = $row['disable'];//i am not want item code i,eeeeeeeeeeee
+			}
 
-		$this->db->where('SSID', $subsectionid);
-		$this->db->set('DISABLE', $disable);
+			if($disable == 'N')
+				$disable = 'Y';
+			else
+				$disable = 'N';
 
-		$this->db->update('law_statuate_sub_section');
+			$this->db->where('SSID', $subsectionid);
+			$this->db->set('DISABLE', $disable);
+
+			$this->db->update('law_statuate_sub_section');
+		}
 
 		$dArray = array();
 		array_push($dArray, true);

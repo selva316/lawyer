@@ -234,7 +234,7 @@
         $.each($("input[class='chkNotationbox']:checked"), function(){            
             temp.push($(this).val());
         });
-
+        
         if(temp.length > 0){
         	$.ajax({
 				url : '../user/notation/changeDbVersion',
@@ -250,6 +250,7 @@
         }
         else
         	alert("No notation is selected");
+        
 	});
 
 	$(document).on('click', '.btnPublic', function(e) {

@@ -1769,9 +1769,10 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		foreach ($hashidArr as $hashval) {
 		
 			$type = $this->findTypeofNotation(trim($hashval));
-			
-			if($type != "dbversion")
-			{
+
+			$citationval = $this->findCitationNotation(trim($hashval));
+			//if($type != "dbversion")
+			//{
 				$this->db->where('HASHNOTATIONID', $hashval);
 				$this->db->set('CREATED_BY', $this->session->userdata('userid'));
 				$this->db->set('UPDATED_BY', $this->session->userdata('userid'));
@@ -1780,7 +1781,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 				$this->db->update('law_notation');
 
-			}
+			//}
 		}
 		return true;
 	}
@@ -2213,6 +2214,11 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
   	 	return preg_replace('/[^a-zA-Z0-9]/', '', $string); // Removes special chars.
 	}
 
+	public function _cleanWithSemicolon($string) {
+   		//$string = str_replace('-', ' ', $string); // Replaces all spaces with hyphens.
+  	 	return preg_replace('/[^a-zA-Z0-9]/', '', $string); // Removes special chars.
+	}
+
 	public function _checkCitationAvailable($citation)
 	{
 		$userid =  $this->session->userdata('userid');
@@ -2523,6 +2529,42 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		}
 
 		return $type;	
+	}
+
+	public function findCitationNotation($hashnotationid)
+	{
+		$query = $this->db->query("select citation from law_notation where hashnotationid  = '".$hashnotationid."'");
+		$result = $query->result_array();
+		$listcitation = '';
+		foreach($result as $r)
+		{
+			$listcitation = $r['citation'];
+		}
+
+		if($listcitation != '')
+		{
+			if (strpos($listcitation, ';') !== false) {
+				$citation_arr = explode(";",$listcitation);
+				foreach($citation_arr as $lcitation)
+				{
+					$citationval = trim($this->_clean($lcitation));
+					if($citationval!='')
+					{
+
+						$dubcitation = $this->_clean($citationval);
+						$this->db->query("update law_notation set type='public' where (type = 'public' or type = 'dbversion') and dup_citation like '%$dubcitation%'");
+					}
+				}
+				
+			}
+			else
+			{
+
+				$dubcitation = $this->_clean($citationval);
+				$this->db->query("update law_notation set type='public' where (type = 'public' or type = 'dbversion') and dup_citation like '%$dubcitation%'");
+			}
+	
+		}
 	}
 
 	public function checkCitationTypeAvailable($citationType){

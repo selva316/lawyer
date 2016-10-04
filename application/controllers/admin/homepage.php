@@ -43,6 +43,7 @@ class Homepage extends CI_Controller {
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-info btnDraft' value=".$r['HASHNOTATIONID']."> Accept Draft</button>";
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
 
+				$pdfStr = "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 				$details = array(
 					
 					//'notation'=>$r['NOTATIONID'],
@@ -54,7 +55,7 @@ class Homepage extends CI_Controller {
 					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
-					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))
+					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))." ".$pdfStr
 					//'action' => $actionStr
 					
 					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil' rel='tooltip' title='Edit'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View'></span></a>"
@@ -126,7 +127,7 @@ class Homepage extends CI_Controller {
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 
-				
+				$pdfStr = "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 				
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
@@ -139,7 +140,7 @@ class Homepage extends CI_Controller {
 					//'date_of_creation' => date('d-m-Y',$r['CREATED_ON']),
 					//'created_by' => $this->configurationmodel->fetchUserName($r['CREATED_BY']),
 					'type' => ucfirst($r['TYPE']),
-					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))
+					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))." ".$pdfStr
 					//'action' => $actionStr
 				);
 				

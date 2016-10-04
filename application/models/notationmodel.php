@@ -2697,6 +2697,211 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 	}
 
+	public function fetchPdfHashNotation()
+	{
+		$nid = $this->input->get('nid');
+		//echo "Notation Id: ".$nid;
+		$this->db->select('*');
+		$this->db->from('law_notation');
+		$this->db->where('HASHNOTATIONID', $nid);		
+
+		$query = $this->db->get();
+
+		$html = '';
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			//print_r($result);
+			$data = array();
+			$citationval = '';
+			foreach($result as $row)
+			{
+				
+				$html .= '<div class="container-fluid">
+			<div id="page-wrapper">
+			<div class="panel panel-info">
+                <div class="panel-heading">Case Information</div>
+                <div class="panel-body">
+            		<div class="row-fluid">
+						<div class="span3">
+							<label class="control-label">Case Name: ';
+							$html .= $row['CASENAME'];
+
+				$html .= '		</label>
+						</div>
+						<div class="span3">
+							<label class="control-label">Citation: ';
+
+				$html .= $row['CITATION'];
+
+				$html .= '</label>
+						</div>
+						<div class="span3">
+							<label class="control-label">Court assigned case number:';
+
+
+				$html .= $row['CASENUMBER'];
+
+				$html .= '</label>
+						</div>
+						<div class="span3">
+							<label class="control-label">Court Name: ';
+				$html .= $row['COURT_NAME'];
+
+				$html .= '</label>
+						</div>
+					</div>   
+
+					<div class="row-fluid">
+						<div class="span3">
+							<label class="control-label">Judge Name:';
+
+				$html .= ucfirst($row['JUDGE_NAME']);
+
+				$html .= '</label>
+						</div>
+						<div class="span3">
+							<label class="control-label">Year of Judgement:';
+
+				$html .= $row['YEAR'];
+				
+				$html .= '</label>
+						</div>
+						<div class="span3">
+							<label class="control-label">Type of Bench:';
+
+				$html .= $row['BENCH'];
+
+				$html .= '</label>
+						</div>
+						
+						<div class="span3">
+							<label  class="control-label" >Status: ';
+
+				$html .= ucfirst($row['type']);
+
+				$html .= '</label>
+						</div>
+					</div> 
+
+					<div class="row-fluid">
+						<div class="span8">
+							<label  class="control-label" >Notes:</label>';
+
+				$html .= $row['facts_of_case'];
+
+				$html .=	'</div>
+					</div>
+
+            	</div>
+            </div>';
+
+            	$this->db->select('*');
+				$this->db->from('law_notation_statuate');
+				$this->db->where('notationid', $nid);
+				$statuateData = array();
+				$statuatequery = $this->db->get();
+				
+				if($statuatequery->num_rows() > 0)
+				{
+
+            	$html .= '<table class="table table-bordered table-hover tableStatuate">
+								<thead>
+									<tr>
+										<th width="2%">ID</th>
+										<th width="15%">Statute</th>
+										<th width="25%">Section & Subsection</th>
+										<th width="5%">Concept</th>
+									</tr>
+								</thead>
+								<tbody>
+							';
+
+				$statuateresult = $statuatequery->result_array();
+				$k = 0;
+				foreach($statuateresult as $statuaterow)
+				{
+					$html .= '<tr>';
+					$html .= '<td>'.($k+1) .'</td>';
+					$html .= '<td>'.$statuaterow['statuate'].'</td>';
+					$html .= '<td>'.$statuaterow['sub_section'].'</td>';
+					$html .= '<td>'.$statuaterow['concept'].'</td>';
+					$html .='</tr>';
+
+					$k++;
+				}
+
+				$html .='</tbody>
+							</table>';
+            	}
+
+            	$this->db->select('*');
+				$this->db->from('law_citation_notation_link');
+				$this->db->where('notationid', $nid);
+				$notationdata = array();
+				$notationquery = $this->db->get();
+				
+				if($notationquery->num_rows() > 0)
+				{
+					$html .= '<table class="table table-bordered table-hover tableCitation">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>Type of Citation</th>
+										<th>Citation Number</th>
+										<th>Notes</th>
+									</tr>
+								</thead>
+								<tbody>';
+
+					$notationresult = $notationquery->result_array();
+					$i = 0;
+					foreach($notationresult as $notationrow)
+					{
+						$html .= '<tr>';
+						$html .= '<td>'.($k+1) .'</td>';
+						$html .= '<td>'.$notationrow['TYPE_OF_CITATION'].'</td>';
+						$html .= '<td>'.$notationrow['ACTUAL_CITATION'].'</td>';
+						$html .= '<td>'.$notationrow['DESCRIPTION'].'</td>';
+						$html .='</tr>';
+
+						$i++;
+					}
+
+					$html .='</tbody>
+							</table>';
+				}
+            	/*		
+				
+			
+				$this->db->select('*');
+				$this->db->from('law_citation_notation_link');
+				$this->db->where('CITATION', $citationval);
+
+				$datalink = array();
+				$datalinkquery = $this->db->get();
+				if($datalinkquery->num_rows() > 0)
+				{
+					$notationlink = $datalinkquery->result_array();
+					$i = 0;
+					foreach($notationlink as $notationrow)
+					{
+						$datalink[$i]['citation'] = $this->findDupCitation($notationrow['NOTATIONID']);
+						$datalink[$i]['actual_citation'] = $this->findCitation($notationrow['NOTATIONID']);
+						$datalink[$i]['type_of_citation'] = $this->findCitationType($notationrow['TYPE_OF_CITATION']).' in ';//$notationrow['TYPE_OF_CITATION'];
+						$datalink[$i]['casenumber'] = $this->findCaseName($notationrow['NOTATIONID']);
+						$datalink[$i]['description'] = $notationrow['DESCRIPTION'];
+						$datalink[$i]['treatment'] = $notationrow['TREATMENT'];
+						$i++;
+					}
+				}
+				$data['linkdetails'] = $datalink;
+				*/
+				return $html;
+			}
+			
+		}
+	}
 
 }
 /* End of file Logindetailsmodel.php */

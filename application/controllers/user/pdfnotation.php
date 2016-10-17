@@ -19,9 +19,10 @@ class PdfNotation extends CI_Controller {
 		$this->load->model('notationmodel');
 
 		$html = '';
-		$html .= $this->cssStyle();
+		//$html .= $this->cssStyle();
 		$html .= $this->notationmodel->fetchPdfHashNotation();
-				
+    //echo $html;
+		
 		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
 		ob_clean();
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -38,7 +39,8 @@ class PdfNotation extends CI_Controller {
 		//$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING, array(0,64,255), array(0,64,128));
 		
 		//$pdf->setFooterData($tc=array(0,64,0), $lc=array(0,64,128));
-		
+    
+
 		// set header and footer fonts
 		$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 		$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -69,12 +71,12 @@ class PdfNotation extends CI_Controller {
 		// dejavusans is a UTF-8 Unicode font, if you only need to
 		// print standard ASCII chars, you can use core fonts like
 		// helvetica or helvetica to reduce file size.
-		$pdf->SetFont('droidsans', '', 14, '', true);
+		$pdf->SetFont('times', '', 10, '', true);
 
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
 		$pdf->AddPage();
-		
+		$pdf->Cell(0, 15, 'Notation Details', 0, false, 'C', 0, '', 0, false, 'M', 'M');
         // output the HTML content
 		$pdf->writeHTML($html, true, false, true, false, '');
 		$pdf->Output($hashnid.'.pdf', 'I');

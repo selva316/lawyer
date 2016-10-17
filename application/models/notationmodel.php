@@ -2716,79 +2716,81 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 			$citationval = '';
 			foreach($result as $row)
 			{
-				
+				$notationid = $row['NOTATIONID'];
+
 				$html .= '<div class="container-fluid">
 			<div id="page-wrapper">
 			<div class="panel panel-info">
-                <div class="panel-heading">Case Information</div>
+				<h2>Case Information</h2>
+                <div class="panel-heading" style="font-weight:bold;"></div>
                 <div class="panel-body">
             		<div class="row-fluid">
 						<div class="span3">
-							<label class="control-label">Case Name: ';
+							<label class="control-label"  style="font-weight:bold;">Case Name: </label>';
 							$html .= $row['CASENAME'];
 
-				$html .= '		</label>
+				$html .= '		
 						</div>
 						<div class="span3">
-							<label class="control-label">Citation: ';
+							<label class="control-label" style="font-weight:bold;">Citation: </label>';
 
 				$html .= $row['CITATION'];
 
-				$html .= '</label>
+				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label">Court assigned case number:';
+							<label class="control-label" style="font-weight:bold;">Court assigned case number:</label>';
 
 
 				$html .= $row['CASENUMBER'];
 
-				$html .= '</label>
+				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label">Court Name: ';
+							<label class="control-label" style="font-weight:bold;">Court Name: </label>';
 				$html .= $row['COURT_NAME'];
 
-				$html .= '</label>
+				$html .= '
 						</div>
 					</div>   
 
 					<div class="row-fluid">
 						<div class="span3">
-							<label class="control-label">Judge Name:';
+							<label class="control-label" style="font-weight:bold;">Judge Name: </label>';
 
 				$html .= ucfirst($row['JUDGE_NAME']);
 
-				$html .= '</label>
+				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label">Year of Judgement:';
+							<label class="control-label" style="font-weight:bold;">Year of Judgement:</label>';
 
 				$html .= $row['YEAR'];
 				
-				$html .= '</label>
+				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label">Type of Bench:';
+							<label class="control-label" style="font-weight:bold;">Type of Bench:</label>';
 
 				$html .= $row['BENCH'];
 
-				$html .= '</label>
+				$html .= '
 						</div>
 						
 						<div class="span3">
-							<label  class="control-label" >Status: ';
+							<label  class="control-label" style="font-weight:bold;">Status: </label>';
 
-				$html .= ucfirst($row['type']);
+				$html .= ucfirst($row['TYPE']);
 
-				$html .= '</label>
+				$html .= '
 						</div>
 					</div> 
 
 					<div class="row-fluid">
 						<div class="span8">
-							<label  class="control-label" >Notes:</label>';
+							<label  class="control-label" style="font-weight:bold;">Notes:</label>';
 
-				$html .= $row['facts_of_case'];
+				$html .= $row['FACTS_OF_CASE'];
 
 				$html .=	'</div>
 					</div>
@@ -2798,56 +2800,60 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
             	$this->db->select('*');
 				$this->db->from('law_notation_statuate');
-				$this->db->where('notationid', $nid);
+				$this->db->where('notationid', $notationid);
 				$statuateData = array();
 				$statuatequery = $this->db->get();
 				
 				if($statuatequery->num_rows() > 0)
 				{
+					$html .= '<BR/>';
+					$html .= '<h2>Statute and Concepts</h2>';
+	            	$html .= '<table class="table table-bordered table-hover tableStatuate" border="1">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Statute</th>
+											<th>Section & Subsection</th>
+											<th>Concept</th>
+										</tr>
+									</thead>
+									<tbody>
+								';
 
-            	$html .= '<table class="table table-bordered table-hover tableStatuate">
-								<thead>
-									<tr>
-										<th width="2%">ID</th>
-										<th width="15%">Statute</th>
-										<th width="25%">Section & Subsection</th>
-										<th width="5%">Concept</th>
-									</tr>
-								</thead>
-								<tbody>
-							';
+					$statuateresult = $statuatequery->result_array();
+					$k = 0;
+					foreach($statuateresult as $statuaterow)
+					{
+						$html .= '<tr>';
+						$html .= '<td>'.($k+1) .'</td>';
+						$html .= '<td>'.$statuaterow['STATUATE'].'</td>';
+						$html .= '<td>'.$statuaterow['SUB_SECTION'].'</td>';
+						$html .= '<td>'.$statuaterow['CONCEPT'].'</td>';
+						$html .='</tr>';
 
-				$statuateresult = $statuatequery->result_array();
-				$k = 0;
-				foreach($statuateresult as $statuaterow)
-				{
-					$html .= '<tr>';
-					$html .= '<td>'.($k+1) .'</td>';
-					$html .= '<td>'.$statuaterow['statuate'].'</td>';
-					$html .= '<td>'.$statuaterow['sub_section'].'</td>';
-					$html .= '<td>'.$statuaterow['concept'].'</td>';
-					$html .='</tr>';
+						$k++;
+					}
 
-					$k++;
-				}
-
-				$html .='</tbody>
+					$html .='</tbody>
 							</table>';
             	}
 
             	$this->db->select('*');
 				$this->db->from('law_citation_notation_link');
-				$this->db->where('notationid', $nid);
+				$this->db->where('notationid', $notationid);
 				$notationdata = array();
 				$notationquery = $this->db->get();
 				
 				if($notationquery->num_rows() > 0)
 				{
-					$html .= '<table class="table table-bordered table-hover tableCitation">
+					$html .= '<BR/>';
+					$html .= '<h2>List of Citation</h2>';
+					$html .= '<table class="table table-bordered table-hover tableCitation" border="1">
 								<thead>
 									<tr>
-										<th>ID</th>
 										<th>Type of Citation</th>
+										<th>Treatment</th>
+										<th>Case Name</th>
 										<th>Citation Number</th>
 										<th>Notes</th>
 									</tr>
@@ -2859,8 +2865,9 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 					foreach($notationresult as $notationrow)
 					{
 						$html .= '<tr>';
-						$html .= '<td>'.($k+1) .'</td>';
 						$html .= '<td>'.$notationrow['TYPE_OF_CITATION'].'</td>';
+						$html .= '<td>'.$notationrow['TREATMENT'].'</td>';
+						$html .= '<td>'.$notationrow['CASENUMBER'].'</td>';
 						$html .= '<td>'.$notationrow['ACTUAL_CITATION'].'</td>';
 						$html .= '<td>'.$notationrow['DESCRIPTION'].'</td>';
 						$html .='</tr>';

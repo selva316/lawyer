@@ -23,6 +23,7 @@ class PdfNotation extends CI_Controller {
 		$html .= $this->notationmodel->fetchPdfHashNotation();
     //echo $html;
 		
+    
 		$pdf = new Pdf('P', 'mm', 'A4', true, 'UTF-8', false);
 		ob_clean();
 		$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -76,7 +77,7 @@ class PdfNotation extends CI_Controller {
 		// Add a page
 		// This method has several options, check the source code documentation for more information.
 		$pdf->AddPage();
-		$pdf->Cell(0, 15, 'Notation Details', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		//$pdf->Cell(0, 5, 'Notation Details', 0, false, 'C', 0, '', 0, false, 'M', 'M');
         // output the HTML content
 		$pdf->writeHTML($html, true, false, true, false, '');
 		$pdf->Output($hashnid.'.pdf', 'I');

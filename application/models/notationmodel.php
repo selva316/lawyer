@@ -2718,28 +2718,27 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 			{
 				$notationid = $row['NOTATIONID'];
 
-				$html .= '<div class="container-fluid">
-			<div id="page-wrapper">
-			<div class="panel panel-info">
-				<h2>Case Information</h2>
-                <div class="panel-heading" style="font-weight:bold;"></div>
-                <div class="panel-body">
-            		<div class="row-fluid">
-						<div class="span3">
-							<label class="control-label"  style="font-weight:bold;">Case Name: </label>';
-							$html .= $row['CASENAME'];
-
-				$html .= '		
-						</div>
-						<div class="span3">
-							<label class="control-label" style="font-weight:bold;">Citation: </label>';
-
-				$html .= $row['CITATION'];
-
 				$html .= '
-						</div>
+				<div style="text-align:center;"><h2>Notation Details</h2></div>
+
+				<table>
+					<thead>
+						<tr>
+							<th><span  style="font-weight:bold;">Case Name: </span>'.$row['CASENAME'].'</th>
+							<th><span  style="font-weight:bold;">Citation: </span>'.$row['CITATION'].'</th>
+						</tr>
+					</thead>
+				</table>
+
+			<div class="panel panel-info">
+				
+                <div class="panel-heading" style="font-weight:bold;">Case Information</div>
+                <div class="panel-body">
+            		<div class="row-fluid">';
+						
+				$html .= '
 						<div class="span3">
-							<label class="control-label" style="font-weight:bold;">Court assigned case number:</label>';
+							<label class="control-label" style="font-weight:bold; ">Court assigned case number: </label>';
 
 
 				$html .= $row['CASENUMBER'];
@@ -2752,9 +2751,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 				$html .= '
 						</div>
-					</div>   
 
-					<div class="row-fluid">
 						<div class="span3">
 							<label class="control-label" style="font-weight:bold;">Judge Name: </label>';
 
@@ -2763,14 +2760,14 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label" style="font-weight:bold;">Year of Judgement:</label>';
+							<label class="control-label" style="font-weight:bold;">Year of Judgement: </label>';
 
 				$html .= $row['YEAR'];
 				
 				$html .= '
 						</div>
 						<div class="span3">
-							<label class="control-label" style="font-weight:bold;">Type of Bench:</label>';
+							<label class="control-label" style="font-weight:bold;">Type of Bench: </label>';
 
 				$html .= $row['BENCH'];
 
@@ -2784,19 +2781,14 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 				$html .= '
 						</div>
-					</div> 
 
-					<div class="row-fluid">
 						<div class="span8">
 							<label  class="control-label" style="font-weight:bold;">Notes:</label>';
 
 				$html .= $row['FACTS_OF_CASE'];
 
 				$html .=	'</div>
-					</div>
-
-            	</div>
-            </div>';
+					</div>';
 
             	$this->db->select('*');
 				$this->db->from('law_notation_statuate');
@@ -2807,7 +2799,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				if($statuatequery->num_rows() > 0)
 				{
 					$html .= '<BR/>';
-					$html .= '<h2>Statute and Concepts</h2>';
+					$html .= '<h3>Statute and Concepts</h3>';
 	            	$html .= '<table class="table table-bordered table-hover tableStatuate" border="1">
 									<thead>
 										<tr>
@@ -2847,7 +2839,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				if($notationquery->num_rows() > 0)
 				{
 					$html .= '<BR/>';
-					$html .= '<h2>List of Citation</h2>';
+					$html .= '<h3>List of Citation</h3>';
 					$html .= '<table class="table table-bordered table-hover tableCitation" border="1">
 								<thead>
 									<tr>

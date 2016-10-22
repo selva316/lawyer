@@ -51,6 +51,10 @@
 		#mceu_60{
 			display: none;	
 		}
+
+		#mceu_90{
+			display: none;
+		}
 	</style>
 </head>
 
@@ -413,6 +417,20 @@
 				</div>
 				<?php
 					}
+					else
+					{
+				?>
+				<div class="row-fluid" style="margin-bottom:5px;">
+					<div class="span4" style="text-align:center;"></div>
+					<div class="span4" style="text-align:center;">
+					<button type="button" class="btn btn-primary" id="tag" data-toggle="modal" data-target="#modalResearch" >
+			            Tag a Notation <i class="fa fa-film "></i>
+			        </button>
+			        </div>
+			        <div class="span4" style="text-align:center;"></div>
+			    </div>
+				<?php
+					}
 				?>
 			</div>
 			<!-- /#page-wrapper -->
@@ -568,6 +586,41 @@
 		</div><!-- /.modal -->	
 
 	<!-- Concept Modal End here-->
+
+	<div class="modal fade" id="modalResearch" style="z-index:99999;">
+            <div class="modal-dialog">
+	            <div class="modal-content">
+	              <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title">Research topic to tag</h4>
+	              </div>
+	              <div class="modal-body">
+	                
+	                <div class="row-fluid">
+	                    <div class="span12">
+	                        <label class="control-label">Select Research Topic</label>
+	                        <input  class="form-control autocomplete_tag" type="text" id="topicname" name="topicname"  autocomplete="off"  value=""/>
+	                        <input  class="form-control" type="hidden" id="rid" name="rid"  autocomplete="off"  value=""/>
+	                    </div>
+	                </div>
+
+					<div class="row-fluid" style="margin-top:20px;">
+						<div class="span12">
+							<label class="control-label">Tag Notes</label>
+							<textarea id="tagNote" class="form-control myTextEditor"  placeholder="Note" name="tagNote" rows="4" cols="45"></textarea>				
+						</div>
+					</div>
+
+	                <div class="clearfix"><br></div>
+	                <div class="center modalButton"  style="text-align:center;">
+	                  <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+	                  <button type="button" class="btn btn-primary nonEisValidate" data-dismiss="modal" name="tagButton" id="tagButton">Save</button>
+	                </div>
+	                <div class="clearfix"></div>
+	              </div>
+	            </div><!--/.modal-content -->
+            </div><!--/.modal-dialog -->
+        </div> <!--/.modal -->
 	</form>		
     <!-- /#wrapper -->
 

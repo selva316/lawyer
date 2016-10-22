@@ -43,7 +43,8 @@ class Homepage extends CI_Controller {
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-info btnDraft' value=".$r['HASHNOTATIONID']."> Accept Draft</button>";
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
 
-				$pdfStr = "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
+				$pdfStr = "<a style='margin-left:10px;' target='_blank' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='btn btn-primary' rel='tooltip' title='Pdf' >Print</span></a>";
+
 				$details = array(
 					
 					//'notation'=>$r['NOTATIONID'],
@@ -127,8 +128,10 @@ class Homepage extends CI_Controller {
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='View' ></span></a>";
 				//$actionStr .= "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 
-				$pdfStr = "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
+				//$pdfStr = "<a style='margin-left:10px;' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open' rel='tooltip' title='Pdf' ></span></a>";
 				
+				$pdfStr = "<a style='margin-left:10px;' target='_blank' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='btn btn-primary' rel='tooltip' title='Pdf' >Print</span></a>";
+
 				$details = array(
 					//'notation'=>"<a  style='margin-left:10px;' target='_blank' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['NOTATIONID']."</a>",
 					'notation'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkNotationbox" type="checkbox" name="selectchk[]" value="'.$r['HASHNOTATIONID'].'"/></label></div> </div>',

@@ -85,7 +85,7 @@
 														<th>Citation</th>
 														<th>Case Number</th>
 														<th>Type</th>
-														<!--<th>Action</th>-->
+														<th>Owner</th>
 													</tr>
 												</thead>
 												
@@ -470,8 +470,8 @@
                { "data": "casename" },  
                { "data": "citation" },  
                { "data": "case_number" },
-               { "data": "type" }
-               //{ "data": "action" }
+               { "data": "type" },
+               { "data": "owner" }
             ],
             "initComplete": function(settings, json) {
             	var cntTable = $(this).DataTable();

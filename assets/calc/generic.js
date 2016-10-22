@@ -1009,6 +1009,38 @@ $( "#conceptName" ).blur(function() {
     });
 });
 
+$(document).on('focus','.autocomplete_tag',function(){
+	var topicname = $(this).val();
+	$(this).autocomplete({
+		source: function( request, response ) {
+			$.ajax({
+				url : 'research/accessResearchName',
+				dataType: "json",
+				method: 'post',
+				data: {
+				   topicname: request.term
+				},
+				 success: function( data ) {
+					 response( $.map( data, function( item ) {
+					 	var code = item.split("|");
+						return {
+							label: item,
+							value: code[0],
+							data : item
+						}
+					}));
+				}
+			});
+		},
+		autoFocus: true,	      	
+		minLength: 0,
+		select: function( event, ui ) {
+			var names = ui.item.data.split("|");
+			$('#topicname').val(names[0]);
+			$('#rid').val(names[1]);
+		}		      	
+	});
+});
 
 function saveAsDraft()
 {

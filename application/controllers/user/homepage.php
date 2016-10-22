@@ -29,6 +29,7 @@ class Homepage extends CI_Controller {
 
 	public function fetchDraftNotation()
 	{
+		$this->load->model('userdetailsmodel');
 		$this->load->model('notationmodel');
 		$result = $this->notationmodel->fetchStatusNotation('draft');
 		
@@ -40,7 +41,9 @@ class Homepage extends CI_Controller {
 				$actionStr = '';
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-info btnDraft' value=".$r['HASHNOTATIONID']."> Accept Draft</button>";
 				$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-warning btnDelete' value=".$r['HASHNOTATIONID']."> Delete</button>";
-				
+		
+				$pdfStr = "<a style='margin-left:10px;' target='_blank' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='btn btn-primary' rel='tooltip' title='Pdf' >Print</span></a>";
+
 				$details = array(
 					'notation'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['HASHNOTATIONID'].'"/></label></div> </div>',
 
@@ -48,7 +51,8 @@ class Homepage extends CI_Controller {
 					'citation'=>"<a  style='margin-left:10px;' href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID'].">".$r['CITATION']."</a>",
 					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
-					'type' => ucfirst($r['TYPE'])
+					'type' => ucfirst($r['TYPE']),
+					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))." ".$pdfStr
 					//'action' => $actionStr
 
 					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
@@ -108,7 +112,7 @@ class Homepage extends CI_Controller {
 					//$actionStr .= "<button style='margin-left:10px;' type='button' class='btn btn-success btnPrivate' value=".$r['HASHNOTATIONID']."> Make Private</button>";
 				}
 
-				
+				$pdfStr = "<a style='margin-left:10px;' target='_blank' href=".site_url('user/pdfnotation')."?nid=".$r['HASHNOTATIONID']."><span class='btn btn-primary' rel='tooltip' title='Pdf' >Print</span></a>";
 
 				$details = array(
 					'notation'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkNotationbox" type="checkbox" name="selectchk[]" value="'.$r['HASHNOTATIONID'].'"/></label></div> </div>',
@@ -117,7 +121,7 @@ class Homepage extends CI_Controller {
 					//'citation'=>$r['CITATION'],
 					'case_number' => $r['CASENUMBER'],
 					'type' => ucfirst($r['TYPE']),
-					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))
+					'owner' => ucfirst($this->userdetailsmodel->findUsername($r['CREATED_BY']))." ".$pdfStr
 					//'action' => $actionStr
 					//'action' => "<a href=".site_url('user/editnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-pencil'></span></a>"."<a  style='margin-left:10px;' href=".site_url('user/viewnotation')."?nid=".$r['HASHNOTATIONID']."><span class='glyphicon glyphicon-eye-open'></span></a>"
 					//'disable' => '<div id="infoView'.$r['CTID'].'"> <a class="btn btn-xs btn-success editCourtType" data-toggle="modal" href="javascript:editView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> <a class="btn btn-xs btn-danger" href="javascript:infoView(\''.$r['CTID'].'\')"> <span class="glyphicon glyphicon-eye-open"></span> </a> </div>'

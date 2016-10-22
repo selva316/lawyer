@@ -99,7 +99,7 @@
 			</div>
 			<!-- /#page-wrapper -->
 
-			<div class="modal fade" id="modalValidate">
+			<div class="modal fade" id="modalValidate" style="margin-top:5%;">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

@@ -84,7 +84,8 @@
 						<table id="researchList" class="display" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th>Topic ID</th>
+									<th width="5%">
+                                    <input id="checkAllResearch" value="1" type="checkbox"></th>
 									<th>Topic Name</th>
 									<th>Belongs To</th>
 									<th>Date</th>
@@ -95,6 +96,9 @@
 							
 						</table>
 					</div>
+					<div class="panel-footer" id="divFooter">
+                        <button style='margin-left:10px;' type='button' class='btn btn-warning disableResearch'> Delete</button>
+                    </div>
 				</div>
 			</div>
 			<!-- /#page-wrapper -->
@@ -133,7 +137,7 @@
         </div> <!--/.modal -->
 
         <!--Begin Research Topic modal -->
-		<div class="modal fade" id="researchModal">
+		<div class="modal fade" id="researchModal"  style="margin-top:5%;">
             <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -220,7 +224,8 @@
         });
 
 		$('#proceedButton').click(function () {
-			if($("#topicname").val != "" && $("#assignTo").val()!="")
+			//if($("#topicname").val != "" && $("#assignTo").val()!="")
+			if($("#topicname").val != "")
 			{
 		        $.ajax({
 		            type: 'post',
@@ -242,7 +247,7 @@
 	    });
 
 		$('#updateButton').click(function () {
-			if($("#edittopicname").val != "" && $("#editassignTo").val()!="")
+			if($("#edittopicname").val != "")
 			{
 		        $.ajax({
 		            type: 'post',
@@ -314,15 +319,35 @@
 		});
 
 	});
+	
+	$(document).on('change', '#checkAllResearch', function() {
+        if(this.checked)
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+        else
+        {
+            $("input[class='chkbox']").prop('checked', $(this).prop("checked"));
+        }
+    });
+
+	$(document).on('click','.viewResearchTopic', function(){
+		var rid = $(this).val();
+		window.open(
+		  "<?php echo site_url('user/researchList')?>/?rid="+rid,
+		  '_blank' // <- This is what makes it open in a new window.
+		);
+	});
 
 	$(document).on('click','.editResearchGroup',function(){
-			var rid = $(this).val();
-
+			//var rid = $(this).val();
+			var rid = $(this).data('type');
+			
 		    $.ajax({
 		    	type:"POST",
 		       url: "research/researchTopic",
 		       dataType: "json",
-		       data:{rid:$(this).val()},
+		       data:{rid:rid},
 		       success: function(data) {
 		        	//alert(data.topic)  
 		            console.log(data.name)
@@ -336,6 +361,29 @@
 
 		$("#researchModal").modal('show');
 	});
+
+	$(document).on('click', '.disableResearch', function(e) {
+        var temp = [];
+        $.each($("input[class='chkbox']:checked"), function(){            
+            temp.push($(this).val());
+        });
+
+        if(temp.length > 0){
+            $.ajax({
+                url: 'research/disableResearch',
+                dataType: "json",
+                method: 'post',
+                data: {
+                   rid: temp.join(",")
+                },
+                success : function(data) {
+                    fnResearchCalling();
+                }
+            });
+        }
+        else
+            alert("No topic is selected!!!")
+    });
 
 	function fnResearchCalling()
 	{
@@ -354,7 +402,23 @@
                { "data": "timestamp" },
                { "data": "assign" },
                { "data": "action" }
-            ]
+            ],
+            "initComplete": function(settings, json) {
+                var cntTable = $(this).DataTable();
+                var info = cntTable.page.info()
+                if(info.recordsTotal>0)
+                {
+                    $("#divFooter").css("display","block");
+                    $("#checkAllResearch").prop("checked",false);
+                    $("#checkAllResearch").prop("disabled",false);
+                }
+                else
+                {
+                    $("#divFooter").css("display","none");
+                    $("#checkAllResearch").prop("checked",false);
+                    $("#checkAllResearch").prop("disabled",true);
+                }
+            }
         });
 	}
 

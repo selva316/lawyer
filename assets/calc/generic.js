@@ -1009,6 +1009,7 @@ $( "#conceptName" ).blur(function() {
     });
 });
 
+/*
 $(document).on('focus','.autocomplete_tag',function(){
 	var topicname = $(this).val();
 	$(this).autocomplete({
@@ -1041,6 +1042,110 @@ $(document).on('focus','.autocomplete_tag',function(){
 		}		      	
 	});
 });
+
+$(document).on("click","#tagButton",function(e){
+	var topicname = $("#topicname").val();
+	var rid = $("#rid").val();
+	var tagNote = tinymce.get('tagNote').getContent();
+	var notationid = $("#ntype").val();
+	$.ajax({
+        url: 'research/saveResearchName',
+        dataType: "json",
+        method: 'post',
+        data: {topicname: topicname, notes: tagNote, rid: rid, notationid: notationid},
+        success: function(data) {
+        
+        }
+    });
+});
+*/
+
+$(document).on("click","#tagButton",function(e){
+	var topicname = $("#topicname").val();
+	var rid = $("#rid").val();
+	var tagNote = tinymce.get('tagNote').getContent();
+	var notationid = $("#ntype").val();
+	$.ajax({
+        url: 'research/saveResearchName',
+        dataType: "json",
+        method: 'post',
+        data: {topicname: topicname, notes: tagNote, rid: rid, notationid: notationid},
+        success: function(data) {
+        
+        }
+    });
+});
+
+$(document).on("click","#tag",function(e){
+	
+	var notationid = $("#ntype").val();
+	$.ajax({
+        url: 'research/fetchResearchName',
+        dataType: "json",
+        method: 'post',
+        data: {notationid: notationid},
+        success: function(data) {
+        	var oval = data.split("|");
+        	$("#topicname").val($.trim(oval[0]));
+        	$("#rid").val($.trim(oval[1]));
+        	tinymce.get('tagNote').setContent($.trim(oval[2]));
+        }
+    });
+});
+
+$(document).on("keyup.autocomplete",".autocomplete_tag",function(e){
+       var topicname = $(this).val();
+
+       $( this ).autocomplete({
+	    source : function( request, response ) {
+	        $.ajax({
+	            url: 'research/accessResearchName',
+	            dataType: "json",
+	            method: 'post',
+	            data: {topicname: extractLast(topicname)},
+	            success: function(data) {
+	                    response($.map(data, function(item) {
+	                        var code = item.split("|");
+	                        return {
+	                            label: code[0],
+	                            value: code[0],
+	                            data: item
+	                        };
+	                    }));
+	                }
+	            });
+        },
+		focus : function() {
+			// prevent value inserted on focus
+			return false;
+		},
+		select : function(event, ui) {
+			var names = ui.item.data.split("|");
+
+			var rid = $("#rid").val();
+			if(rid != '')
+				rid = rid + names[1] + ';';
+			else
+				rid = names[1] + ';';
+
+			$("#rid").val(rid);
+
+			var terms = split( this.value );
+			// remove the current input
+			terms.pop();
+			// add the selected item
+			terms.push( ui.item.value );
+			// add placeholder to get the comma-and-space at the end
+			terms.push( "" );
+			this.value = terms.join( "; " );
+
+			//setSubject(this.value);
+			return false;
+		},
+      	minLength: 0
+    });
+});
+
 
 function saveAsDraft()
 {

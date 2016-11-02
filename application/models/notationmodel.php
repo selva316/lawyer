@@ -1,6 +1,22 @@
 <?php 
 class Notationmodel extends CI_Model {
 
+	public $notationid;
+	public $hashnotationid;
+	public $casename;
+	public $citation;
+	public $dup_citation;
+	public $casenumber;
+	public $judge_name;
+	public $courtname;
+	public $year;
+	public $bench;
+	public $facts_of_case;
+	public $case_note;
+	public $created_by;
+	public $created_on;
+	public $type;
+
 	public function fetchCourtType()
 	{
 		$str = "select * from law_courttype";
@@ -2563,7 +2579,6 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				$dubcitation = $this->_clean($citationval);
 				$this->db->query("update law_notation set type='public' where (type = 'public' or type = 'dbversion') and dup_citation like '%$dubcitation%'");
 			}
-	
 		}
 	}
 
@@ -2897,6 +2912,84 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 				$data['linkdetails'] = $datalink;
 				*/
 				return $html;
+			}
+			
+		}
+	}
+
+	public function fetchNotationDetails($nid)
+	{
+		/*
+		$this->notationid = '';
+		$this->hashnotationid = '';
+		$this->casename = '';
+		$this->citation = '';
+		$this->dup_citation = '';
+		$this->casenumber = '';
+		$this->judge_name = '';
+		$this->courtname = '';
+		$this->year = '';
+		$this->bench = '';
+		$this->facts_of_case = '';
+		$this->case_note = '';
+		$this->created_by = '';
+		$this->created_on = '';
+		$this->type = '';
+		*/
+		//$nid = $this->input->get('nid');
+		//echo "Notation Id: ".$nid;
+		$this->db->select('*');
+		$this->db->from('law_notation');
+		$this->db->where('NOTATIONID', $nid);		
+
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0)
+		{
+			$result = $query->result_array();
+			//print_r($result);
+			$data = array();
+			$citationval = '';
+			foreach($result as $row)
+			{
+				$this->notationid = $row['NOTATIONID'];
+				$this->hashnotationid = $row['HASHNOTATIONID'];
+				$this->casename = $row['CASENAME'];
+				$this->citation = $row['CITATION'];
+				$this->dup_citation = $row['DUP_CITATION'];
+				$this->casenumber = $row['CASENUMBER'];
+				$this->judge_name = $row['JUDGE_NAME'];
+				$this->courtname = $row['COURT_NAME'];
+				$this->year = $row['YEAR'];
+				$this->bench = $row['BENCH'];
+				$this->facts_of_case = $row['FACTS_OF_CASE'];
+				$this->case_note = $row['CASE_NOTE'];
+				$this->created_by = $row['CREATED_BY'];
+				$this->created_on = $row['CREATED_ON'];
+				$this->type = $row['TYPE'];
+
+				/*
+				$notationid = $row['NOTATIONID'];
+				$data['notationid'] = $row['NOTATIONID'];
+				$data['hashnotationid'] = $row['HASHNOTATIONID'];
+				$data['casename'] = $row['CASENAME'];
+				$data['citation'] = $row['CITATION'];
+				$data['dup_citation'] = $row['DUP_CITATION'];
+				$citationval = $row['DUP_CITATION'];
+
+				$data['casenumber'] = $row['CASENUMBER'];
+				$data['judge_name'] = $row['JUDGE_NAME'];
+				$data['court_name'] = $row['COURT_NAME'];
+				$data['year'] = $row['YEAR'];
+				$data['bench'] = $row['BENCH'];
+				$data['facts_of_case'] = $row['FACTS_OF_CASE'];
+				$data['case_note'] = $row['CASE_NOTE'];
+				
+				$data['created_by'] = $row['CREATED_BY'];
+				$data['created_on'] = $row['CREATED_ON'];
+				$data['type'] = $row['TYPE'];
+				*/
+				return $row;
 			}
 			
 		}

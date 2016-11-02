@@ -28,6 +28,11 @@ class Research extends CI_Controller {
 		$this->load->view('user/research',$data);
 	}
 	
+	public function researchList()
+	{
+		$this->load->view('user/researchList');	
+	}
+
 	public function fetchResearchTopic()
 	{
 		$this->load->model('researchmodel');
@@ -38,10 +43,14 @@ class Research extends CI_Controller {
 			$detailsList = array();
 			foreach($result as $r)
 			{	
+				/*
 				if($r['DISABLE'] == 'N')
-				$statusStr = '<button type="button" class="btn btn-small btn-success editResearchGroup" value="'.$r['RID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-danger disableCourtType" value="'.$r['RID'].'" >Disable</button>';
-			else
-				$statusStr = '<button type="button" class="btn btn-small btn-success editResearchGroup" value="'.$r['RID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableCourtType" value="'.$r['RID'].'" >Enable</button>';
+					$statusStr = '<button type="button" class="btn btn-small btn-success editResearchGroup" value="'.$r['RID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-danger disableCourtType" value="'.$r['RID'].'" >Disable</button>';
+				else
+					$statusStr = '<button type="button" class="btn btn-small btn-success editResearchGroup" value="'.$r['RID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableCourtType" value="'.$r['RID'].'" >Enable</button>';
+				*/
+
+				$statusStr = '<button type="button" class="btn btn-small btn-success viewResearchTopic" value="'.$r['RID'].'"  >View Topic Notation</button>';
 
 				$assign_userid = '';
 				if($r['ASSIGN_TO'] != "" )
@@ -61,8 +70,8 @@ class Research extends CI_Controller {
 				}
 
 				$details = array(
-					'rid'=>$r['RID'],
-					'topic'=>$r['TOPIC'],
+					'rid'=>'<div style="display:inline"><div class="checkbox" ><label><input class="chkbox" type="checkbox" name="selectchk[]" value="'.$r['RID'].'"/></label></div> </div>',
+					'topic'=>"<a class='editResearchGroup' data-type='".$r['RID']."' style='margin-left:10px;' href='#'>".$r['TOPIC']."</a>",
 					'belongs_to'=>$this->researchmodel->fetchUserName($r['BELONGS_TO']),
 					'timestamp' => date("d-m-Y", $r['TIMESTAMP']),
 					'assign' => $assign_userid,
@@ -84,6 +93,14 @@ class Research extends CI_Controller {
 			echo json_encode($collectionDetails);		
 		}
 
+	}
+
+	public function disableResearch()
+	{
+		$this->load->model('researchmodel');
+		$data =  $this->researchmodel->disableResearch();
+		$disableDetails= array('data'=>$data);
+		echo json_encode($disableDetails);
 	}
 
 	public function checkTopicAvailable()
@@ -124,42 +141,7 @@ class Research extends CI_Controller {
 
 		$this->load->model('researchmodel');
 		$this->researchmodel->updateResearchGroup();
-		/*
-		if($assignTo != "" && $assignTo != "null")
-		{
-			$source_array = explode('!', $assignTo);
-			$userList = array_map('trim', $source_array);
-			//$this->researchmodel->deleteResearchGroupUser($userid);
-
-			$assign_userid = '';
-			foreach ($userList as $username) {
-				
-				$assign_userid .= $this->researchmodel->fetchUserID($username);
-				$assign_userid .=',';
-			}
-
-			$data = array();
-
-			$data['TOPIC'] = $topicname;
-			$data['BELONGS_TO'] = $userid;
-			$data['TIMESTAMP'] = time();
-			$data['ASSIGN_TO'] = $assign_userid;
-
-			//$this->load->model('researchmodel');
-			$result =  $this->researchmodel->updateResearchGroup($data, $rid);
-		}
-		else
-		{
-
-			$data = array();
-
-			$data['TOPIC'] = $topicname;
-			$data['BELONGS_TO'] = $userid;
-			$data['TIMESTAMP'] = time();
-			$data['ASSIGN_TO'] = $userid;
-			$result =  $this->researchmodel->updateResearchGroup($data, $rid);
-		}
-		*/
+		
 		$data = array();
 		$data['BELONGS_TO'] = $this->session->userdata('userid');
 		
@@ -178,7 +160,7 @@ class Research extends CI_Controller {
 		{
 			$source_array = explode('!', $assignTo);
 			$userList = array_map('trim', $source_array);
-			$this->researchmodel->deleteResearchGroupUser($userid);
+			//$this->researchmodel->deleteResearchGroupUser($userid);
 
 			$assign_userid = '';
 			foreach ($userList as $username) {
@@ -205,7 +187,7 @@ class Research extends CI_Controller {
 			$data['TOPIC'] = $topicname;
 			$data['BELONGS_TO'] = $userid;
 			$data['TIMESTAMP'] = time();
-			$data['ASSIGN_TO'] = $userid;
+			$data['ASSIGN_TO'] = $userid.',';
 			$result =  $this->researchmodel->createResearchGroup($data);
 		}
 		
@@ -287,6 +269,19 @@ class Research extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function saveResearchName()
+	{
+		$this->load->model('researchmodel');
+		$data =  $this->researchmodel->saveResearchName();
+		echo json_encode($data);	
+	}
+
+	public function fetchResearchName()
+	{
+		$this->load->model('researchmodel');
+		$data =  $this->researchmodel->fetchResearchName();
+		echo json_encode($data);	
+	}
 }
 
 /* End of file homepage.php */

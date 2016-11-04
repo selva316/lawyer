@@ -153,17 +153,76 @@ class Researchmodel extends CI_Model {
 		return $research_name;
 	}
 
-	public function fetchClientTopicName($rid)
+	public function fetchClientTopicName($rid, $entityid, $casenumber)
 	{
-		$query = $this->db->query("select * from law_client_master where clientid  = '".$rid."'");
-		$result = $query->result_array();
+		//echo $rid ."--". $entityid ."--". $casenumber;
+		//echo "<BR/>";
 		$research_name = '';
+		if($entityid != '' || $casenumber!='')
+		{
+			if($rid == $entityid){
+				
+				$query = $this->db->query("select * from law_client_entity_case where clientid  = '".$rid."' and entityid ='".$entityid."' and casenumber ='".$casenumber."'");
+			}
+			else{
+				$entityname = $this->fetchEntityName($rid, $entityid);
+
+				if($casenumber != ''){
+					$query = $this->db->query("select * from law_client_entity_case where clientid  = '".$rid."' and entityid ='".$entityname."' and casenumber ='".$casenumber."'");	
+				}
+				else
+				{
+					$entityname = $this->fetchEntityName($rid, $entityid);
+					$query = $this->db->query("select * from law_client_entity_case where clientid  = '".$rid."' and entityid ='".$entityname."'");
+				}
+				
+			}
+
+			$result = $query->result_array();
+			
+			foreach($result as $r)
+			{
+				if($rid == $entityid){
+					$client_name = $this->fetchClientName($r['CLIENTID']);
+					$research_name = $client_name." - ".$r['CASENUMBER'];
+				}
+				else{
+					$client_name = $this->fetchClientName($r['CLIENTID']);
+					$entityname = $this->fetchEntityName($r['CLIENTID'], $r['ENTITYID']);
+					if($casenumber != ''){
+						$research_name = $client_name." - ".$r['ENTITYID']." - ".$r['CASENUMBER'];
+					}
+					else
+					{
+						$research_name = $client_name." - ".$r['ENTITYID'];	
+					}
+				}
+			}
+		}
+		else
+		{
+			$query = $this->db->query("select * from law_client_master where clientid  = '".$rid."'");
+			$result = $query->result_array();	
+			
+			foreach($result as $r)
+			{
+				$research_name = $r['CLIENT_NAME'];
+			}
+		}
+		
+		return $research_name;	
+	}
+
+	public function fetchClientName($topicname)
+	{
+		$client_name = '';
+		$query = $this->db->query("select * from law_client_master where clientid  = '".trim($topicname)."'");
+		$result = $query->result_array();
 		foreach($result as $r)
 		{
-			$research_name = $r['CLIENT_NAME'];
+			$client_name = $r['CLIENT_NAME'];
 		}
-
-		return $research_name;	
+		return $client_name;
 	}
 
 	public function accessResearchName($topicname)
@@ -184,7 +243,6 @@ class Researchmodel extends CI_Model {
 
 		$clientquery = $this->db->query("select clientid, client_name from law_client_master where client_name like '".$topicname."'");
 		
-
 		$clientid = '';
 		$client_name = '';
 		if ($clientquery->num_rows() > 0)
@@ -267,13 +325,18 @@ class Researchmodel extends CI_Model {
 				if($lrid != '' && $lrid != null && strlen($lrid) > 1)
 				{
 					$topicid = $this->findResearchId($lrid);
-					
+					echo "Output ID: ".$topicid;
+
+					$research_arr = explode("--^--",$topicid);
+
 					$itemlist = array();
 					//$itemlist['RID'] = trim($lrid);
-					$itemlist['RID'] = trim($topicid);
+					$itemlist['RID'] = trim($research_arr[0]);
 					$itemlist['NOTATIONID'] = $notationid;
 					$itemlist['NOTES'] = $tagNote;
 					$itemlist['USERID'] = $userid;
+					$itemlist['ENTITYID'] = trim($research_arr[1]);
+					$itemlist['CASENUMBER'] = trim($research_arr[2]);
 					$this->db->insert('law_research_notation_link', $itemlist);	
 				}
 			}
@@ -285,12 +348,18 @@ class Researchmodel extends CI_Model {
 			if($topicname)
 			{
 				$topicid = $this->findResearchId($topicname);
+				echo "Output ID: ".$topicid;
+				$research_arr = explode("--^--",$topicid);
+
 				$itemlist = array();
 				//$itemlist['RID'] = trim($topicname);
 				$itemlist['RID'] = trim($topicid);
 				$itemlist['NOTATIONID'] = $notationid;
 				$itemlist['NOTES'] = $tagNote;
 				$itemlist['USERID'] = $userid;
+				$itemlist['ENTITYID'] = trim($research_arr[1]);
+				$itemlist['CASENUMBER'] = trim($research_arr[2]);
+
 				$this->db->insert('law_research_notation_link', $itemlist);
 			}
 		}
@@ -311,7 +380,10 @@ class Researchmodel extends CI_Model {
 			$result = $query->result_array();
 			foreach($result as $row)
 			{
+				$entityid = $row['ENTITYID'];
+				$casenumber = $row['CASENUMBER'];
 				$rid = $row['RID'];
+
 				$chkval = substr($rid, 0, 3);
 
 				if($chkval == 'RID')
@@ -321,7 +393,7 @@ class Researchmodel extends CI_Model {
 				}
 				else
 				{
-					$topicname .= $this->fetchClientTopicName($rid).'; ';
+					$topicname .= $this->fetchClientTopicName($rid, $entityid, $casenumber).'; ';
 					$ridvalue .= $rid.'; ';	
 				}
 				$tagNotes = $row['NOTES'];
@@ -379,7 +451,7 @@ class Researchmodel extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function fetchClientName($topicname)
+	public function fetchClientId($topicname)
 	{
 		$query = $this->db->query("select * from law_client_master where client_name  = '".trim($topicname)."'");
 		$result = $query->result_array();
@@ -390,11 +462,8 @@ class Researchmodel extends CI_Model {
 		return $research_name;
 	}
 
-	public function fetchEntityName($clientid, $topicname)
+	public function fetchEntityID($clientid, $topicname)
 	{
-		echo "select * from law_client_entity where clientid='".$clientid."' and entity_name  = '".trim($topicname)."'";
-		echo "<BR/>";
-
 		$query = $this->db->query("select * from law_client_entity where clientid='".$clientid."' and entity_name  = '".trim($topicname)."'");
 		$result = $query->result_array();
 		foreach($result as $r)
@@ -404,10 +473,24 @@ class Researchmodel extends CI_Model {
 		return $research_name;
 	}
 
+	public function fetchEntityName($clientid, $topicname)
+	{
+		$research_name = '';
+		$query = $this->db->query("select * from law_client_entity where clientid='".$clientid."' and entityid  = '".trim($topicname)."'");
+		$result = $query->result_array();
+		foreach($result as $r)
+		{
+			$research_name = $r['ENTITY_NAME'];
+		}
+		return $research_name;
+	}
+
 	public function findResearchId($topicname)
 	{
 		$research_name = '';
-		
+		$entityVal = ''; 
+		$caseNumberVal = '';
+
 		$query = $this->db->query("select * from law_research_group where topic  = '".trim($topicname)."'");
 		if ($query->num_rows() > 0)
 		{
@@ -426,35 +509,47 @@ class Researchmodel extends CI_Model {
 				
 				$rid_arr = explode("-",$topicname);
 				
-				$rid_arr[0] = $this->fetchClientName($rid_arr[0]);
+				$rid_arr[0] = $this->fetchClientId($rid_arr[0]);
 
 				if(count($rid_arr) == 2)
 				{
-					$rid_arr[1] = $this->fetchEntityName($rid_arr[0], $rid_arr[1]);
+					echo "Count 2";
+					
+					$lentityId = $this->fetchEntityID($rid_arr[0], $rid_arr[1]);
 
-					$query = $this->db->query("select * from law_client_entity where clientid='".$rid_arr[0]."' and entity_name  = '".trim($rid_arr[1])."'");
+					$query = $this->db->query("select * from law_client_entity where clientid='".$rid_arr[0]."' and entityid  = '".trim($lentityId)."'");
 					if ($query->num_rows() > 0)
 					{
+						echo "Count 2.1";
+						$entityVal = trim($lentityId);
 						$result = $query->result_array();
 						foreach($result as $r)
 						{
 							$research_name = $r['CLIENTID'];
-						}	
+						}
 					}
 					else
 					{
+						$caseNumberVal = trim($rid_arr[1]);
+						echo "Count 2.2";
+						echo "select * from law_client_entity_case where clientid='".$rid_arr[0]."' and casenumber  = '".trim($rid_arr[1])."'";
+
 						$query = $this->db->query("select * from law_client_entity_case where clientid='".$rid_arr[0]."' and casenumber  = '".trim($rid_arr[1])."'");
 						$result = $query->result_array();
 						foreach($result as $r)
 						{
+							$entityVal = $r['CLIENTID'];
 							$research_name = $r['CLIENTID'];
-						}	
+						}
 					}
 				}
 				
 				if(count($rid_arr) == 3)
 				{
-					//$rid_arr[1] = $this->fetchEntityName($rid_arr[0], $rid_arr[1]);
+					//$rid_arr[1] = $this->fetchEntityID($rid_arr[0], $rid_arr[1]);
+					echo "Count 3";
+					$entityVal = trim($rid_arr[1]);
+					$caseNumberVal = trim($rid_arr[2]);
 
 					echo "select * from law_client_entity_case where clientid='".$rid_arr[0]."' and casenumber  = '".trim($rid_arr[2])."'  and entityid  = '".trim($rid_arr[1])."'";
 
@@ -464,11 +559,13 @@ class Researchmodel extends CI_Model {
 					{
 						$research_name = $r['CLIENTID'];
 					}
+					$entityVal = trim($this->fetchEntityID($rid_arr[0], $rid_arr[1]));
 				}
 				
 			}
 			else
 			{
+				echo "Else";
 				$query = $this->db->query("select * from law_client_master where client_name  = '".trim($topicname)."'");
 				$result = $query->result_array();
 				foreach($result as $r)
@@ -479,7 +576,7 @@ class Researchmodel extends CI_Model {
 			
 		}
 		
-		return $research_name;
+		return $research_name.'--^--'.$entityVal.'--^--'.$caseNumberVal;
 	}
 
 }

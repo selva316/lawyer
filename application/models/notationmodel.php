@@ -2281,9 +2281,39 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 
 	public function searchStringCollection($searchString)
 	{
+		$userid =  $this->session->userdata('userid');
+
 		$listOfSearchStringArray = explode("--^--",$searchString);
-		$allColumn = 'casename, citation, dup_citation, casenumber, judge_name, court_name, YEAR, bench, facts_of_case';
-		$searchQuery = "SELECT * FROM law_notation WHERE ";
+
+		$searchFields = array();
+
+		foreach ($listOfSearchStringArray as $ss_arr) {
+		  $searchStringContent = explode('--$$--', $ss_arr);
+		  array_push($searchFields,$searchStringContent[0]); 
+		}
+
+		$strFields = array('statuate','sub_section','concepts');
+		$searchResult = false;
+		foreach($strFields as $fields)
+		{
+			if (in_array($fields, $searchFields))
+				$searchResult = true;	  
+		}
+
+		
+		if($searchResult)
+		{
+			$searchQuery = "SELECT * FROM law_notation lno INNER JOIN law_notation_Statuate lns ON lno.notationid = lns.notationid WHERE  ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND ";
+		}
+		else
+		{
+			$searchQuery = "SELECT * FROM law_notation WHERE ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND ";	
+		}
+
+		//$searchQuery = "SELECT * FROM law_notation lno INNER JOIN law_notation_Statuate lns ON lno.notationid = lns.notationid WHERE  ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND ";
+
+		$allColumn = 'casename, citation, dup_citation, casenumber, judge_name, court_name, YEAR, bench, facts_of_case, statuate, sub_section, concept';
+		
 		$i = 0;
 		foreach ($listOfSearchStringArray as $ss_arr) {
 			$searchStringContent = explode('--$$--', $ss_arr);

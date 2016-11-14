@@ -71,6 +71,7 @@
                                 <th>Client Name</th>
                                 <th>Belongs To</th>
                                 <th>Created On</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                     </table>
@@ -138,6 +139,14 @@
 
     $("#finalize").click(function(){
         window.location.href = "addcliententity"
+    });
+
+    $(document).on('click','.viewClientEntityTopic', function(){
+        var clientid = $(this).val();
+        window.open(
+          "<?php echo site_url('user/clientList')?>/?clientid="+clientid,
+          '_blank' // <- This is what makes it open in a new window.
+        );
     });
 
     $('#proceedButton').click(function () {
@@ -236,7 +245,8 @@
                { "data": "clientid" },  
                { "data": "name" },  
                { "data": "createdby" },
-               { "data": "createdon" }
+               { "data": "createdon" },
+               { "data": "action" }
                //{ "data": "disable" }
             ]
         });

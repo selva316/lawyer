@@ -81,7 +81,7 @@
         <span style="cursor: default; color: rgb(10, 218, 222); font-weight: bold; font-size: 32px;">easyCite</span>
     </div>
 
-    <div style="position: absolute; left: 0; margin-left: 70%;  top: 15px; text-align: right; width: 28%;">
+    <div style="position: absolute; left: 0; margin-left: 80%;  top: 15px; text-align: right; width: 18%;">
         <span style="cursor:default; color: #0adade; font-size: 14px; font-weight: bold; "><font color="#fff">Welcome </font><?php echo $this->session->userdata('loginname'); ?></span>
         <span style="cursor:pointer; color: #fff; margin-left: %;" title="Logout"><a style="color:#fff;" href="<?php echo site_url('login/logout');?>"><i aria-hidden="true" class="fa fa-sign-out"></i></a></span>
     </div>
@@ -106,13 +106,15 @@
         <li  class="active">
             <a href="<?php echo site_url('user/research');?>">Research Topic</a>
         </li>
-
+        <li  class="active">
+            <a href="<?php echo site_url('admin/searchbuilder');?>">Search Builder</a>
+        </li>
     </ul>
         <div style="position: absolute; left: 0px; margin-left: 2%; top: 5px; width: 10%;">
             <span style="cursor: default; color: rgb(10, 218, 222); font-weight: bold; font-size: 32px;">easyCite</span>
         </div>
 
-        <div style="position: absolute; left: 0; margin-left: 70%;  top: 15px; text-align: right; width: 28%;">
+        <div style="position: absolute; left: 0; margin-left: 80%;  top: 15px; text-align: right; width: 18%;">
             <span style="cursor:default; color: #0adade; font-size: 14px; font-weight: bold; "><font color="#fff">Welcome </font><?php echo $this->session->userdata('loginname'); ?></span>
             <span style="cursor:pointer; color: #fff; margin-left: %;" title="Logout"><a style="color:#fff;" href="<?php echo site_url('login/logout');?>"><i aria-hidden="true" class="fa fa-sign-out"></i></a></span>
         </div>

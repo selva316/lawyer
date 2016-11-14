@@ -50,7 +50,7 @@ class Research extends CI_Controller {
 					$statusStr = '<button type="button" class="btn btn-small btn-success editResearchGroup" value="'.$r['RID'].'"  >Edit</button>'.'<button type="button" style="margin-left:25px;" class="btn btn-small btn-warning disableCourtType" value="'.$r['RID'].'" >Enable</button>';
 				*/
 
-				$statusStr = '<button type="button" class="btn btn-small btn-success viewResearchTopic" value="'.$r['RID'].'"  >View Topic Notation</button>';
+				$statusStr = '<button type="button" class="btn btn-small btn-success viewResearchTopic" value="'.$r['RID'].'"  >View Tag Notation</button>';
 
 				$assign_userid = '';
 				if($r['ASSIGN_TO'] != "" )

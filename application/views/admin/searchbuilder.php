@@ -40,7 +40,7 @@
     <!-- Custom Fonts -->
     <link href="<?php echo base_url();?>assets/font-awesome/css/font-awesome.min.css" />
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-
+    
 </head>
 
 <body>
@@ -50,7 +50,8 @@
         <div class="panel-heading">
             <center><label><b>Search Builder</b></label></center></div>
         </div>-->
-        <div id="page-wrapper" class="titleClass">
+        <!--<div id="page-wrapper" class="titleClass"  style="min-height: 0px;">-->
+        <div id="" class="titleClass"  style="min-height: 0px;">
             <div class='row-fluid'>
                 <div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'>
                     <input type="hidden" id="numberOfSearchEntries" name="numberOfSearchEntries" value="1"> </input>
@@ -74,10 +75,13 @@
                                         <option value="judge_name">Judge Name</option>
                                         <option value="court_name">Court Name</option>
                                         <option value="year">Year</option>
+                                        <option value="statuate">Statute</option>
+                                        <option value="sub_section">Sub Section</option>
+                                        <option value="concept">Concept</option>
                                     </select>
                                 </td>
                                 <td>
-                                <input type="text" data-type="1" name="searchContent[]" id="searchcontent_1" class="form-control autocomplete_searchcontent" autocomplete="off" ondrop="return false;" onpaste="return false;">
+                                <input type="text" data-type="1" name="searchContent[]" id="searchcontent_1" class="form-control autocomplete_searchcontent" autocomplete="off" ondrop="return false;">
                                 </td>
                                 <td></td>
                             </tr>
@@ -98,7 +102,7 @@
                 <div class="span5"></div>
             </div>
         </div>
-        <div id="searchResult" style="display: none;">
+        <div id="searchResult" style="display: none;  margin-top: 10px;">
             <div class="panel panel-info">
                 <div class="panel-heading">Search Result</div>
                 <div class="panel-body">
@@ -137,7 +141,9 @@
     <script src="<?php echo base_url();?>dist/js/sb-admin-2.js"></script>
     
     <script type="text/javascript">
-
+    $(document).ready(function(){
+        $("#page-wrapper").css('min-height','0px');
+    });
         
     </script>
 </body>

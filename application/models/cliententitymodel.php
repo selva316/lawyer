@@ -303,6 +303,13 @@ class Cliententitymodel extends CI_Model {
 			
 		}
 	}
+
+	public function fetchClientEntityNotation($clientid)
+	{
+		$str = "select * from law_research_notation_link where disable='N' and rid='".$clientid."'";
+		$query = $this->db->query($str);
+		return $query->result_array();
+	}
 }
 
 /* End of file Configurationmodel.php */

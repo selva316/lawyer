@@ -592,13 +592,13 @@
 	            <div class="modal-content">
 	              <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	                <h4 class="modal-title">Research topic to tag</h4>
+	                <h4 class="modal-title">Tag Notation</h4>
 	              </div>
 	              <div class="modal-body">
 	                
 	                <div class="row-fluid">
 	                    <div class="span12">
-	                        <label class="control-label">Select Research Topic</label>
+	                        <label class="control-label">Select Research Topic / Client, Entities and Case Number</label>
 	                        <input  class="form-control autocomplete_tag" type="text" id="topicname" name="topicname"  autocomplete="off"  value=""/>
 	                        <input  class="form-control" type="hidden" id="rid" name="rid"  autocomplete="off"  value=""/>
 	                    </div>

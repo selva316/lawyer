@@ -2292,7 +2292,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		  array_push($searchFields,$searchStringContent[0]); 
 		}
 
-		$strFields = array('statuate','sub_section','concepts');
+		$strFields = array('statuate','sub_section','concept');
 		$searchResult = false;
 		foreach($strFields as $fields)
 		{

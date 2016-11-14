@@ -2303,7 +2303,7 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		
 		if($searchResult)
 		{
-			$searchQuery = "SELECT * FROM law_notation lno INNER JOIN law_notation_Statuate lns ON lno.notationid = lns.notationid WHERE  ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND ";
+			$searchQuery = "SELECT * FROM law_notation lno INNER JOIN law_notation_statuate lns ON lno.notationid = lns.notationid WHERE  ((created_by='$userid' OR UPDATED_BY='$userid') OR (TYPE='dbversion' OR TYPE='public') ) AND ";
 		}
 		else
 		{

@@ -193,6 +193,13 @@ class Notationmodel extends CI_Model {
 		return $notationid;
 	}
 
+	function webserviceCheckCitationisAvailable($citation, $role, $userid)
+	{
+		$citation = $this->_clean($citation);
+		$notationid = $this->findNotationId($citation, $role, $userid);
+		return $notationid;
+	}
+
 	function createNotation($data)
 	{
 		$this->db->insert('law_notation', $data); 
@@ -2470,6 +2477,20 @@ OR (TYPE='dbversion' OR TYPE='public')) AND DISABLE='N'";
 		}
 
 		return $name;	
+	}
+
+	public function findNotationId($citation, $role, $userid)
+	{
+		$query = $this->db->query("select notationid from law_notation where dup_citation   = '".$citation."' and created_by='".$userid."' and dup_citation is not null and disable='N'");
+		$result = $query->result_array();
+		$notationid = '';
+
+		foreach($result as $r)
+		{
+			$notationid = $r['notationid'];
+		}
+
+		return $notationid;	
 	}
 
 	public function findCitation($notationid)

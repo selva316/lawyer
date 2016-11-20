@@ -243,6 +243,53 @@ class Login extends CI_Controller {
 		echo json_encode($jsonUserdetails);
 	}
 
+	public function webserviceCheckCitationisAvailable()
+	{
+		$userid = $this->input->post('userid');
+		if($userid != '')
+		{
+			$this->load->model('logindetailsmodel');
+			$this->load->model('notationmodel');
+			$role = $this->logindetailsmodel->userrole($userid);
+			$this->session->set_userdata('userid',$userid);
+			
+			if($role == 1)
+			{
+				$role = 'Admin';
+				$this->session->set_userdata('role','Admin');
+			}
+			else{
+				$role = 'User';
+				$this->session->set_userdata('role','User');
+			}
+
+			$citation = $this->input->post('citation');
+
+			$notationid = $this->notationmodel->webserviceCheckCitationisAvailable($citation, $role, $userid);
+			
+			if($notationid != '')
+			{
+				$jsonUserdetails = array(
+					'notationid'=>$notationid
+				);
+			}
+			else
+			{
+				$jsonUserdetails = array(
+					'notationid'=>'Not available'
+				);
+			}
+		}
+		else
+		{
+			$jsonUserdetails = array(
+				'notationid'=>'Not available'
+			);
+		}
+
+		echo json_encode($jsonUserdetails);
+	}
+
 	public function validate_credentials(){
 		
 		$this->load->model('logindetailsmodel');

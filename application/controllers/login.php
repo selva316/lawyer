@@ -71,6 +71,7 @@ class Login extends CI_Controller {
 			$courtname = $this->input->post('courtname');
 			$fact_of_case = $this->input->post('fact_of_case');
 			$notes = $this->input->post('notes');
+			$year = $this->input->post('year');
 
 			if(isset($judge_name) != null)
 				$judge_name = $this->input->post('judge_name');
@@ -113,7 +114,7 @@ class Login extends CI_Controller {
 					}
 				}
 				if($vx == 0){
-					$notationid = $this->notationmodel->createWebNotation($casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $userid, $role);
+					$notationid = $this->notationmodel->createWebNotation($casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $year, $userid, $role);
 					$jsonUserdetails = array(
 						'notationid'=>$notationid,
 						'error_message'=>'Not available',
@@ -171,6 +172,7 @@ class Login extends CI_Controller {
 			$courtname = $this->input->post('courtname');
 			$fact_of_case = $this->input->post('fact_of_case');
 			$notes = $this->input->post('notes');
+			$year = $this->input->post('year');
 
 			if(isset($judge_name)!= null)
 				$judge_name = $this->input->post('judge_name');
@@ -213,7 +215,7 @@ class Login extends CI_Controller {
 				}
 				if($vx == 0)
 				{
-					$notationid = $this->notationmodel->updateWebNotation($notationid, $casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $userid, $role);
+					$notationid = $this->notationmodel->updateWebNotation($notationid, $casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $year, $userid, $role);
 					$jsonUserdetails = array(
 						'notationid'=>$notationid,
 						'error_message'=>'Not available',

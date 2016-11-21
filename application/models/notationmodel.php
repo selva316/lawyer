@@ -85,7 +85,7 @@ class Notationmodel extends CI_Model {
 		return $data;
 	}
 
-	public function createWebNotation($casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $userid, $role)
+	public function createWebNotation($casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $year, $userid, $role)
 	{
 		$data = array();
 		$data['CASENAME'] = $casename;
@@ -122,6 +122,11 @@ class Notationmodel extends CI_Model {
 		else
 			$data['CASE_NOTE'] = '';
 
+		if(strlen($year) > 1)
+			$data['YEAR'] = $year;
+		else
+			$data['YEAR'] = '';
+
 		$this->db->insert('law_notation', $data); 
 		$autoid = $this->db->insert_id();
 		
@@ -144,7 +149,7 @@ class Notationmodel extends CI_Model {
 		return $nid;
 	}
 
-	public function updateWebNotation($notationid, $casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $userid, $role)
+	public function updateWebNotation($notationid, $casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $year, $userid, $role)
 	{
 
 		$data = array();
@@ -184,6 +189,7 @@ class Notationmodel extends CI_Model {
 		$this->db->set('COURT_NAME', $courtname);
 		$this->db->set('FACTS_OF_CASE', $fact_of_case);
 		$this->db->set('CASE_NOTE', $notes);
+		$this->db->set('YEAR', $year);
 
 		$this->db->set('UPDATED_BY', $userid);
 		$this->db->set('UPDATED_ON', time());

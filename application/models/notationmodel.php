@@ -206,6 +206,12 @@ class Notationmodel extends CI_Model {
 		return $notationid;
 	}
 
+	function webserviceFetchCaseNumber($notationid)
+	{
+		$casenumber = $this->findCasenumber($notationid);
+		return $casenumber;
+	}
+
 	function createNotation($data)
 	{
 		$this->db->insert('law_notation', $data); 

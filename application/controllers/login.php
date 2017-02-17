@@ -268,24 +268,28 @@ class Login extends CI_Controller {
 			$citation = $this->input->post('citation');
 
 			$notationid = $this->notationmodel->webserviceCheckCitationisAvailable($citation, $role, $userid);
-			
+			$casenumber = '';
 			if($notationid != '')
 			{
+				$casenumber = $this->notationmodel->webserviceFetchCaseNumber($notationid);
 				$jsonUserdetails = array(
-					'notationid'=>$notationid
+					'notationid'=>$notationid,
+					'casenumber'=>$casenumber
 				);
 			}
 			else
 			{
 				$jsonUserdetails = array(
-					'notationid'=>'Not available'
+					'notationid'=>'Not available',
+					'casenumber'=>$casenumber
 				);
 			}
 		}
 		else
 		{
 			$jsonUserdetails = array(
-				'notationid'=>'Not available'
+				'notationid'=>'Not available',
+				'casenumber'=>$casenumber
 			);
 		}
 

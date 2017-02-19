@@ -226,11 +226,25 @@ class Login extends CI_Controller {
 			}
 			else
 			{
-				$jsonUserdetails = array(
-					'notationid'=>'Not available',
-					'error_message'=>'Case Number is not available',
-					'status'=>'Failure'
-				);
+				$vx = 0;
+				if($casenumber != '')
+				{
+					$notationid = $this->notationmodel->updateWebNotation($notationid, $casename, $citation, $casenumber, $judge_name, $courtname, $fact_of_case, $notes, $year, $userid, $role);
+					$jsonUserdetails = array(
+						'notationid'=>$notationid,
+						'error_message'=>'Not available',
+						'status'=>'Success'
+					);	
+				}
+				else{
+					++$vx;
+					$jsonUserdetails = array(
+						'notationid'=>'Not available',
+						'error_message'=>'Case Number is not available',
+						'status'=>'Failure'
+					);	
+				}
+				
 			}
 			
 		}

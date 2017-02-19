@@ -181,15 +181,29 @@ class Notationmodel extends CI_Model {
 		$this->db->where('NOTATIONID', $notationid);
 		
 		$this->db->set('TYPE', 'draft');
-		$this->db->set('CASENAME', $casename);
-		$this->db->set('CITATION', $citation);		
-		$this->db->set('CASENUMBER', $casenumber);
+		if($casename != '')
+			$this->db->set('CASENAME', $casename);
+		
+		if($citation != '')
+			$this->db->set('CITATION', $citation);		
+		
+		if($casenumber != '')
+			$this->db->set('CASENUMBER', $casenumber);
 
-		$this->db->set('JUDGE_NAME', $judge_name);
-		$this->db->set('COURT_NAME', $courtname);
-		$this->db->set('FACTS_OF_CASE', $fact_of_case);
-		$this->db->set('CASE_NOTE', $notes);
-		$this->db->set('YEAR', $year);
+		if($judge_name != '')
+			$this->db->set('JUDGE_NAME', $judge_name);
+		
+		if($courtname != '')
+			$this->db->set('COURT_NAME', $courtname);
+		
+		if($fact_of_case != '')
+			$this->db->set('FACTS_OF_CASE', $fact_of_case);
+		
+		if($notes != '')
+			$this->db->set('CASE_NOTE', $notes);
+		
+		if($year != '')
+			$this->db->set('YEAR', $year);
 
 		$this->db->set('UPDATED_BY', $userid);
 		$this->db->set('UPDATED_ON', time());
